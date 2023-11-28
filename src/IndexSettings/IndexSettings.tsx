@@ -10,7 +10,7 @@ const IndexSettings: React.FC = () => {
     try {
       const res = await axios({ url: `${origin}/indices`, method: "GET" });
       console.log(res);
-      setIndices(res?.data?.indices);
+      setIndices(res?.data);
     } catch (err) {
       return err;
     }
