@@ -1,8 +1,7 @@
-import { useEffect, useState } from "react";
-
 interface IndexInputsProps {
   indices: IndicesType;
   onChange: (indices: IndicesType) => void;
+  onPost: () => void;
 }
 
 export interface StartEnd {
@@ -17,7 +16,11 @@ export interface IndicesType {
   bottom: StartEnd;
 }
 
-const IndexInputs: React.FC<IndexInputsProps> = ({ indices, onChange }) => {
+const IndexInputs: React.FC<IndexInputsProps> = ({
+  indices,
+  onChange,
+  onPost,
+}) => {
   const handleChange =
     (pos: keyof IndicesType, sel: keyof StartEnd) =>
     (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -92,6 +95,9 @@ const IndexInputs: React.FC<IndexInputsProps> = ({ indices, onChange }) => {
           type="number"
           onChange={handleChange("bottom", "s")}
         ></input>
+
+        {/* update button */}
+        <button onClick={() => onPost()}>Update</button>
       </div>
     </div>
   );

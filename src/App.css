@@ -4,6 +4,9 @@
   aspect-ratio: 16/9;
   background-color: #282c34;
   position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 /* .container {
