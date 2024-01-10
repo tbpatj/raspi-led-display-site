@@ -2,6 +2,8 @@ interface IndexInputsProps {
   indices: IndicesType;
   onChange: (indices: IndicesType) => void;
   onPost: () => void;
+  onStatusChange: () => void;
+  status: boolean;
 }
 
 export interface StartEnd {
@@ -20,6 +22,8 @@ const IndexInputs: React.FC<IndexInputsProps> = ({
   indices,
   onChange,
   onPost,
+  onStatusChange,
+  status,
 }) => {
   const handleChange =
     (pos: keyof IndicesType, sel: keyof StartEnd) =>
@@ -99,6 +103,9 @@ const IndexInputs: React.FC<IndexInputsProps> = ({
         {/* update button */}
         <button onClick={() => onPost()}>Update</button>
       </div>
+      <button onClick={() => onStatusChange()}>
+        {status ? "turn off" : "turn on"}
+      </button>
     </div>
   );
 };
