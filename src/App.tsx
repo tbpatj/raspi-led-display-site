@@ -8,10 +8,12 @@ const router = createBrowserRouter(routes, { basename: "/" });
 
 function App() {
   return (
-    <GlobalContextProvider>
-      <BackgroundContainer />
-      <RouterProvider router={router} />
-    </GlobalContextProvider>
+    <div className="basic-color">
+      <GlobalContextProvider>
+        <BackgroundContainer />
+        <RouterProvider router={router} />
+      </GlobalContextProvider>
+    </div>
   );
 }
 

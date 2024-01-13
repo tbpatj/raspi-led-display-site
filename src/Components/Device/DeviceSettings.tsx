@@ -1,16 +1,60 @@
 import { useState } from "react";
 import VerticalTransition from "../TransitionContainers/VerticalTransition";
+import PowerIcon from "../../SVGs/PowerIcon";
+import RGBStripIcon from "../../SVGs/RGBStripIcon";
+import ImageIcon from "../../SVGs/ImageIcon";
+import AnimationIcon from "../../SVGs/AnimationIcon";
+import PinoutIcon from "../../SVGs/PinoutIcon";
+import BrightnessIcon from "../../SVGs/BrightnessIcon";
+import ArrowThinIcon from "../../SVGs/ArrowThinIcon";
+import OptionController from "./OptionsController";
+import OptionsController from "./OptionsController";
+import HorizontalTransition from "../TransitionContainers/HorizonalTransition";
+import DeviceSetting from "./DeviceSetting";
 
 interface DeviceSettingsProps {}
 
-const devicesOptions = {
-  power: { element: <div></div>, icon: <div></div> },
-  type: { element: <div></div>, icon: <div></div> },
-  configure: { element: <div></div>, icon: <div></div> },
-  image_processing: { element: <div></div>, icon: <div></div> },
-  idle_animation: { element: <div></div>, icon: <div></div> },
-  pin_out: { element: <div></div>, icon: <div></div> },
-  brightness: { element: <div></div>, icon: <div></div> },
+export const deviceOptions: {
+  [key: string]: {
+    element: React.ReactNode | React.ReactNode[];
+    icon: React.ReactNode | React.ReactNode[];
+  };
+} = {
+  power: {
+    element: <div></div>,
+    icon: <PowerIcon width="25" height="28" stroke="inherit" />,
+  },
+  type: {
+    element: <div></div>,
+    icon: (
+      <RGBStripIcon
+        stroke="inherit"
+        width="40"
+        height="8"
+        style={{
+          transformOrigin: "center",
+          transform: "rotate(-45deg)",
+        }}
+      />
+    ),
+  },
+  configure: { element: <div></div>, icon: <span></span> },
+  image_processing: {
+    element: <div></div>,
+    icon: <ImageIcon width="30" height="24" stroke="inherit" />,
+  },
+  idle_animation: {
+    element: <div></div>,
+    icon: <AnimationIcon width="30" height="26" stroke="inherit" />,
+  },
+  pin_out: {
+    element: <div></div>,
+    icon: <PinoutIcon width="35" height="24" stroke="inherit" />,
+  },
+  brightness: {
+    element: <div></div>,
+    icon: <BrightnessIcon width="30" height="30" stroke="inherit" />,
+  },
 };
 
 const DeviceSettings: React.FC<DeviceSettingsProps> = () => {
@@ -18,37 +62,31 @@ const DeviceSettings: React.FC<DeviceSettingsProps> = () => {
   const [editing, setEditing] = useState("");
   return (
     <div style={{ width: "100vw", height: "100vh", position: "relative" }}>
-      <VerticalTransition
+      <HorizontalTransition
         onBack={() => setIsEditing(false)}
         id="device-settings-transition"
         selected={isEditing ? 1 : 0}
       >
         {/* <div className="position-item-container"> */}
         <div className="device-settings-container">
-          {Object.keys(devicesOptions).map((option, i) => {
+          <h1 className="device-settings-title">Title of Device</h1>
+          {Object.keys(deviceOptions).map((option, i) => {
             return (
-              <div
-                className="device-settings-item"
+              <DeviceSetting
+                value="on"
+                title={option}
+                elements={deviceOptions[option]}
                 onClick={() => {
                   setIsEditing(true);
                   setEditing(option);
                 }}
                 key={`device-option-${i}-${option}`}
-              >
-                <div>
-                  {option
-                    .split("_")
-                    .map((v) => v.charAt(0).toUpperCase() + v.slice(1))
-                    .join(" ")}
-                </div>
-                <div>on</div>
-              </div>
+              />
             );
           })}
         </div>
-        {/* </div> */}
-        <div className="position-item-container">setting</div>
-      </VerticalTransition>
+        <OptionsController option={editing}></OptionsController>
+      </HorizontalTransition>
     </div>
   );
 };

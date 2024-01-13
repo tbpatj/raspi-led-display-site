@@ -4,6 +4,8 @@
   --secondary-accent: #f71735;
 }
 
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap");
+
 h1,
 h2,
 h3,
@@ -13,9 +15,15 @@ h6,
 p,
 span,
 div {
-  color: var(--primary-accent);
+  color: inherit;
   padding: 0px;
   margin: 0px;
+  font-family: Montserrat, sans-serif;
+  /* font-optical-sizing: auto; */
+}
+
+.basic-color {
+  color: var(--primary-accent);
 }
 
 /* ------------- background ------------- */
@@ -94,7 +102,7 @@ div {
   height: 100%;
   overflow: hidden;
   position: absolute;
-  transition: top 0.8s ease;
+  transition: top 0.8s ease, left 0.6s ease-in-out;
 }
 
 .back-nav {
@@ -123,6 +131,12 @@ div {
 .devices-container {
   display: flex;
   gap: 30px;
+}
+
+@media (max-width: 900px) {
+  .devices-page {
+    padding-left: 30px;
+  }
 }
 
 /* ------------- Nav ------------- */
@@ -205,20 +219,202 @@ div {
   width: 100%;
   height: 100%;
   display: flex;
-  justify-content: center;
   align-items: center;
   flex-direction: column;
-  gap: 20px;
+  gap: 15px;
+  padding-top: 80px;
 }
 
 .device-settings-item {
-  font-size: 25px;
-  width: 40%;
+  font-size: 30px;
+  width: 50%;
   display: flex;
   justify-content: space-between;
+  padding: 10px 10px;
+  border-radius: 10px;
+  cursor: pointer;
+  background-color: #ece5ec00;
+  stroke: var(--primary-accent);
+  fill: var(--primary-accent);
+  box-shadow: 0px 0px 0px 0px rgba(0, 0, 0, 0);
+  transition: background-color 0.3s, stroke 0.3s, fill 0.3s, box-shadow 0.3s,
+    color 0.3s;
 }
 
-/* ------------- ------------- */
+.device-settings-item:hover {
+  color: var(--primary-background);
+  background-color: #ece5ecff;
+  /* background: linear-gradient(91deg, #ece5ecff -5.01%, #dcddecff 104.47%); */
+  box-shadow: 0px 4px 30.1px 10px rgba(0, 0, 0, 0.25);
+  stroke: var(--primary-background);
+  fill: var(--primary-background);
+}
+
+.device-settings-value {
+  font-weight: 300;
+}
+
+.device-settings-title {
+  font-size: 30px;
+  font-weight: 700;
+  margin: 50px 0px;
+}
+
+@media (max-width: 900px) {
+  .device-settings-item {
+    width: 80%;
+  }
+}
+
+/* ------------- Select Menu ------------- */
+.select-menu-container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  gap: 15px;
+  padding-top: 80px;
+}
+
+.select-menu-item {
+  font-size: 30px;
+  width: 50%;
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 10px;
+  border-radius: 10px;
+  cursor: pointer;
+  background-color: #ece5ec00;
+  stroke: var(--primary-accent);
+  fill: var(--primary-accent);
+  box-shadow: 0px 0px 0px 0px rgba(0, 0, 0, 0);
+  transition: background-color 0.3s, stroke 0.3s, fill 0.3s, box-shadow 0.3s,
+    color 0.3s;
+}
+
+.select-menu-item.selected {
+  color: var(--primary-background);
+  background-color: #ece5ecff;
+  /* background: linear-gradient(91deg, #ece5ecff -5.01%, #dcddecff 104.47%); */
+  box-shadow: 0px 4px 30.1px 10px rgba(0, 0, 0, 0.25);
+  stroke: var(--primary-background);
+  fill: var(--primary-background);
+}
+
+@media (max-width: 900px) {
+  .select-menu-item {
+    width: 80%;
+  }
+}
+
+/* ------------- Input Textbox ------------- */
+.input-textbox {
+  border-radius: 5px;
+  background: var(--primary-accent);
+  box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.25) inset;
+  border: none;
+  outline: none;
+  width: calc(100% - 20px);
+  font-size: 30px;
+  height: 55px;
+  padding: 0px 10px;
+}
+.input-textbox::placeholder {
+  color: rgba(7, 3, 14, 0.5);
+  font-family: Montserrat;
+  font-size: 30px;
+}
+
+/* ------------- New Device Page ------------- */
+.new-device-container {
+  width: 100%;
+  height: 75vh;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 15px;
+  padding-top: 80px;
+}
+
+.new-device-button-container {
+  width: 50%;
+}
+
+.new-device-list {
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  align-items: center;
+}
+
+@media (max-width: 900px) {
+  .new-device-list {
+    width: 80%;
+  }
+  .new-device-button-container {
+    width: 80%;
+  }
+}
+
+/* ------------- Regular Container ------------- */
+
+.regular-container {
+  width: 100%;
+  height: 75vh;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 15px;
+  padding-top: 80px;
+}
+
+.regular-item-list {
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  align-items: center;
+}
+
+@media (max-width: 900px) {
+  .regular-item-list {
+    width: 80%;
+  }
+}
+
+/* ------------- My Button ------------- */
+
+.my-button-container {
+  border-radius: 5px;
+  background-color: var(--primary-accent);
+  width: calc(100% - 20px);
+  color: var(--primary-background);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* background: linear-gradient(91deg, #ece5ec -5.01%, #dcddec 104.47%); */
+  font-size: 30px;
+  box-shadow: 0px 4px 30.1px 10px rgba(0, 0, 0, 0.25);
+  padding: 10px;
+  cursor: pointer;
+}
+
+.my-button-container.disabled {
+  background-color: color-mix(
+    in srgb,
+    var(--primary-accent) 75%,
+    var(--primary-background)
+  );
+  color: color-mix(
+    in srgb,
+    var(--primary-background) 75%,
+    var(--primary-accent)
+  );
+}
 
 /* ------------- ------------- */
 

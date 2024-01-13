@@ -3,6 +3,8 @@ import Card from "../Components/Cards/Card";
 import AddIcon from "../SVGs/AddIcon";
 import VerticalTransition from "../Components/TransitionContainers/VerticalTransition";
 import DeviceSettings from "../Components/Device/DeviceSettings";
+import NewDevice from "../Components/Device/NewDevice";
+import { DeviceContextProvider } from "../Context/DeviceContext";
 
 const DevicesPage = () => {
   const [editing, setEditing] = useState(0);
@@ -46,7 +48,15 @@ const DevicesPage = () => {
             <DeviceSettings />
           </div>
         )}
-        {editing === 2 && <></>}
+        {editing === 2 && (
+          <div
+            style={{ position: "relative", width: "100vw", height: "100vh" }}
+          >
+            <DeviceContextProvider>
+              <NewDevice onFinish={() => setEditing(0)} />
+            </DeviceContextProvider>
+          </div>
+        )}
       </div>
     </VerticalTransition>
   );

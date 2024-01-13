@@ -1,6 +1,6 @@
 import { BasicIcon } from "./types";
 
-const LedIcon: React.FC<BasicIcon> = ({
+const ImageIcon: React.FC<BasicIcon> = ({
   width = "23",
   height = "19",
   stroke = "#ece5ec",
@@ -22,4 +22,4 @@ const LedIcon: React.FC<BasicIcon> = ({
   );
 };
 
-export default LedIcon;
+export default ImageIcon;

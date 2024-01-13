@@ -4,9 +4,13 @@ const RGBStripIcon: React.FC<BasicIcon> = ({
   width = "76",
   height = "16",
   stroke = "#ece5ec",
+  style,
+  className,
 }) => {
   return (
     <svg
+      style={style}
+      className={className}
       width={width}
       height={height}
       viewBox="0 0 76 16"
