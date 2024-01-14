@@ -11,6 +11,7 @@ import OptionController from "./OptionsController";
 import OptionsController from "./OptionsController";
 import HorizontalTransition from "../TransitionContainers/HorizonalTransition";
 import DeviceSetting from "./DeviceSetting";
+import { BaseControllerOptions } from "./OptionsControllerUtil";
 
 interface DeviceSettingsProps {}
 
@@ -85,7 +86,10 @@ const DeviceSettings: React.FC<DeviceSettingsProps> = () => {
             );
           })}
         </div>
-        <OptionsController option={editing}></OptionsController>
+        <OptionsController
+          options={BaseControllerOptions}
+          option={editing}
+        ></OptionsController>
       </HorizontalTransition>
     </div>
   );

@@ -6,7 +6,7 @@ interface BackgroundContainerProps {
   className?: string;
 }
 
-const items = Array(10).fill(0);
+const items = Array(3).fill(0);
 
 const BackgroundContainer: React.FC<BackgroundContainerProps> = () => {
   return (

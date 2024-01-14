@@ -7,6 +7,8 @@ import HorizontalTransition from "../TransitionContainers/HorizonalTransition";
 import { DeviceContext } from "../../Context/DeviceContext";
 import { cloneDeep } from "lodash";
 import OptionsController from "./OptionsController";
+import { BaseControllerOptions } from "./OptionsControllerUtil";
+import { GlobalContext } from "../../Context/GlobalContext";
 interface NewDeviceProps {
   onFinish: () => void;
 }
@@ -15,6 +17,7 @@ const NewDevice: React.FC<NewDeviceProps> = ({ onFinish }) => {
   const [deviceName, setDeviceName] = useState("");
   const [isEditing, setIsEditing] = useState(false);
   const [editing, setEditing] = useState("");
+  const { toggleTvShown } = useContext(GlobalContext);
   const { device, updateDevice } = useContext(DeviceContext);
 
   const onNameEdit = (val: string) => {
@@ -42,7 +45,10 @@ const NewDevice: React.FC<NewDeviceProps> = ({ onFinish }) => {
 
   return (
     <HorizontalTransition
-      onBack={() => setIsEditing(false)}
+      onBack={() => {
+        toggleTvShown(false);
+        setIsEditing(false);
+      }}
       id="device-settings-transition"
       selected={isEditing ? 1 : 0}
     >
@@ -57,6 +63,7 @@ const NewDevice: React.FC<NewDeviceProps> = ({ onFinish }) => {
           {baseOptions.map((option) => {
             return (
               <DeviceSetting
+                key={`new-device-${option}`}
                 value={getDisplayValue(
                   device.presets.default[
                     option as keyof typeof device.presets.default
@@ -64,6 +71,9 @@ const NewDevice: React.FC<NewDeviceProps> = ({ onFinish }) => {
                 )}
                 style={{ width: "calc(100% - 20px)" }}
                 onClick={() => {
+                  if (option === "configure") {
+                    toggleTvShown(true);
+                  }
                   setIsEditing(true);
                   setEditing(option);
                 }}
@@ -80,7 +90,10 @@ const NewDevice: React.FC<NewDeviceProps> = ({ onFinish }) => {
         </div>
       </div>
       <div>
-        <OptionsController option={editing}></OptionsController>
+        <OptionsController
+          options={BaseControllerOptions}
+          option={editing}
+        ></OptionsController>
       </div>
     </HorizontalTransition>
   );

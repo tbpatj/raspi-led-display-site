@@ -3,6 +3,7 @@ import { RGBStripDevice } from "../Resources/DataStructure";
 
 interface DeviceContextProviderProps {
   initialDevice?: RGBStripDevice;
+  initialPreset?: string;
   onFinish?: () => void;
   children: React.ReactNode | React.ReactNode[];
 }
@@ -10,6 +11,8 @@ interface DeviceContextProviderProps {
 interface DeviceProps {
   device: RGBStripDevice;
   updateDevice: (nDevice: RGBStripDevice) => void;
+  preset: string;
+  updatePreset: (nPreset: string) => void;
 }
 
 const defaultDevice: RGBStripDevice = {
@@ -41,23 +44,31 @@ const defaultDevice: RGBStripDevice = {
 export const DeviceContext = createContext<DeviceProps>({
   device: defaultDevice,
   updateDevice: () => null,
+  preset: "default",
+  updatePreset: () => null,
 });
 
 export const DeviceContextProvider: React.FC<DeviceContextProviderProps> = ({
   initialDevice,
   children,
+  initialPreset,
 }) => {
   const [device, setDevice] = useState<RGBStripDevice>(
     initialDevice ?? defaultDevice
   );
+  const [preset, setPreset] = useState<string>(initialPreset ?? "default");
 
   const updateDevice = (nDevice: RGBStripDevice) => {
     setDevice(nDevice);
   };
 
+  const updatePreset = (nPreset: string) => {
+    setPreset(nPreset);
+  };
+
   const value = useMemo(() => {
-    return { device, updateDevice };
-  }, [device, updateDevice]);
+    return { device, updateDevice, preset, updatePreset };
+  }, [device, updateDevice, preset, updatePreset]);
 
   return (
     <DeviceContext.Provider value={value}>{children}</DeviceContext.Provider>

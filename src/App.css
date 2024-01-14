@@ -40,6 +40,7 @@ div {
 .background-item {
   position: absolute;
   border-radius: 50%;
+  transition: left 0.8s ease, top 0.8s ease;
 }
 
 .background-cover {
@@ -414,6 +415,16 @@ div {
     var(--primary-background) 75%,
     var(--primary-accent)
   );
+}
+
+/* ------------- configure ------------- */
+
+.configure-tv {
+  border-radius: 3px;
+  border: 10px solid #1b1525;
+  background-color: #000;
+  width: 100%;
+  aspect-ratio: 16/9;
 }
 
 /* ------------- ------------- */
