@@ -39,7 +39,7 @@ export const deviceOptions: {
       />
     ),
   },
-  configure: { element: <div></div>, icon: <span></span> },
+  tv_settings: { element: <div></div>, icon: <span></span> },
   image_processing: {
     element: <div></div>,
     icon: <ImageIcon width="30" height="24" stroke="inherit" />,

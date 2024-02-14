@@ -1,74 +1,46 @@
 import { createContext, useMemo, useState } from "react";
-import { RGBStripDevice } from "../Resources/DataStructure";
+import { Devices } from "../Resources/DeviceResources";
 
 interface DeviceContextProviderProps {
-  initialDevice?: RGBStripDevice;
-  initialPreset?: string;
+  initialDevice?: Devices;
   onFinish?: () => void;
   children: React.ReactNode | React.ReactNode[];
 }
 
 interface DeviceProps {
-  device: RGBStripDevice;
-  updateDevice: (nDevice: RGBStripDevice) => void;
-  preset: string;
-  updatePreset: (nPreset: string) => void;
+  device: Devices;
+  updateDevice: (nDevice: Devices) => void;
+  saveDevice: () => void;
 }
 
-const defaultDevice: RGBStripDevice = {
+const defaultDevice: Devices = {
   name: "",
   preset: "default",
-  presets: {
-    default: {
-      type: "addressable",
-      power: "off",
-      image_processing: "default",
-      idle_animation: "default",
-      configure: {
-        configured: false,
-        lefts: 0,
-        lefte: 0,
-        rights: 0,
-        righte: 0,
-        tops: 0,
-        tope: 0,
-        bottoms: 0,
-        bottome: 0,
-      },
-      pin_out: 18,
-      brightness: 100,
-    },
-  },
+  type: "addressable",
+  pin_out: 0,
 };
 
 export const DeviceContext = createContext<DeviceProps>({
   device: defaultDevice,
   updateDevice: () => null,
-  preset: "default",
-  updatePreset: () => null,
+  saveDevice: () => null,
 });
 
 export const DeviceContextProvider: React.FC<DeviceContextProviderProps> = ({
   initialDevice,
   children,
-  initialPreset,
 }) => {
-  const [device, setDevice] = useState<RGBStripDevice>(
-    initialDevice ?? defaultDevice
-  );
-  const [preset, setPreset] = useState<string>(initialPreset ?? "default");
+  const [device, setDevice] = useState<Devices>(initialDevice ?? defaultDevice);
 
-  const updateDevice = (nDevice: RGBStripDevice) => {
+  const updateDevice = (nDevice: Devices) => {
     setDevice(nDevice);
   };
 
-  const updatePreset = (nPreset: string) => {
-    setPreset(nPreset);
-  };
+  const saveDevice = () => {};
 
   const value = useMemo(() => {
-    return { device, updateDevice, preset, updatePreset };
-  }, [device, updateDevice, preset, updatePreset]);
+    return { device, updateDevice, saveDevice };
+  }, [device, updateDevice, saveDevice]);
 
   return (
     <DeviceContext.Provider value={value}>{children}</DeviceContext.Provider>

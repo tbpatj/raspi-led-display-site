@@ -1,48 +1,68 @@
 import { useContext, useEffect, useMemo, useRef, useState } from "react";
 import { DeviceContext } from "../../Context/DeviceContext";
 import Input from "../Input/Input";
-import { RGBAddressableStripPreset } from "../../Resources/DataStructure";
 import { cloneDeep } from "lodash";
+import { RGBAddressableTVDevice } from "../../Resources/DeviceResources";
+import { RGBAddressableTVSettings } from "../../Resources/DeviceUtilResrouces";
 
-interface ConfigureOptionProps {}
+interface TVSettingsProps {}
 
-interface ConfigIndexInputs {
+interface TVIndexInputs {
   title: "left" | "right" | "top" | "bottom";
 }
+const defaultTVSettings: RGBAddressableTVSettings = {
+  configured: false,
+  lefts: 0,
+  lefte: 0,
+  rights: 0,
+  righte: 0,
+  tops: 0,
+  tope: 0,
+  bottoms: 0,
+  bottome: 0,
+};
 
-const ConfigIndexInputs: React.FC<ConfigIndexInputs> = ({ title }) => {
-  const { device, preset, updateDevice } = useContext(DeviceContext);
-  const config = useMemo(() => {
-    return (device.presets[preset] as RGBAddressableStripPreset).configure;
-  }, [device, preset]);
+const TVIndexInputs: React.FC<TVIndexInputs> = ({ title }) => {
+  const { device, updateDevice } = useContext(DeviceContext);
+
+  useEffect(() => {
+    if (!(device as RGBAddressableTVDevice)?.tv_settings) {
+      const nDevice = cloneDeep(device as RGBAddressableTVDevice);
+      nDevice.tv_settings = defaultTVSettings;
+      updateDevice(nDevice);
+    }
+  }, [device]);
+
+  const tvSettings = useMemo(() => {
+    if ((device as RGBAddressableTVDevice)?.tv_settings)
+      return (device as RGBAddressableTVDevice)?.tv_settings;
+    else {
+      return defaultTVSettings;
+    }
+  }, [device]);
   const initS = useMemo(
     () =>
       //@ts-ignore
-      config[title + "s"],
-    [config]
+      tvSettings[title + "s"],
+    [tvSettings]
   );
   const initE = useMemo(
     () =>
       //@ts-ignore
-      config[title + "e"],
-    [config]
+      tvSettings[title + "e"],
+    [tvSettings]
   );
   const [indexS, setIndexS] = useState("" + (initS ?? "0"));
   const [indexE, setIndexE] = useState("" + (initE ?? "0"));
 
   const updateVals = (val: number, type: "s" | "e") => {
-    let newD = cloneDeep(device);
+    let newD: RGBAddressableTVDevice = cloneDeep(
+      device as RGBAddressableTVDevice
+    );
     // @ts-ignore
-    (newD.presets[preset] as RGBAddressableStripPreset).configure[
-      title + type
-    ] = val;
-    if (
-      (newD.presets[preset] as RGBAddressableStripPreset).configure
-        .configured === false
-    ) {
-      (newD.presets[preset] as RGBAddressableStripPreset).configure.configured =
-        true;
-    }
+    newD.tv_settings[title + type] = val;
+    if (newD.tv_settings.configured === false)
+      newD.tv_settings.configured = true;
     updateDevice(newD);
   };
 
@@ -81,20 +101,20 @@ const ConfigIndexInputs: React.FC<ConfigIndexInputs> = ({ title }) => {
   );
 };
 
-const ConfigureOption: React.FC<ConfigureOptionProps> = () => {
+const TVSettings: React.FC<TVSettingsProps> = () => {
   const tvRef = useRef<HTMLDivElement>(null);
 
   return (
     <div className="regular-container">
       <div className="regular-item-list">
         <div ref={tvRef} className="configure-tv"></div>
-        <ConfigIndexInputs title="top" />
-        <ConfigIndexInputs title="right" />
-        <ConfigIndexInputs title="left" />
-        <ConfigIndexInputs title="bottom" />
+        <TVIndexInputs title="top" />
+        <TVIndexInputs title="right" />
+        <TVIndexInputs title="left" />
+        <TVIndexInputs title="bottom" />
       </div>
     </div>
   );
 };
 
-export default ConfigureOption;
+export default TVSettings;

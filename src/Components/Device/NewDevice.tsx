@@ -14,7 +14,6 @@ interface NewDeviceProps {
 }
 
 const NewDevice: React.FC<NewDeviceProps> = ({ onFinish }) => {
-  const [deviceName, setDeviceName] = useState("");
   const [isEditing, setIsEditing] = useState(false);
   const [editing, setEditing] = useState("");
   const { toggleTvShown } = useContext(GlobalContext);
@@ -32,9 +31,10 @@ const NewDevice: React.FC<NewDeviceProps> = ({ onFinish }) => {
   }, [device]);
 
   const baseOptions = useMemo(() => {
-    if (device.presets.default.type === "addressable")
-      return ["type", "pin_out", "configure"];
-    return ["type", "pin_out"];
+    if (device.type === "addressable-tv")
+      return ["type", "pin_out", "tv_settings"];
+    else if (device.type === "non-addressable-tv") return ["type", "pin_out"];
+    else return ["type", "pin_out"];
   }, [device]);
 
   const getDisplayValue = (value: any) => {
@@ -64,14 +64,10 @@ const NewDevice: React.FC<NewDeviceProps> = ({ onFinish }) => {
             return (
               <DeviceSetting
                 key={`new-device-${option}`}
-                value={getDisplayValue(
-                  device.presets.default[
-                    option as keyof typeof device.presets.default
-                  ]
-                )}
+                value={getDisplayValue(device[option as keyof typeof device])}
                 style={{ width: "calc(100% - 20px)" }}
                 onClick={() => {
-                  if (option === "configure") {
+                  if (option === "tv_settings") {
                     toggleTvShown(true);
                   }
                   setIsEditing(true);

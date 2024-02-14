@@ -1,5 +1,5 @@
 import { SelectMenuOption } from "../Input/SelectMenu";
-import ConfigureOption from "../Options/ConfigureOption";
+import TVSettings from "../Options/TVSettings";
 
 // ----------------- Option Controller Type Declaration ----------------- //
 
@@ -48,6 +48,8 @@ export const BaseControllerOptions: ControllerOptions = {
   type: {
     type: "select",
     options: [
+      { text: "RGB TV Addressable Strip", value: "addressable-tv" },
+      { text: "RGB TV Non-Addressable Strip", value: "non-addressable-tv" },
       { text: "RGB Addressable Strip", value: "addressable" },
       { text: "RGB Non-Addressable Strip", value: "non-addressable" },
     ],
@@ -65,9 +67,9 @@ export const BaseControllerOptions: ControllerOptions = {
     id: "brightness-input",
     title: "Brightness",
   },
-  configure: {
+  tv_settings: {
     type: "custom",
-    element: <ConfigureOption />,
+    element: <TVSettings />,
   },
   image_processing: {
     type: "custom",

@@ -21,7 +21,7 @@ const OptionsController: React.FC<OptionsControllerProps> = ({
   const updateDeviceOption = (option: string, value: any) => {
     const nDevice = cloneDeep(device);
     //@ts-ignore
-    nDevice.presets[preset][option] = value;
+    nDevice[option] = value;
     updateDevice(nDevice);
   };
 
@@ -31,7 +31,7 @@ const OptionsController: React.FC<OptionsControllerProps> = ({
 
   const optionValue = useMemo(() => {
     //@ts-ignore
-    return device.presets?.[preset]?.[option] ?? undefined;
+    return device?.[option] ?? undefined;
   }, [option, preset, device]);
 
   const displayValue = useMemo(() => {
