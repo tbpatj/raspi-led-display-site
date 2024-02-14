@@ -11,7 +11,7 @@ interface TVIndexInputs {
   title: "left" | "right" | "top" | "bottom";
 }
 const defaultTVSettings: RGBAddressableTVSettings = {
-  configured: false,
+  configured: true,
   lefts: 0,
   lefte: 0,
   rights: 0,

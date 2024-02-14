@@ -9,6 +9,10 @@ import { cloneDeep } from "lodash";
 import OptionsController from "./OptionsController";
 import { BaseControllerOptions } from "./OptionsControllerUtil";
 import { GlobalContext } from "../../Context/GlobalContext";
+import {
+  Devices,
+  RGBAddressableTVDevice,
+} from "../../Resources/DeviceResources";
 interface NewDeviceProps {
   onFinish: () => void;
 }
@@ -16,7 +20,7 @@ interface NewDeviceProps {
 const NewDevice: React.FC<NewDeviceProps> = ({ onFinish }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editing, setEditing] = useState("");
-  const { toggleTvShown } = useContext(GlobalContext);
+  const { toggleTvShown, addDevice } = useContext(GlobalContext);
   const { device, updateDevice } = useContext(DeviceContext);
 
   const onNameEdit = (val: string) => {
@@ -27,6 +31,11 @@ const NewDevice: React.FC<NewDeviceProps> = ({ onFinish }) => {
 
   const isButtonDisabled = useMemo(() => {
     if (device.name === "") return true;
+    if (
+      device.type === "addressable-tv" &&
+      !(device as RGBAddressableTVDevice)?.tv_settings?.configured
+    )
+      return true;
     return false;
   }, [device]);
 
@@ -41,6 +50,12 @@ const NewDevice: React.FC<NewDeviceProps> = ({ onFinish }) => {
     if (typeof value === "string") return value;
     else if (typeof value === "number") return value.toString();
     else return "";
+  };
+
+  const createDevice = async () => {
+    const response = await addDevice(device);
+    onFinish();
+    console.log(response);
   };
 
   return (
@@ -80,7 +95,7 @@ const NewDevice: React.FC<NewDeviceProps> = ({ onFinish }) => {
           })}
         </div>
         <div className="new-device-button-container">
-          <Button disabled={isButtonDisabled} onClick={() => null}>
+          <Button disabled={isButtonDisabled} onClick={() => createDevice()}>
             Create Device
           </Button>
         </div>

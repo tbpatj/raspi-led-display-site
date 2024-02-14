@@ -1,4 +1,4 @@
-import { Devices } from "./DeviceResources";
+import { DeviceTypes, Devices } from "./DeviceResources";
 import { DevicePresets } from "./PresetResources";
 
 export interface DeviceController {
@@ -10,6 +10,7 @@ export interface DeviceController {
   brightness: number;
   power: boolean;
   mode: string;
-  devices: { [name: string]: Devices };
-  presets: { [name: string]: DevicePresets };
+  devices: Devices[];
+  presets: { [device: string]: { [preset: string]: DevicePresets } };
+  // presets: { [name: string]: DevicePresets };
 }

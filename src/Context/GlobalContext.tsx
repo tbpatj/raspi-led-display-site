@@ -1,4 +1,8 @@
 import { createContext, useMemo, useState } from "react";
+import { Devices } from "../Resources/DeviceResources";
+import { DevicePresets } from "../Resources/PresetResources";
+import { ServerResponse } from "../Resources/ServerResponseResources";
+import { cloneDeep } from "lodash";
 
 interface GlobalContextProviderProps {
   children: React.ReactNode | React.ReactNode[];
@@ -14,8 +18,9 @@ export interface TVPosition {
 interface GlobalProps {
   tvShown: boolean;
   toggleTvShown: (nVal?: boolean) => void;
-  presets: any;
-  devices: any;
+  presets: DevicePresets[];
+  devices: Devices[];
+  addDevice: (device: Devices) => Promise<ServerResponse>;
 }
 
 const defaultGlobalData = {
@@ -23,6 +28,13 @@ const defaultGlobalData = {
   toggleTvShown: (nVal?: boolean) => null,
   presets: [],
   devices: [],
+  addDevice: async (device: Devices) => {
+    return {
+      status: "error",
+      message: "Context Provider was not initialized properly",
+      code: 400,
+    } as ServerResponse;
+  },
 };
 
 export const GlobalContext = createContext<GlobalProps>(defaultGlobalData);
@@ -34,18 +46,39 @@ export const GlobalContextProvider: React.FC<GlobalContextProviderProps> = ({
   const toggleTvShown = (nVal?: boolean) => {
     setTVShown(nVal ?? !tvShown);
   };
+  const [devices, setDevices] = useState<Devices[]>([]);
+  const addDevice = async (device: Devices) => {
+    // do a call to the server
+    const response: ServerResponse = {
+      status: "success",
+      message: "Device added successfully",
+      code: 200,
+    };
+
+    //handle response and potentially push the new device to our list of devices
+    if (response.status === "success") {
+      const nDevices = cloneDeep(devices);
+      nDevices.push(device);
+      setDevices(nDevices);
+      //TODO preset handler, make sure when the device gets added if there are no default presets for the device then create one.
+
+      return response;
+    } else {
+      return response;
+    }
+  };
 
   const presets: any = [];
-  const devices: any = [];
 
-  const value = useMemo(() => {
+  const value: GlobalProps = useMemo(() => {
     return {
       tvShown,
       presets,
       devices,
       toggleTvShown,
+      addDevice,
     };
-  }, [tvShown, presets, devices, toggleTvShown]);
+  }, [tvShown, presets, devices, toggleTvShown, addDevice]);
 
   return (
     <GlobalContext.Provider value={value}>{children}</GlobalContext.Provider>
