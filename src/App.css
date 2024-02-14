@@ -425,6 +425,14 @@ div {
   background-color: #000;
   width: 100%;
   aspect-ratio: 16/9;
+  max-width: 700px;
+}
+.config-tv-input-container {
+  display: flex;
+  gap: 5px;
+  justify-content: center;
+  align-items: center;
+  font-size: 30px;
 }
 
 /* ------------- ------------- */

@@ -9,11 +9,18 @@ interface InputProps {
   className?: string;
 }
 
-const Input: React.FC<InputProps> = ({ onChange, value, placeholder }) => {
+const Input: React.FC<InputProps> = ({
+  onChange,
+  value,
+  placeholder,
+  style,
+  className,
+}) => {
   return (
     <input
+      style={style}
       placeholder={placeholder}
-      className="input-textbox"
+      className={`input-textbox ${className ?? ""}`}
       onChange={(e) => onChange(e.target.value)}
       value={value}
       type="text"

@@ -33,16 +33,18 @@ export interface RGBNonAddressableStripPreset extends RGBStripPreset {
 
 export interface RGBAddressableStripPreset extends RGBStripPreset {
   type: "addressable";
-  configure: {
-    configured: boolean;
-    lefts: number;
-    lefte: number;
-    tops: number;
-    tope: number;
-    rights: number;
-    righte: number;
-    bottoms: number;
-    bottome: number;
-  };
+  configure: RGBAddressableTVConfigure;
   pin_out: number;
+}
+
+export interface RGBAddressableTVConfigure {
+  configured: boolean;
+  lefts: number;
+  lefte: number;
+  tops: number;
+  tope: number;
+  rights: number;
+  righte: number;
+  bottoms: number;
+  bottome: number;
 }
