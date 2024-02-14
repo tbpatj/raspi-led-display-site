@@ -19,7 +19,7 @@ interface CustomControllerOption extends ControllerOption {
   element: React.ReactNode | React.ReactNode[];
 }
 
-interface SelectControllerOption extends ControllerOption {
+export interface SelectControllerOption extends ControllerOption {
   type: "select";
   options: SelectMenuOption[];
   id: string;
@@ -48,8 +48,6 @@ export const BaseControllerOptions: ControllerOptions = {
   type: {
     type: "select",
     options: [
-      { text: "RGB TV Addressable Strip", value: "addressable-tv" },
-      { text: "RGB TV Non-Addressable Strip", value: "non-addressable-tv" },
       { text: "RGB Addressable Strip", value: "addressable" },
       { text: "RGB Non-Addressable Strip", value: "non-addressable" },
     ],
@@ -78,5 +76,11 @@ export const BaseControllerOptions: ControllerOptions = {
   idle_animation: {
     type: "custom",
     element: <div></div>,
+  },
+  preset: {
+    type: "select",
+    options: [{ text: "Default", value: "default" }],
+    id: "options-controller-device-preset",
+    title: "Presets",
   },
 };

@@ -1,6 +1,6 @@
 import { createContext, useMemo, useState } from "react";
 import { Devices } from "../Resources/DeviceResources";
-import { DevicePresets } from "../Resources/PresetResources";
+import { DevicePresets, defaultPresets } from "../Resources/PresetResources";
 import { ServerResponse } from "../Resources/ServerResponseResources";
 import { cloneDeep } from "lodash";
 
@@ -26,7 +26,7 @@ interface GlobalProps {
 const defaultGlobalData = {
   tvShown: false,
   toggleTvShown: (nVal?: boolean) => null,
-  presets: [],
+  presets: defaultPresets,
   devices: [],
   addDevice: async (device: Devices) => {
     return {
@@ -68,7 +68,7 @@ export const GlobalContextProvider: React.FC<GlobalContextProviderProps> = ({
     }
   };
 
-  const presets: any = [];
+  const [presets, setPresets] = useState<DevicePresets[]>(defaultPresets);
 
   const value: GlobalProps = useMemo(() => {
     return {

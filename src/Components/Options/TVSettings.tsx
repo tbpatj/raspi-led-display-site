@@ -2,8 +2,8 @@ import { useContext, useEffect, useMemo, useRef, useState } from "react";
 import { DeviceContext } from "../../Context/DeviceContext";
 import Input from "../Input/Input";
 import { cloneDeep } from "lodash";
-import { RGBAddressableTVDevice } from "../../Resources/DeviceResources";
 import { RGBAddressableTVSettings } from "../../Resources/DeviceUtilResrouces";
+import { RGBAddressableDevice } from "../../Resources/DeviceResources";
 
 interface TVSettingsProps {}
 
@@ -26,16 +26,16 @@ const TVIndexInputs: React.FC<TVIndexInputs> = ({ title }) => {
   const { device, updateDevice } = useContext(DeviceContext);
 
   useEffect(() => {
-    if (!(device as RGBAddressableTVDevice)?.tv_settings) {
-      const nDevice = cloneDeep(device as RGBAddressableTVDevice);
+    if (!(device as RGBAddressableDevice)?.tv_settings) {
+      const nDevice = cloneDeep(device as RGBAddressableDevice);
       nDevice.tv_settings = defaultTVSettings;
       updateDevice(nDevice);
     }
   }, [device]);
 
   const tvSettings = useMemo(() => {
-    if ((device as RGBAddressableTVDevice)?.tv_settings)
-      return (device as RGBAddressableTVDevice)?.tv_settings;
+    if ((device as RGBAddressableDevice)?.tv_settings)
+      return (device as RGBAddressableDevice)?.tv_settings;
     else {
       return defaultTVSettings;
     }
@@ -56,12 +56,10 @@ const TVIndexInputs: React.FC<TVIndexInputs> = ({ title }) => {
   const [indexE, setIndexE] = useState("" + (initE ?? "0"));
 
   const updateVals = (val: number, type: "s" | "e") => {
-    let newD: RGBAddressableTVDevice = cloneDeep(
-      device as RGBAddressableTVDevice
-    );
+    let newD: RGBAddressableDevice = cloneDeep(device as RGBAddressableDevice);
     // @ts-ignore
     newD.tv_settings[title + type] = val;
-    if (newD.tv_settings.configured === false)
+    if (newD?.tv_settings?.configured === false)
       newD.tv_settings.configured = true;
     updateDevice(newD);
   };

@@ -1,22 +1,22 @@
 import { CSSProperties } from "react";
 import ArrowThinIcon from "../../SVGs/ArrowThinIcon";
 
-export interface DeviceSettingProps {
+export interface SettingItemProps {
   title: string;
-  elements: DeviceSetting;
+  element: SettingElement;
   onClick: () => void;
   style?: CSSProperties;
   className?: string;
   value: string;
 }
 
-interface DeviceSetting {
+interface SettingElement {
   element: React.ReactNode | React.ReactNode[];
   icon: React.ReactNode | React.ReactNode[];
 }
 
-const DeviceSetting: React.FC<DeviceSettingProps> = ({
-  elements,
+const SettingItem: React.FC<SettingItemProps> = ({
+  element,
   title,
   onClick,
   style,
@@ -44,7 +44,7 @@ const DeviceSetting: React.FC<DeviceSettingProps> = ({
             alignItems: "center",
           }}
         >
-          {elements.icon}
+          {element.icon}
         </div>
         {title
           .split("_")
@@ -75,4 +75,4 @@ const DeviceSetting: React.FC<DeviceSettingProps> = ({
   );
 };
 
-export default DeviceSetting;
+export default SettingItem;

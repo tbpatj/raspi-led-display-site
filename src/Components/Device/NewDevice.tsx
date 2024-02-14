@@ -1,7 +1,5 @@
 import { useContext, useMemo, useState } from "react";
 import Input from "../Input/Input";
-import DeviceSetting from "./DeviceSetting";
-import { deviceOptions } from "./DeviceSettings";
 import Button from "../Input/Button";
 import HorizontalTransition from "../TransitionContainers/HorizonalTransition";
 import { DeviceContext } from "../../Context/DeviceContext";
@@ -9,10 +7,9 @@ import { cloneDeep } from "lodash";
 import OptionsController from "./OptionsController";
 import { BaseControllerOptions } from "./OptionsControllerUtil";
 import { GlobalContext } from "../../Context/GlobalContext";
-import {
-  Devices,
-  RGBAddressableTVDevice,
-} from "../../Resources/DeviceResources";
+import { RGBAddressableDevice } from "../../Resources/DeviceResources";
+import SettingItem from "./SettingItem";
+import { settingElements } from "./SettingsUtil";
 interface NewDeviceProps {
   onFinish: () => void;
 }
@@ -32,17 +29,17 @@ const NewDevice: React.FC<NewDeviceProps> = ({ onFinish }) => {
   const isButtonDisabled = useMemo(() => {
     if (device.name === "") return true;
     if (
-      device.type === "addressable-tv" &&
-      !(device as RGBAddressableTVDevice)?.tv_settings?.configured
+      device.type === "addressable" &&
+      !(device as RGBAddressableDevice)?.tv_settings?.configured
     )
       return true;
     return false;
   }, [device]);
 
   const baseOptions = useMemo(() => {
-    if (device.type === "addressable-tv")
+    if (device.type === "addressable")
       return ["type", "pin_out", "tv_settings"];
-    else if (device.type === "non-addressable-tv") return ["type", "pin_out"];
+    else if (device.type === "non-addressable") return ["type", "pin_out"];
     else return ["type", "pin_out"];
   }, [device]);
 
@@ -77,7 +74,7 @@ const NewDevice: React.FC<NewDeviceProps> = ({ onFinish }) => {
           ></Input>
           {baseOptions.map((option) => {
             return (
-              <DeviceSetting
+              <SettingItem
                 key={`new-device-${option}`}
                 value={getDisplayValue(device[option as keyof typeof device])}
                 style={{ width: "calc(100% - 20px)" }}
@@ -89,7 +86,7 @@ const NewDevice: React.FC<NewDeviceProps> = ({ onFinish }) => {
                   setEditing(option);
                 }}
                 title={option}
-                elements={deviceOptions[option]}
+                element={settingElements?.[option]}
               />
             );
           })}

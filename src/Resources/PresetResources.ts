@@ -1,11 +1,12 @@
 import { DeviceTypes } from "./DeviceResources";
 
 export type DevicePresets =
-  | RGBNonAddressableTVPreset
-  | RGBAddressableTVPreset
+  | RGBAddressablePreset
+  | RGBNonAddressablePreset
   | DevicePreset;
 
 export interface DevicePreset {
+  name: string;
   power: "on" | "off";
   type: DeviceTypes;
 }
@@ -16,12 +17,18 @@ export interface DevicePreset {
 
 // ----------------- TV ----------------- //
 
-export interface RGBNonAddressableTVPreset extends DevicePreset {
-  type: "non-addressable-tv";
+export interface RGBNonAddressablePreset extends DevicePreset {
+  type: "non-addressable";
+  mode: "tv" | "custom" | "fade";
   image_processing: string;
 }
 
-export interface RGBAddressableTVPreset extends DevicePreset {
-  type: "addressable-tv";
+export interface RGBAddressablePreset extends DevicePreset {
+  type: "addressable";
   image_processing: string;
 }
+
+export const defaultPresets: DevicePresets[] = [
+  { name: "default", power: "off", type: "addressable" },
+  { name: "default", power: "off", type: "non-addressable" },
+];
