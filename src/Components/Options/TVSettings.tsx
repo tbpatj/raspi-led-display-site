@@ -1,5 +1,5 @@
 import { useContext, useEffect, useMemo, useRef, useState } from "react";
-import { DeviceContext } from "../../Context/DeviceContext";
+import { SettingsContext } from "../../Context/SettingsContext";
 import Input from "../Input/Input";
 import { cloneDeep } from "lodash";
 import { RGBAddressableTVSettings } from "../../Resources/DeviceUtilResrouces";
@@ -23,7 +23,7 @@ const defaultTVSettings: RGBAddressableTVSettings = {
 };
 
 const TVIndexInputs: React.FC<TVIndexInputs> = ({ title }) => {
-  const { device, updateDevice } = useContext(DeviceContext);
+  const { device, updateDevice } = useContext(SettingsContext);
 
   useEffect(() => {
     if (!(device as RGBAddressableDevice)?.tv_settings) {

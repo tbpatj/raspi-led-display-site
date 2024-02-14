@@ -2,12 +2,11 @@ import { useContext, useState } from "react";
 import Card from "../Components/Cards/Card";
 import AddIcon from "../SVGs/AddIcon";
 import VerticalTransition from "../Components/TransitionContainers/VerticalTransition";
-import DeviceSettings from "../Components/Device/PresetSettings";
 import NewDevice from "../Components/Device/NewDevice";
-import { DeviceContextProvider } from "../Context/DeviceContext";
 import { Devices } from "../Resources/DeviceResources";
 import { GlobalContext } from "../Context/GlobalContext";
 import PresetSettings from "../Components/Device/PresetSettings";
+import { SettingsContextProvider } from "../Context/SettingsContext";
 
 const DevicesPage = () => {
   const [editing, setEditing] = useState(0);
@@ -43,14 +42,6 @@ const DevicesPage = () => {
               }}
               icon={<AddIcon width="60" height="60" />}
             />
-            {/* <Card
-              text="RGB Strip-1"
-              onClick={() => {
-                setEditingOpen(true);
-                setEditing(1);
-              }}
-              icon={<AddIcon width="60" height="60" />}
-            /> */}
           </div>
         </div>
       </div>
@@ -59,22 +50,22 @@ const DevicesPage = () => {
           <div
             style={{ position: "relative", width: "100vw", height: "100vh" }}
           >
-            <DeviceContextProvider>
+            <SettingsContextProvider>
               <PresetSettings />
-            </DeviceContextProvider>
+            </SettingsContextProvider>
           </div>
         )}
         {editing === 2 && (
           <div
             style={{ position: "relative", width: "100vw", height: "100vh" }}
           >
-            <DeviceContextProvider>
+            <SettingsContextProvider>
               <NewDevice
                 onFinish={() => {
                   setEditingOpen(false);
                 }}
               />
-            </DeviceContextProvider>
+            </SettingsContextProvider>
           </div>
         )}
       </div>

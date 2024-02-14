@@ -3,20 +3,15 @@ import ArrowThinIcon from "../../SVGs/ArrowThinIcon";
 
 export interface SettingItemProps {
   title: string;
-  element: SettingElement;
+  icon: React.ReactNode | React.ReactNode[];
   onClick: () => void;
   style?: CSSProperties;
   className?: string;
   value: string;
 }
 
-interface SettingElement {
-  element: React.ReactNode | React.ReactNode[];
-  icon: React.ReactNode | React.ReactNode[];
-}
-
 const SettingItem: React.FC<SettingItemProps> = ({
-  element,
+  icon,
   title,
   onClick,
   style,
@@ -44,7 +39,7 @@ const SettingItem: React.FC<SettingItemProps> = ({
             alignItems: "center",
           }}
         >
-          {element.icon}
+          {icon ? icon : ""}
         </div>
         {title
           .split("_")
