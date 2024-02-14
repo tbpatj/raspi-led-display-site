@@ -10,11 +10,13 @@ import { SettingsContext } from "../../Context/SettingsContext";
 interface SettingsControllerProps {
   options: string[];
   values: { [key: string]: any };
+  title?: string;
 }
 
 const SettingsController: React.FC<SettingsControllerProps> = ({
   options,
   values,
+  title,
 }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editing, setEditing] = useState("");
@@ -38,6 +40,7 @@ const SettingsController: React.FC<SettingsControllerProps> = ({
     >
       <div className="new-device-container">
         <div className="new-device-list">
+          <h1>{title ? title : ""}</h1>
           {options.map((option) => {
             //filter out options that are not supported by the device type
             if (defaultSettings?.[option]?.includeTypes) {

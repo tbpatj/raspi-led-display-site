@@ -130,4 +130,9 @@ export const defaultSettings: SettingsControllerList = {
     dataType: "device",
     element: <div>input</div>,
   },
+  device_confirm: {
+    type: "custom-item",
+    dataType: "device",
+    element: <div>input</div>,
+  },
 };
