@@ -1,4 +1,4 @@
-import { createContext, useMemo, useState } from "react";
+import { createContext, useCallback, useMemo, useState } from "react";
 import { Devices } from "../Resources/DeviceResources";
 import { DevicePresets, defaultPresets } from "../Resources/PresetResources";
 import { ServerResponse } from "../Resources/ServerResponseResources";
@@ -21,20 +21,22 @@ interface GlobalProps {
   presets: DevicePresets[];
   devices: Devices[];
   addDevice: (device: Devices) => Promise<ServerResponse>;
+  updateDevice: (i: number, nDevice: Devices) => Promise<ServerResponse>;
 }
+
+const defaultServerResponse: ServerResponse = {
+  status: "error",
+  message: "Context Provider was not initialized properly",
+  code: 400,
+};
 
 const defaultGlobalData = {
   tvShown: false,
   toggleTvShown: (nVal?: boolean) => null,
   presets: defaultPresets,
   devices: [],
-  addDevice: async (device: Devices) => {
-    return {
-      status: "error",
-      message: "Context Provider was not initialized properly",
-      code: 400,
-    } as ServerResponse;
-  },
+  addDevice: async (device: Devices) => defaultServerResponse,
+  updateDevice: async (i: number, nDevice: Devices) => defaultServerResponse,
 };
 
 export const GlobalContext = createContext<GlobalProps>(defaultGlobalData);
@@ -54,12 +56,32 @@ export const GlobalContextProvider: React.FC<GlobalContextProviderProps> = ({
       message: "Device added successfully",
       code: 200,
     };
-
     //handle response and potentially push the new device to our list of devices
     if (response.status === "success") {
       const nDevices = cloneDeep(devices);
       nDevices.push(device);
       setDevices(nDevices);
+      //TODO preset handler, make sure when the device gets added if there are no default presets for the device then create one.
+
+      return response;
+    } else {
+      return response;
+    }
+  };
+  const updateDevice = async (i: number, nDevice: Devices) => {
+    // do a call to the server
+    const response: ServerResponse = {
+      status: "success",
+      message: "Device added successfully",
+      code: 200,
+    };
+
+    //handle response and potentially push the new device to our list of devices
+    if (response.status === "success") {
+      const nDevices = cloneDeep(devices);
+      nDevices[i] = nDevice;
+      setDevices(nDevices);
+      console.log("updated");
       //TODO preset handler, make sure when the device gets added if there are no default presets for the device then create one.
 
       return response;
@@ -77,8 +99,9 @@ export const GlobalContextProvider: React.FC<GlobalContextProviderProps> = ({
       devices,
       toggleTvShown,
       addDevice,
+      updateDevice,
     };
-  }, [tvShown, presets, devices, toggleTvShown, addDevice]);
+  }, [tvShown, presets, devices, toggleTvShown, addDevice, updateDevice]);
 
   return (
     <GlobalContext.Provider value={value}>{children}</GlobalContext.Provider>

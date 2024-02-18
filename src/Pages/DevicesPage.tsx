@@ -53,7 +53,7 @@ const DevicesPage = () => {
             style={{ position: "relative", width: "100vw", height: "100vh" }}
           >
             <SettingsContextProvider
-              initialDevice={devices[editingIndex]}
+              selectedDevice={editingIndex}
               initialPreset={presets.find((val) => {
                 if (
                   val.name === devices[editingIndex].preset &&

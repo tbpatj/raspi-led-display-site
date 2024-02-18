@@ -1,6 +1,7 @@
 import {
   createContext,
   useCallback,
+  useContext,
   useEffect,
   useMemo,
   useState,
@@ -8,9 +9,10 @@ import {
 import { Devices } from "../Resources/DeviceResources";
 import { DevicePresets } from "../Resources/PresetResources";
 import { cloneDeep } from "lodash";
+import { GlobalContext } from "./GlobalContext";
 
 interface SettingsContextProviderProps {
-  initialDevice?: Devices;
+  selectedDevice?: number;
   initialPreset?: DevicePresets;
   setEditingOpen?: React.Dispatch<React.SetStateAction<boolean>>;
   onFinish?: () => void;
@@ -57,29 +59,58 @@ export const SettingsContext = createContext<SettingsContextProps>({
 
 export const SettingsContextProvider: React.FC<
   SettingsContextProviderProps
-> = ({ initialDevice, initialPreset, children, setEditingOpen }) => {
-  const [device, setDevice] = useState<Devices>(initialDevice ?? defaultDevice);
+> = ({ selectedDevice, initialPreset, children, setEditingOpen }) => {
+  const { devices, updateDevice: globalUpdateDevice } =
+    useContext(GlobalContext);
+  const [device, setDevice] = useState<Devices>(
+    selectedDevice !== undefined && selectedDevice !== null
+      ? devices?.[selectedDevice] ?? defaultDevice
+      : defaultDevice
+  );
   const [preset, setPreset] = useState<DevicePresets>(
     initialPreset ?? defaultPreset
   );
 
   useEffect(() => {
-    setDevice(initialDevice ?? defaultDevice);
-  }, [initialDevice]);
+    setDevice(
+      selectedDevice !== undefined && selectedDevice !== null
+        ? devices?.[selectedDevice] ?? defaultDevice
+        : defaultDevice
+    );
+  }, [selectedDevice]);
 
   useEffect(() => {
     setPreset(initialPreset ?? defaultPreset);
   }, [initialPreset]);
 
   const updateDevice = async (nDevice: Devices) => {
-    setDevice(nDevice);
+    //update the client if successful
+    if (
+      selectedDevice !== undefined &&
+      selectedDevice !== null &&
+      devices?.[selectedDevice]
+    ) {
+      const response = await globalUpdateDevice(selectedDevice, nDevice);
+      if (response.status === "success") setDevice(nDevice);
+    } else {
+      setDevice(nDevice);
+    }
   };
 
   const updatePreset = async (nPreset: DevicePresets) => {
-    setPreset(nPreset);
     const nDevice = cloneDeep(device);
     nDevice.settings = nPreset;
-    setDevice(nDevice);
+    if (
+      selectedDevice !== undefined &&
+      selectedDevice !== null &&
+      devices?.[selectedDevice]
+    ) {
+      const response = await globalUpdateDevice(selectedDevice, nDevice);
+      if (response.status === "success") setDevice(nDevice);
+    } else {
+      setDevice(nDevice);
+      setPreset(nPreset);
+    }
   };
 
   const toggleEditingNav = useCallback(() => {
