@@ -18,17 +18,17 @@ const InputController: React.FC<InputControllerProps> = ({
   const { device, preset, updateDevice, updatePreset } =
     useContext(SettingsContext);
 
-  const updateDeviceOption = (option: string, value: any) => {
+  const updateDeviceOption = async (option: string, value: any) => {
     const nDevice = cloneDeep(device);
     //@ts-ignore
     nDevice[option] = value;
-    updateDevice(nDevice);
+    await updateDevice(nDevice);
   };
 
   const updatePresetOption = (option: string, value: any) => {
     const nPreset = cloneDeep(preset);
     //@ts-ignore
-    nDevice[option] = value;
+    nPreset[option] = value;
     updatePreset(nPreset);
   };
 
@@ -64,7 +64,6 @@ const InputController: React.FC<InputControllerProps> = ({
     }
     return ""; // Add a default return value for other cases
   }, [optionValue]);
-
   return (
     <div>
       {optionDetails.type === "select" && (
@@ -75,6 +74,7 @@ const InputController: React.FC<InputControllerProps> = ({
             updateValues(option, val);
           }}
           title={optionDetails?.title}
+          type={device.type}
           id={optionDetails?.id}
           options={optionDetails.options}
         />

@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { defaultSettings } from "./SettingsControllerUtil";
 import SettingItem from "./SettingItem";
 import HorizontalTransition from "../TransitionContainers/HorizonalTransition";
@@ -50,15 +50,26 @@ const SettingsController: React.FC<SettingsControllerProps> = ({
                 if (!includedTypes.includes(device.type)) return;
               }
             }
+            if (defaultSettings?.[option]?.modeInfo) {
+              //if the mode doesn't support the current setting then remove it.
+              const modeInfo = defaultSettings?.[option].modeInfo;
+              if (!modeInfo?.[device.settings.mode]) return;
+            }
             //if the element is a custom element then don't use a default setting.
             const settingOption = defaultSettings?.[option];
             if (settingOption?.type === "custom-item") {
               return <>{settingOption.element}</>;
             }
+            //get the value if it's a preset setting or a device setting
+            const value =
+              defaultSettings?.[option]?.dataType === "device"
+                ? device?.[option as keyof typeof device]
+                : device.settings?.[option as keyof typeof device.settings];
+
             return (
               <SettingItem
                 key={`settings-controller-item-${option}`}
-                value={getDisplayValue(values[option as keyof typeof values])}
+                value={getDisplayValue(value)}
                 style={{ width: "calc(100% - 20px)" }}
                 onClick={() => {
                   if (option === "tv_settings") {

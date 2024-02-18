@@ -2,7 +2,7 @@ import { useContext, useEffect, useMemo, useRef, useState } from "react";
 import { SettingsContext } from "../../Context/SettingsContext";
 import Input from "../Input/Input";
 import { cloneDeep } from "lodash";
-import { RGBAddressableTVSettings } from "../../Resources/DeviceUtilResrouces";
+import { RGBAddressableTVSettings } from "../../Resources/DeviceUtilResources";
 import { RGBAddressableDevice } from "../../Resources/DeviceResources";
 
 interface TVSettingsProps {}

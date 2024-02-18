@@ -7,7 +7,7 @@ interface NewDeviceProps {
 }
 
 const NewDevice: React.FC<NewDeviceProps> = ({ onFinish }) => {
-  const { device, updateDevice } = useContext(SettingsContext);
+  const { device } = useContext(SettingsContext);
 
   return (
     <SettingsController

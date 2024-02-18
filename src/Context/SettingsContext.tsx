@@ -1,6 +1,13 @@
-import { createContext, useCallback, useMemo, useState } from "react";
+import {
+  createContext,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import { Devices } from "../Resources/DeviceResources";
 import { DevicePresets } from "../Resources/PresetResources";
+import { cloneDeep } from "lodash";
 
 interface SettingsContextProviderProps {
   initialDevice?: Devices;
@@ -24,12 +31,19 @@ const defaultDevice: Devices = {
   preset: "default",
   type: "addressable",
   pin_out: 0,
+  settings: {
+    name: "default",
+    power: "off",
+    type: "addressable",
+    mode: "breathe",
+  },
 };
 
 const defaultPreset: DevicePresets = {
   name: "default",
   power: "off",
   type: "addressable",
+  mode: "breathe",
 };
 
 export const SettingsContext = createContext<SettingsContextProps>({
@@ -49,12 +63,23 @@ export const SettingsContextProvider: React.FC<
     initialPreset ?? defaultPreset
   );
 
-  const updateDevice = (nDevice: Devices) => {
+  useEffect(() => {
+    setDevice(initialDevice ?? defaultDevice);
+  }, [initialDevice]);
+
+  useEffect(() => {
+    setPreset(initialPreset ?? defaultPreset);
+  }, [initialPreset]);
+
+  const updateDevice = async (nDevice: Devices) => {
     setDevice(nDevice);
   };
 
-  const updatePreset = (nPreset: DevicePresets) => {
+  const updatePreset = async (nPreset: DevicePresets) => {
     setPreset(nPreset);
+    const nDevice = cloneDeep(device);
+    nDevice.settings = nPreset;
+    setDevice(nDevice);
   };
 
   const toggleEditingNav = useCallback(() => {

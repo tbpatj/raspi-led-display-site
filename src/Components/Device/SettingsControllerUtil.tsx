@@ -25,6 +25,7 @@ interface SettingListItem {
   type: "custom-input" | "select" | "text" | "custom-item";
   icon?: React.ReactNode | React.ReactNode[] | string;
   dataType: "device" | "preset";
+  modeInfo?: ModeInfo;
   includeTypes?: DeviceTypes | DeviceTypes[];
 }
 
@@ -50,6 +51,15 @@ interface InputSettingItem extends SettingListItem {
   id?: string;
   filter?: (value: string, prevVal?: string) => string;
   title?: string;
+}
+/**
+ *
+ * [modeName: string]: info
+ * @param modeName - The name of the mode that enables this option to be displayed, if not provided, the option will be displayed for all modes
+ * @param info - The information that will be displayed if the user hovers for help changes depending on the mode. If empty string, then it will not display
+ */
+interface ModeInfo {
+  [modeName: string]: string;
 }
 
 // ----------------- Option Controller Basic Options ----------------- //
@@ -107,6 +117,9 @@ export const defaultSettings: SettingsControllerList = {
     dataType: "device",
     element: <TVSettings />,
     includeTypes: "addressable",
+    modeInfo: {
+      tv: "Specify which light index corresponds with which side of the TV",
+    },
   },
   image_processing: {
     type: "custom-input",
@@ -136,5 +149,16 @@ export const defaultSettings: SettingsControllerList = {
     type: "custom-item",
     dataType: "device",
     element: <ConfirmNewDevice />,
+  },
+  mode: {
+    type: "select",
+    dataType: "preset",
+    id: "mode-select",
+    options: [
+      { text: "Breathe", value: "breathe" },
+      { text: "Fade", value: "fade" },
+      { text: "TV", value: "tv" },
+      { text: "Test", value: "test", type: "addressable" },
+    ],
   },
 };

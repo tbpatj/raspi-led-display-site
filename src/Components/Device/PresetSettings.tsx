@@ -47,7 +47,13 @@ const PresetSettings: React.FC<PresetSettingsProps> = () => {
   return (
     <div style={{ width: "100vw", height: "100vh", position: "relative" }}>
       <SettingsController
-        options={["preset", "brightness", "mode"]}
+        options={[
+          "preset",
+          "mode",
+          "animation_speed",
+          "tv_settings",
+          "brightness",
+        ]}
         values={presets}
       />
       {/* <HorizontalTransition
