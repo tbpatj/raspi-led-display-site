@@ -46,7 +46,10 @@ const PresetSettings: React.FC<PresetSettingsProps> = () => {
 
   return (
     <div style={{ width: "100vw", height: "100vh", position: "relative" }}>
-      <SettingsController options={["brightness", "preset"]} values={presets} />
+      <SettingsController
+        options={["preset", "brightness", "mode"]}
+        values={presets}
+      />
       {/* <HorizontalTransition
         onBack={() => setIsEditing(false)}
         id="device-settings-transition"

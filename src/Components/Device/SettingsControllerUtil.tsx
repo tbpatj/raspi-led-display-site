@@ -8,6 +8,8 @@ import AnimationIcon from "../../SVGs/AnimationIcon";
 import PinoutIcon from "../../SVGs/PinoutIcon";
 import BrightnessIcon from "../../SVGs/BrightnessIcon";
 import { DeviceTypes } from "../../Resources/DeviceResources";
+import DeviceName from "../Settings/DeviceName";
+import ConfirmNewDevice from "../Settings/ConfirmNewDevice";
 
 // ----------------- Option Controller Type Declaration ----------------- //
 
@@ -128,11 +130,11 @@ export const defaultSettings: SettingsControllerList = {
   name: {
     type: "custom-item",
     dataType: "device",
-    element: <div>input</div>,
+    element: <DeviceName />,
   },
   device_confirm: {
     type: "custom-item",
     dataType: "device",
-    element: <div>input</div>,
+    element: <ConfirmNewDevice />,
   },
 };

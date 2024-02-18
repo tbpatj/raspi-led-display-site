@@ -1,12 +1,12 @@
 import { useContext, useState } from "react";
 import Card from "../Components/Cards/Card";
-import AddIcon from "../SVGs/AddIcon";
 import VerticalTransition from "../Components/TransitionContainers/VerticalTransition";
 import NewDevice from "../Components/Device/NewDevice";
 import { Devices } from "../Resources/DeviceResources";
 import { GlobalContext } from "../Context/GlobalContext";
 import PresetSettings from "../Components/Device/PresetSettings";
 import { SettingsContextProvider } from "../Context/SettingsContext";
+import { DeviceSVGMap } from "../Utils/DeviceSVGMap";
 
 const DevicesPage = () => {
   const [editing, setEditing] = useState(0);
@@ -30,7 +30,7 @@ const DevicesPage = () => {
                     setEditingOpen(true);
                     setEditing(1);
                   }}
-                  icon={<AddIcon width="60" height="60" />}
+                  icon={DeviceSVGMap(device.type)}
                 />
               );
             })}
@@ -40,7 +40,7 @@ const DevicesPage = () => {
                 setEditingOpen(true);
                 setEditing(2);
               }}
-              icon={<AddIcon width="60" height="60" />}
+              icon={DeviceSVGMap("new-device")}
             />
           </div>
         </div>
@@ -50,7 +50,7 @@ const DevicesPage = () => {
           <div
             style={{ position: "relative", width: "100vw", height: "100vh" }}
           >
-            <SettingsContextProvider>
+            <SettingsContextProvider setEditingOpen={setEditingOpen}>
               <PresetSettings />
             </SettingsContextProvider>
           </div>
@@ -59,7 +59,7 @@ const DevicesPage = () => {
           <div
             style={{ position: "relative", width: "100vw", height: "100vh" }}
           >
-            <SettingsContextProvider>
+            <SettingsContextProvider setEditingOpen={setEditingOpen}>
               <NewDevice
                 onFinish={() => {
                   setEditingOpen(false);

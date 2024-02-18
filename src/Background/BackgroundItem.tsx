@@ -5,8 +5,8 @@ import { cloneDeep } from "lodash";
 const BackgroundItem = () => {
   const { tvShown } = useContext(GlobalContext);
   const [perc, setPerc] = useState({
-    x: Math.random() * 100,
-    y: Math.random() * 100,
+    x: Math.random() * 80 + 10,
+    y: Math.random() * 80 + 10,
     w: Math.random() * 100 + 400,
     h: Math.random() * 100 + 400,
     color: `rgb(${Math.random() * 255}, ${Math.random() * 255}, ${

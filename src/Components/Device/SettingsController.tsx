@@ -2,7 +2,6 @@ import { useContext, useState } from "react";
 import { defaultSettings } from "./SettingsControllerUtil";
 import SettingItem from "./SettingItem";
 import HorizontalTransition from "../TransitionContainers/HorizonalTransition";
-import OptionsController from "./InputController";
 import { GlobalContext } from "../../Context/GlobalContext";
 import InputController from "./InputController";
 import { SettingsContext } from "../../Context/SettingsContext";
