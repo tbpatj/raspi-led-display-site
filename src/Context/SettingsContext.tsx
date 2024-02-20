@@ -100,13 +100,20 @@ export const SettingsContextProvider: React.FC<
   const updatePreset = async (nPreset: DevicePresets) => {
     const nDevice = cloneDeep(device);
     nDevice.settings = nPreset;
+    //make sure the device is now on it's own custom preset, since we changed the data of the preset currently
+    nDevice.preset = "custom";
+    nDevice.settings.name = "custom";
+    nPreset.name = "custom";
     if (
       selectedDevice !== undefined &&
       selectedDevice !== null &&
       devices?.[selectedDevice]
     ) {
       const response = await globalUpdateDevice(selectedDevice, nDevice);
-      if (response.status === "success") setDevice(nDevice);
+      if (response.status === "success") {
+        setDevice(nDevice);
+        setPreset(nPreset);
+      }
     } else {
       setDevice(nDevice);
       setPreset(nPreset);

@@ -48,8 +48,10 @@ const PresetSettings: React.FC<PresetSettingsProps> = () => {
     <div style={{ width: "100vw", height: "100vh", position: "relative" }}>
       <SettingsController
         options={[
+          "save_preset",
           "preset",
           "mode",
+          "power",
           "animation_speed",
           "tv_settings",
           "brightness",

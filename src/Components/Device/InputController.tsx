@@ -49,6 +49,7 @@ const InputController: React.FC<InputControllerProps> = ({
     if (optionDetails.dataType === "device") {
       return device?.[option as keyof typeof device] ?? undefined;
     } else if (optionDetails.dataType === "preset") {
+      //return the current settings preset value from the device
       return (
         device?.settings?.[option as keyof typeof device.settings] ?? undefined
       );

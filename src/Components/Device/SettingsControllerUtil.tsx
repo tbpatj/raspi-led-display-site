@@ -10,6 +10,7 @@ import BrightnessIcon from "../../SVGs/BrightnessIcon";
 import { DeviceTypes } from "../../Resources/DeviceResources";
 import DeviceName from "../Settings/DeviceName";
 import ConfirmNewDevice from "../Settings/ConfirmNewDevice";
+import SavePreset from "../Settings/SavePreset";
 
 // ----------------- Option Controller Type Declaration ----------------- //
 
@@ -27,6 +28,7 @@ interface SettingListItem {
   dataType: "device" | "preset";
   modeInfo?: ModeInfo;
   includeTypes?: DeviceTypes | DeviceTypes[];
+  whenCustom?: boolean;
 }
 
 interface CustomSettingItem extends SettingListItem {
@@ -65,6 +67,12 @@ interface ModeInfo {
 // ----------------- Option Controller Basic Options ----------------- //
 
 export const defaultSettings: SettingsControllerList = {
+  save_preset: {
+    type: "custom-item",
+    dataType: "preset",
+    whenCustom: true,
+    element: <SavePreset />,
+  },
   power: {
     type: "select",
     options: [

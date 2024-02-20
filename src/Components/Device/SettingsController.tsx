@@ -55,6 +55,12 @@ const SettingsController: React.FC<SettingsControllerProps> = ({
               const modeInfo = defaultSettings?.[option].modeInfo;
               if (!modeInfo?.[device.settings.mode]) return;
             }
+            //if the element is only meant to shown when the preset it a custom preset
+            if (
+              defaultSettings?.[option]?.whenCustom &&
+              device.preset !== "custom"
+            )
+              return;
             //if the element is a custom element then don't use a default setting.
             const settingOption = defaultSettings?.[option];
             if (settingOption?.type === "custom-item") {
