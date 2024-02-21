@@ -1,10 +1,12 @@
-import { useContext, useEffect, useState } from "react";
-import { defaultSettings } from "./SettingsControllerUtil";
+import { useContext, useEffect, useMemo, useState } from "react";
+import { SelectSettingItem, defaultSettings } from "./SettingsControllerUtil";
 import SettingItem from "./SettingItem";
 import HorizontalTransition from "../TransitionContainers/HorizonalTransition";
 import { GlobalContext } from "../../Context/GlobalContext";
 import InputController from "./InputController";
 import { SettingsContext } from "../../Context/SettingsContext";
+import { cloneDeep } from "lodash";
+import { SelectMenuOption } from "../Input/SelectMenu";
 
 interface SettingsControllerProps {
   options: string[];
@@ -19,7 +21,7 @@ const SettingsController: React.FC<SettingsControllerProps> = ({
 }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editing, setEditing] = useState("");
-  const { toggleTvShown } = useContext(GlobalContext);
+  const { toggleTvShown, presets } = useContext(GlobalContext);
   const { device } = useContext(SettingsContext);
 
   const getDisplayValue = (value: any) => {
@@ -27,6 +29,23 @@ const SettingsController: React.FC<SettingsControllerProps> = ({
     else if (typeof value === "number") return value.toString();
     else return "";
   };
+
+  const calcSettings = useMemo(() => {
+    const settings = cloneDeep(defaultSettings);
+    const preset = cloneDeep(settings.preset as SelectSettingItem);
+    if (preset as SelectSettingItem)
+      preset.options = presets
+        .filter((preset) => preset.type === device.type)
+        .map((preset) => {
+          return {
+            value: preset.name,
+            text: preset.name,
+          } as SelectMenuOption;
+        });
+    console.log(preset, presets);
+    settings.preset = preset;
+    return settings;
+  }, [device, presets]);
 
   return (
     <HorizontalTransition
@@ -42,33 +61,33 @@ const SettingsController: React.FC<SettingsControllerProps> = ({
           <h1>{title ? title : ""}</h1>
           {options.map((option) => {
             //filter out options that are not supported by the device type
-            if (defaultSettings?.[option]?.includeTypes) {
-              const includedTypes = defaultSettings?.[option]?.includeTypes;
+            if (calcSettings?.[option]?.includeTypes) {
+              const includedTypes = calcSettings?.[option]?.includeTypes;
               if (typeof includedTypes === "string") {
                 if (device.type !== includedTypes) return;
               } else if (typeof includedTypes === "object") {
                 if (!includedTypes.includes(device.type)) return;
               }
             }
-            if (defaultSettings?.[option]?.modeInfo) {
+            if (calcSettings?.[option]?.modeInfo) {
               //if the mode doesn't support the current setting then remove it.
-              const modeInfo = defaultSettings?.[option].modeInfo;
+              const modeInfo = calcSettings?.[option].modeInfo;
               if (!modeInfo?.[device.settings.mode]) return;
             }
             //if the element is only meant to shown when the preset it a custom preset
             if (
-              defaultSettings?.[option]?.whenCustom &&
+              calcSettings?.[option]?.whenCustom &&
               device.preset !== "custom"
             )
               return;
             //if the element is a custom element then don't use a default setting.
-            const settingOption = defaultSettings?.[option];
+            const settingOption = calcSettings?.[option];
             if (settingOption?.type === "custom-item") {
               return <>{settingOption.element}</>;
             }
             //get the value if it's a preset setting or a device setting
             const value =
-              defaultSettings?.[option]?.dataType === "device"
+              calcSettings?.[option]?.dataType === "device"
                 ? device?.[option as keyof typeof device]
                 : device.settings?.[option as keyof typeof device.settings];
 
@@ -85,7 +104,7 @@ const SettingsController: React.FC<SettingsControllerProps> = ({
                   setEditing(option);
                 }}
                 title={option}
-                icon={defaultSettings?.[option]?.icon}
+                icon={calcSettings?.[option]?.icon}
               />
             );
           })}
@@ -93,7 +112,7 @@ const SettingsController: React.FC<SettingsControllerProps> = ({
       </div>
       <div>
         <InputController
-          options={defaultSettings}
+          options={calcSettings}
           option={editing}
         ></InputController>
       </div>

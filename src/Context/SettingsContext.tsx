@@ -26,6 +26,7 @@ interface SettingsContextProps {
   updatePreset: (nPreset: DevicePresets) => void;
   saveDevice: () => void;
   toggleEditingNav: () => void;
+  savePreset: (name: string) => void;
 }
 
 const defaultDevice: Devices = {
@@ -55,13 +56,17 @@ export const SettingsContext = createContext<SettingsContextProps>({
   updatePreset: () => null,
   saveDevice: () => null,
   toggleEditingNav: () => null,
+  savePreset: () => null,
 });
 
 export const SettingsContextProvider: React.FC<
   SettingsContextProviderProps
 > = ({ selectedDevice, initialPreset, children, setEditingOpen }) => {
-  const { devices, updateDevice: globalUpdateDevice } =
-    useContext(GlobalContext);
+  const {
+    devices,
+    updateDevice: globalUpdateDevice,
+    addNewPreset,
+  } = useContext(GlobalContext);
   const [device, setDevice] = useState<Devices>(
     selectedDevice !== undefined && selectedDevice !== null
       ? devices?.[selectedDevice] ?? defaultDevice
@@ -120,6 +125,25 @@ export const SettingsContextProvider: React.FC<
     }
   };
 
+  const savePreset = async (name: string) => {
+    if (
+      selectedDevice !== undefined &&
+      selectedDevice !== null &&
+      devices?.[selectedDevice]
+    ) {
+      const response = await addNewPreset(selectedDevice, name);
+      if (response.status === "success") {
+        const nDevice = cloneDeep(device);
+        nDevice.settings.name = name;
+        nDevice.preset = name;
+        updateDevice(nDevice);
+      }
+    } else {
+      // setDevice(nDevice);
+      // setPreset(nPreset);
+    }
+  };
+
   const toggleEditingNav = useCallback(() => {
     setEditingOpen?.((val) => !val);
   }, [setEditingOpen]);
@@ -134,6 +158,7 @@ export const SettingsContextProvider: React.FC<
       updatePreset,
       saveDevice,
       toggleEditingNav,
+      savePreset,
     };
   }, [
     device,
@@ -142,6 +167,7 @@ export const SettingsContextProvider: React.FC<
     updatePreset,
     saveDevice,
     toggleEditingNav,
+    savePreset,
   ]);
 
   return (

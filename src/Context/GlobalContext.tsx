@@ -22,12 +22,25 @@ interface GlobalProps {
   devices: Devices[];
   addDevice: (device: Devices) => Promise<ServerResponse>;
   updateDevice: (i: number, nDevice: Devices) => Promise<ServerResponse>;
+  addNewPreset: (i: number, name: string) => Promise<ServerResponse>;
 }
 
 const defaultServerResponse: ServerResponse = {
   status: "error",
   message: "Context Provider was not initialized properly",
   code: 400,
+};
+
+const noCallResponse: ServerResponse = {
+  status: "error",
+  message: "No call was made to the server",
+  code: 400,
+};
+
+const successfulServerResponse: ServerResponse = {
+  status: "success",
+  message: "Device added successfully",
+  code: 200,
 };
 
 const defaultGlobalData = {
@@ -37,6 +50,7 @@ const defaultGlobalData = {
   devices: [],
   addDevice: async (device: Devices) => defaultServerResponse,
   updateDevice: async (i: number, nDevice: Devices) => defaultServerResponse,
+  addNewPreset: async (i: number, name: string) => defaultServerResponse,
 };
 
 export const GlobalContext = createContext<GlobalProps>(defaultGlobalData);
@@ -51,11 +65,7 @@ export const GlobalContextProvider: React.FC<GlobalContextProviderProps> = ({
   const [devices, setDevices] = useState<Devices[]>([]);
   const addDevice = async (device: Devices) => {
     // do a call to the server
-    const response: ServerResponse = {
-      status: "success",
-      message: "Device added successfully",
-      code: 200,
-    };
+    const response: ServerResponse = cloneDeep(successfulServerResponse);
     //handle response and potentially push the new device to our list of devices
     if (response.status === "success") {
       const nDevices = cloneDeep(devices);
@@ -70,11 +80,7 @@ export const GlobalContextProvider: React.FC<GlobalContextProviderProps> = ({
   };
   const updateDevice = async (i: number, nDevice: Devices) => {
     // do a call to the server
-    const response: ServerResponse = {
-      status: "success",
-      message: "Device added successfully",
-      code: 200,
-    };
+    const response: ServerResponse = cloneDeep(successfulServerResponse);
 
     //handle response and potentially push the new device to our list of devices
     if (response.status === "success") {
@@ -90,6 +96,33 @@ export const GlobalContextProvider: React.FC<GlobalContextProviderProps> = ({
     }
   };
 
+  const addNewPreset = async (i: number, name: string) => {
+    const nPresets = cloneDeep(presets);
+    const settings = cloneDeep(devices[i].settings);
+    settings.name = name;
+    const presetI = presets.findIndex(
+      (preset) => preset.name === name && preset.type === devices[i].type
+    );
+    let response: ServerResponse = cloneDeep(noCallResponse);
+    if (presetI !== -1) {
+      //a preset of that device already exists
+      nPresets[presetI] = settings;
+      //call to server to update existing preset
+      response = cloneDeep(successfulServerResponse);
+    } else {
+      //create a new preset
+      nPresets.push(settings);
+      //call to server to add a new preset
+      response = cloneDeep(successfulServerResponse);
+    }
+
+    //update the presets list
+    if (response.status === "success") {
+      setPresets(nPresets);
+    }
+    return response;
+  };
+
   const [presets, setPresets] = useState<DevicePresets[]>(defaultPresets);
 
   const value: GlobalProps = useMemo(() => {
@@ -100,8 +133,17 @@ export const GlobalContextProvider: React.FC<GlobalContextProviderProps> = ({
       toggleTvShown,
       addDevice,
       updateDevice,
+      addNewPreset,
     };
-  }, [tvShown, presets, devices, toggleTvShown, addDevice, updateDevice]);
+  }, [
+    tvShown,
+    presets,
+    devices,
+    toggleTvShown,
+    addDevice,
+    updateDevice,
+    addNewPreset,
+  ]);
 
   return (
     <GlobalContext.Provider value={value}>{children}</GlobalContext.Provider>
