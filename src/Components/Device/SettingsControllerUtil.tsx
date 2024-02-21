@@ -19,11 +19,12 @@ export type SettingsControllerList = {
     | CustomInputSettingItem
     | SelectSettingItem
     | InputSettingItem
-    | CustomSettingItem;
+    | CustomSettingItem
+    | DividerSettingItem;
 };
 
 interface SettingListItem {
-  type: "custom-input" | "select" | "text" | "custom-item";
+  type: "custom-input" | "select" | "text" | "custom-item" | "divider";
   icon?: React.ReactNode | React.ReactNode[] | string;
   dataType: "device" | "preset";
   modeInfo?: ModeInfo;
@@ -39,6 +40,11 @@ interface CustomSettingItem extends SettingListItem {
 interface CustomInputSettingItem extends SettingListItem {
   type: "custom-input";
   element: React.ReactNode | React.ReactNode[];
+}
+
+interface DividerSettingItem extends SettingListItem {
+  type: "divider";
+  title: string;
 }
 
 export interface SelectSettingItem extends SettingListItem {
@@ -168,5 +174,20 @@ export const defaultSettings: SettingsControllerList = {
       { text: "TV", value: "tv" },
       { text: "Test", value: "test", type: "addressable" },
     ],
+  },
+  device_divider: {
+    type: "divider",
+    title: "Device Settings",
+    dataType: "device",
+  },
+  preset_divider: {
+    type: "divider",
+    title: "Presets",
+    dataType: "device",
+  },
+  properties_divider: {
+    type: "divider",
+    title: "Properties",
+    dataType: "device",
   },
 };

@@ -48,13 +48,17 @@ const PresetSettings: React.FC<PresetSettingsProps> = () => {
     <div style={{ width: "100vw", height: "100vh", position: "relative" }}>
       <SettingsController
         options={[
+          "preset_divider",
           "save_preset",
           "preset",
+          "properties_divider",
           "mode",
           "power",
           "animation_speed",
-          "tv_settings",
           "brightness",
+          "device_divider",
+          "tv_settings",
+          "pin_out",
         ]}
         values={presets}
       />

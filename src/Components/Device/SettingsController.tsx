@@ -7,6 +7,7 @@ import InputController from "./InputController";
 import { SettingsContext } from "../../Context/SettingsContext";
 import { cloneDeep } from "lodash";
 import { SelectMenuOption } from "../Input/SelectMenu";
+import SettingDivider from "./SettingDivider";
 
 interface SettingsControllerProps {
   options: string[];
@@ -21,6 +22,9 @@ const SettingsController: React.FC<SettingsControllerProps> = ({
 }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editing, setEditing] = useState("");
+  const [dividerHide, setDividerHide] = useState<{ [name: string]: boolean }>(
+    {}
+  );
   const { toggleTvShown, presets } = useContext(GlobalContext);
   const { device } = useContext(SettingsContext);
 
@@ -46,6 +50,8 @@ const SettingsController: React.FC<SettingsControllerProps> = ({
     settings.preset = preset;
     return settings;
   }, [device, presets]);
+
+  let hideFromDivide = false;
 
   return (
     <HorizontalTransition
@@ -80,11 +86,32 @@ const SettingsController: React.FC<SettingsControllerProps> = ({
               device.preset !== "custom"
             )
               return;
-            //if the element is a custom element then don't use a default setting.
             const settingOption = calcSettings?.[option];
+
+            if (settingOption?.type === "divider") {
+              if (dividerHide?.[option]) hideFromDivide = true;
+              else hideFromDivide = false;
+              return (
+                <SettingDivider
+                  onClick={() => {
+                    setDividerHide((prev) => {
+                      return { ...prev, [option]: !prev[option] };
+                    });
+                  }}
+                  title={settingOption.title}
+                />
+              );
+            }
+
+            if (hideFromDivide) {
+              return null;
+            }
+
+            //if the element is a custom element then don't use a default setting.
             if (settingOption?.type === "custom-item") {
               return <>{settingOption.element}</>;
             }
+
             //get the value if it's a preset setting or a device setting
             const value =
               calcSettings?.[option]?.dataType === "device"
