@@ -15,14 +15,18 @@ const InputController: React.FC<InputControllerProps> = ({
   option,
   options,
 }) => {
-  const { device, preset, updateDevice, updatePreset } =
+  const { device, preset, updateDevice, updatePreset, updateDevicePreset } =
     useContext(SettingsContext);
 
   const updateDeviceOption = async (option: string, value: any) => {
     const nDevice = cloneDeep(device);
     //@ts-ignore
     nDevice[option] = value;
-    await updateDevice(nDevice);
+    if (option === "preset") {
+      await updateDevicePreset(value);
+    } else {
+      await updateDevice(nDevice);
+    }
   };
 
   const updatePresetOption = (option: string, value: any) => {

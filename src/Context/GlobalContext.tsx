@@ -22,6 +22,10 @@ interface GlobalProps {
   devices: Devices[];
   addDevice: (device: Devices) => Promise<ServerResponse>;
   updateDevice: (i: number, nDevice: Devices) => Promise<ServerResponse>;
+  updateDevicePreset: (
+    i: number,
+    presetName: string
+  ) => Promise<ServerResponse>;
   addNewPreset: (i: number, name: string) => Promise<ServerResponse>;
 }
 
@@ -37,6 +41,12 @@ const noCallResponse: ServerResponse = {
   code: 400,
 };
 
+const noPresetFoundResponse: ServerResponse = {
+  status: "error",
+  message: "No preset found",
+  code: 404,
+};
+
 const successfulServerResponse: ServerResponse = {
   status: "success",
   message: "Device added successfully",
@@ -50,6 +60,8 @@ const defaultGlobalData = {
   devices: [],
   addDevice: async (device: Devices) => defaultServerResponse,
   updateDevice: async (i: number, nDevice: Devices) => defaultServerResponse,
+  updateDevicePreset: async (i: number, presetName: string) =>
+    defaultServerResponse,
   addNewPreset: async (i: number, name: string) => defaultServerResponse,
 };
 
@@ -59,71 +71,102 @@ export const GlobalContextProvider: React.FC<GlobalContextProviderProps> = ({
   children,
 }) => {
   const [tvShown, setTVShown] = useState(false);
-  const toggleTvShown = (nVal?: boolean) => {
-    setTVShown(nVal ?? !tvShown);
-  };
+  const toggleTvShown = useCallback(
+    (nVal?: boolean) => {
+      setTVShown(nVal ?? !tvShown);
+    },
+    [setTVShown, tvShown]
+  );
   const [devices, setDevices] = useState<Devices[]>([]);
-  const addDevice = async (device: Devices) => {
-    // do a call to the server
-    const response: ServerResponse = cloneDeep(successfulServerResponse);
-    //handle response and potentially push the new device to our list of devices
-    if (response.status === "success") {
-      const nDevices = cloneDeep(devices);
-      nDevices.push(device);
-      setDevices(nDevices);
-      //TODO preset handler, make sure when the device gets added if there are no default presets for the device then create one.
-
-      return response;
-    } else {
-      return response;
-    }
-  };
-  const updateDevice = async (i: number, nDevice: Devices) => {
-    // do a call to the server
-    const response: ServerResponse = cloneDeep(successfulServerResponse);
-
-    //handle response and potentially push the new device to our list of devices
-    if (response.status === "success") {
-      const nDevices = cloneDeep(devices);
-      nDevices[i] = nDevice;
-      setDevices(nDevices);
-      console.log("updated");
-      //TODO preset handler, make sure when the device gets added if there are no default presets for the device then create one.
-
-      return response;
-    } else {
-      return response;
-    }
-  };
-
-  const addNewPreset = async (i: number, name: string) => {
-    const nPresets = cloneDeep(presets);
-    const settings = cloneDeep(devices[i].settings);
-    settings.name = name;
-    const presetI = presets.findIndex(
-      (preset) => preset.name === name && preset.type === devices[i].type
-    );
-    let response: ServerResponse = cloneDeep(noCallResponse);
-    if (presetI !== -1) {
-      //a preset of that device already exists
-      nPresets[presetI] = settings;
-      //call to server to update existing preset
-      response = cloneDeep(successfulServerResponse);
-    } else {
-      //create a new preset
-      nPresets.push(settings);
-      //call to server to add a new preset
-      response = cloneDeep(successfulServerResponse);
-    }
-
-    //update the presets list
-    if (response.status === "success") {
-      setPresets(nPresets);
-    }
-    return response;
-  };
-
   const [presets, setPresets] = useState<DevicePresets[]>(defaultPresets);
+  const addDevice = useCallback(
+    async (device: Devices) => {
+      // do a call to the server
+      const response: ServerResponse = cloneDeep(successfulServerResponse);
+      //handle response and potentially push the new device to our list of devices
+      if (response.status === "success") {
+        const nDevices = cloneDeep(devices);
+        nDevices.push(device);
+        setDevices(nDevices);
+        //TODO preset handler, make sure when the device gets added if there are no default presets for the device then create one.
+
+        return response;
+      } else {
+        return response;
+      }
+    },
+    [devices]
+  );
+  const updateDevice = useCallback(
+    async (i: number, nDevice: Devices) => {
+      // do a call to the server
+      const response: ServerResponse = cloneDeep(successfulServerResponse);
+
+      //handle response and potentially push the new device to our list of devices
+      if (response.status === "success") {
+        const nDevices = cloneDeep(devices);
+        nDevices[i] = nDevice;
+        setDevices(nDevices);
+        console.log("updated");
+        //TODO preset handler, make sure when the device gets added if there are no default presets for the device then create one.
+
+        return response;
+      } else {
+        return response;
+      }
+    },
+    [devices]
+  );
+
+  const addNewPreset = useCallback(
+    async (i: number, name: string) => {
+      const nPresets = cloneDeep(presets);
+      const settings = cloneDeep(devices[i].settings);
+      settings.name = name;
+      const presetI = presets.findIndex(
+        (preset) => preset.name === name && preset.type === devices[i].type
+      );
+      let response: ServerResponse = cloneDeep(noCallResponse);
+      if (presetI !== -1) {
+        //a preset of that device already exists
+        nPresets[presetI] = settings;
+        //call to server to update existing preset
+        response = cloneDeep(successfulServerResponse);
+      } else {
+        //create a new preset
+        nPresets.push(settings);
+        //call to server to add a new preset
+        response = cloneDeep(successfulServerResponse);
+      }
+
+      //update the presets list
+      if (response.status === "success") {
+        setPresets(nPresets);
+      }
+      return response;
+    },
+    [devices, presets]
+  );
+
+  const updateDevicePreset = useCallback(
+    async (i: number, presetName: string) => {
+      let response = noPresetFoundResponse;
+      const preset = presets.find((preset) => preset.name === presetName);
+      if (preset !== undefined) {
+        response = cloneDeep(successfulServerResponse);
+        //make call to server here to update the device preset settings and name
+      }
+      if (response.status === "success" && preset !== undefined) {
+        const nDevices = cloneDeep(devices);
+        nDevices[i].preset = presetName;
+        nDevices[i].settings = preset;
+        setDevices(nDevices);
+        return response;
+      }
+      return response;
+    },
+    [presets, devices]
+  );
 
   const value: GlobalProps = useMemo(() => {
     return {
@@ -133,6 +176,7 @@ export const GlobalContextProvider: React.FC<GlobalContextProviderProps> = ({
       toggleTvShown,
       addDevice,
       updateDevice,
+      updateDevicePreset,
       addNewPreset,
     };
   }, [
@@ -142,6 +186,7 @@ export const GlobalContextProvider: React.FC<GlobalContextProviderProps> = ({
     toggleTvShown,
     addDevice,
     updateDevice,
+    updateDevicePreset,
     addNewPreset,
   ]);
 
