@@ -3,7 +3,8 @@ import { CSSProperties } from "react";
 interface InputProps {
   id?: string;
   placeholder?: string;
-  value: string;
+  type?: "text" | "number";
+  value: string | number;
   onChange: (val: string) => void;
   style?: CSSProperties;
   className?: string;
@@ -15,13 +16,20 @@ const Input: React.FC<InputProps> = ({
   placeholder,
   style,
   className,
+  type,
 }) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (type === "number") {
+    }
+    onChange(e.target.value);
+  };
+
   return (
     <input
       style={style}
       placeholder={placeholder}
       className={`input-textbox ${className ?? ""}`}
-      onChange={(e) => onChange(e.target.value)}
+      onChange={handleChange}
       value={value}
       type="text"
     ></input>

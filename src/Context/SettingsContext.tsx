@@ -40,6 +40,7 @@ const defaultDevice: Devices = {
     power: "off",
     type: "addressable",
     mode: "breathe",
+    mapping: [{ ledSIndx: 0, ledEIndx: 0, mapSIndx: 0, mapEIndx: 0 }],
   },
 };
 
@@ -48,6 +49,7 @@ const defaultPreset: DevicePresets = {
   power: "off",
   type: "addressable",
   mode: "breathe",
+  mapping: [{ ledSIndx: 0, ledEIndx: 0, mapSIndx: 0, mapEIndx: 0 }],
 };
 
 export const SettingsContext = createContext<SettingsContextProps>({

@@ -1,8 +1,15 @@
-import { createContext, useCallback, useMemo, useState } from "react";
+import {
+  createContext,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import { Devices } from "../Resources/DeviceResources";
 import { DevicePresets, defaultPresets } from "../Resources/PresetResources";
 import { ServerResponse } from "../Resources/ServerResponseResources";
 import { cloneDeep } from "lodash";
+import axios from "axios";
 
 interface GlobalContextProviderProps {
   children: React.ReactNode | React.ReactNode[];
@@ -35,6 +42,12 @@ const defaultServerResponse: ServerResponse = {
   code: 400,
 };
 
+const serverNotFoundResponse: ServerResponse = {
+  status: "error",
+  message: "Endpoint or server not found.",
+  code: 404,
+};
+
 const noCallResponse: ServerResponse = {
   status: "error",
   message: "No call was made to the server",
@@ -52,6 +65,8 @@ const successfulServerResponse: ServerResponse = {
   message: "Device added successfully",
   code: 200,
 };
+
+const baseURL = window.location.origin;
 
 const defaultGlobalData = {
   tvShown: false,
@@ -79,12 +94,53 @@ export const GlobalContextProvider: React.FC<GlobalContextProviderProps> = ({
   );
   const [devices, setDevices] = useState<Devices[]>([]);
   const [presets, setPresets] = useState<DevicePresets[]>(defaultPresets);
+
+  const getDevices = useCallback(async () => {
+    const options = {
+      method: "GET",
+      url: baseURL + "/devices",
+    };
+    let response = serverNotFoundResponse;
+    try {
+      response = await axios(options);
+      console.log(response);
+      response = response.data;
+    } catch (e) {
+      console.error(e);
+    }
+    if (response.status === "success") {
+      setDevices(response.data);
+    }
+  }, []);
+
+  useEffect(() => {
+    getDevices();
+  }, []);
+
   const addDevice = useCallback(
     async (device: Devices) => {
       // do a call to the server
-      const response: ServerResponse = cloneDeep(successfulServerResponse);
+
+      const options = {
+        method: "POST",
+        data: device,
+        url: baseURL + "/addDevice",
+      };
+
+      let response =
+        process.env.REACT_APP_DEV_MODE == "false"
+          ? serverNotFoundResponse
+          : successfulServerResponse;
+      try {
+        response = await axios(options);
+        console.log(response);
+        response = response.data;
+      } catch (e) {
+        console.error(e);
+      }
+      // const response: ServerResponse = cloneDeep(successfulServerResponse);
       //handle response and potentially push the new device to our list of devices
-      if (response.status === "success") {
+      if (response?.status === "success") {
         const nDevices = cloneDeep(devices);
         nDevices.push(device);
         setDevices(nDevices);
@@ -100,7 +156,23 @@ export const GlobalContextProvider: React.FC<GlobalContextProviderProps> = ({
   const updateDevice = useCallback(
     async (i: number, nDevice: Devices) => {
       // do a call to the server
-      const response: ServerResponse = cloneDeep(successfulServerResponse);
+      const options = {
+        method: "POST",
+        data: nDevice,
+        url: `${baseURL}/updateDevice/${nDevice.name}`,
+      };
+      let response =
+        process.env.REACT_APP_DEV_MODE == "false"
+          ? serverNotFoundResponse
+          : successfulServerResponse;
+      try {
+        response = await axios(options);
+        console.log(response);
+        response = response.data;
+      } catch (e) {
+        console.error(e);
+      }
+      // const response: ServerResponse = cloneDeep(successfulServerResponse);
 
       //handle response and potentially push the new device to our list of devices
       if (response.status === "success") {

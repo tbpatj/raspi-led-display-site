@@ -587,3 +587,30 @@ div {
     min-width: 200px;
   }
 }
+
+/* ------- mapping --------- */
+.mappings-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.mappings-item-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+/* this one has an s */
+.mappings-item {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin: 5px;
+}
+/* no s in this mapping */
+.mapping-item {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  margin: 0px 20px;
+}

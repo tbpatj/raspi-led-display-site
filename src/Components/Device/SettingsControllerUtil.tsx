@@ -11,6 +11,7 @@ import { DeviceTypes } from "../../Resources/DeviceResources";
 import DeviceName from "../Settings/DeviceName";
 import ConfirmNewDevice from "../Settings/ConfirmNewDevice";
 import SavePreset from "../Settings/SavePreset";
+import Mappings from "../Options/Mappings";
 
 // ----------------- Option Controller Type Declaration ----------------- //
 
@@ -163,6 +164,11 @@ export const defaultSettings: SettingsControllerList = {
     type: "custom-item",
     dataType: "device",
     element: <ConfirmNewDevice />,
+  },
+  mappings: {
+    type: "custom-input",
+    dataType: "preset",
+    element: <Mappings />,
   },
   mode: {
     type: "select",
