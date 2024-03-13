@@ -27,6 +27,7 @@ interface GlobalProps {
   toggleTvShown: (nVal?: boolean) => void;
   presets: DevicePresets[];
   devices: Devices[];
+  modes: string[];
   addDevice: (device: Devices) => Promise<ServerResponse>;
   updateDevice: (i: number, nDevice: Devices) => Promise<ServerResponse>;
   updateDevicePreset: (
@@ -73,6 +74,7 @@ const defaultGlobalData = {
   toggleTvShown: (nVal?: boolean) => null,
   presets: defaultPresets,
   devices: [],
+  modes: [],
   addDevice: async (device: Devices) => defaultServerResponse,
   updateDevice: async (i: number, nDevice: Devices) => defaultServerResponse,
   updateDevicePreset: async (i: number, presetName: string) =>
@@ -94,6 +96,7 @@ export const GlobalContextProvider: React.FC<GlobalContextProviderProps> = ({
   );
   const [devices, setDevices] = useState<Devices[]>([]);
   const [presets, setPresets] = useState<DevicePresets[]>(defaultPresets);
+  const [modes, setModes] = useState<string[]>([]);
 
   const getDevices = useCallback(async () => {
     const options = {
@@ -110,6 +113,23 @@ export const GlobalContextProvider: React.FC<GlobalContextProviderProps> = ({
     }
     if (response.status === "success") {
       setDevices(response.data);
+    }
+  }, []);
+
+  const getModes = useCallback(async () => {
+    const options = {
+      method: "GET",
+      url: baseURL + "/modes",
+    };
+    let response = serverNotFoundResponse;
+    try {
+      response = await axios(options);
+      response = response.data;
+    } catch (e) {
+      console.error(e);
+    }
+    if (response.status === "success") {
+      setModes(response.data);
     }
   }, []);
 
@@ -133,6 +153,7 @@ export const GlobalContextProvider: React.FC<GlobalContextProviderProps> = ({
   useEffect(() => {
     getDevices();
     getPresets();
+    getModes();
   }, []);
 
   const addDevice = useCallback(
@@ -260,6 +281,7 @@ export const GlobalContextProvider: React.FC<GlobalContextProviderProps> = ({
 
   const value: GlobalProps = useMemo(() => {
     return {
+      modes,
       tvShown,
       presets,
       devices,
@@ -270,6 +292,7 @@ export const GlobalContextProvider: React.FC<GlobalContextProviderProps> = ({
       addNewPreset,
     };
   }, [
+    modes,
     tvShown,
     presets,
     devices,

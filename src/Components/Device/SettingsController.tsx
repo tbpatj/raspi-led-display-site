@@ -25,7 +25,7 @@ const SettingsController: React.FC<SettingsControllerProps> = ({
   const [dividerHide, setDividerHide] = useState<{ [name: string]: boolean }>(
     {}
   );
-  const { toggleTvShown, presets } = useContext(GlobalContext);
+  const { toggleTvShown, presets, modes } = useContext(GlobalContext);
   const { device } = useContext(SettingsContext);
 
   const getDisplayValue = (value: any) => {
@@ -36,6 +36,7 @@ const SettingsController: React.FC<SettingsControllerProps> = ({
 
   const calcSettings = useMemo(() => {
     const settings = cloneDeep(defaultSettings);
+    //set up the preset settings
     const preset = cloneDeep(settings.preset as SelectSettingItem);
     if (preset as SelectSettingItem)
       preset.options = presets
@@ -48,8 +49,15 @@ const SettingsController: React.FC<SettingsControllerProps> = ({
         });
     console.log(preset, presets);
     settings.preset = preset;
+
+    //set up the mode settings
+    const modeSetting = cloneDeep(settings.mode as SelectSettingItem);
+    modeSetting.options = modes.map((mode) => {
+      return { text: mode, value: mode } as SelectMenuOption;
+    });
+    settings.mode = modeSetting;
     return settings;
-  }, [device, presets]);
+  }, [device, presets, modes]);
 
   let hideFromDivide = false;
 
