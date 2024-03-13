@@ -54,13 +54,17 @@ const DevicesPage = () => {
           >
             <SettingsContextProvider
               selectedDevice={editingIndex}
-              initialPreset={presets.find((val) => {
-                if (
-                  val.name === devices[editingIndex].preset &&
-                  val.type === devices[editingIndex].type
-                )
-                  return val;
-              })}
+              initialPreset={
+                devices[editingIndex].preset !== "custom"
+                  ? presets.find((val) => {
+                      if (
+                        val.name === devices[editingIndex].preset &&
+                        val.type === devices[editingIndex].type
+                      )
+                        return val;
+                    })
+                  : devices[editingIndex].settings
+              }
               setEditingOpen={setEditingOpen}
             >
               <PresetSettings />

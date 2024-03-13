@@ -66,7 +66,7 @@ const successfulServerResponse: ServerResponse = {
   code: 200,
 };
 
-const baseURL = window.location.origin;
+const baseURL = process.env.REACT_APP_BASE_URL || window.location.origin;
 
 const defaultGlobalData = {
   tvShown: false,
@@ -113,8 +113,26 @@ export const GlobalContextProvider: React.FC<GlobalContextProviderProps> = ({
     }
   }, []);
 
+  const getPresets = useCallback(async () => {
+    const options = {
+      method: "GET",
+      url: baseURL + "/presets",
+    };
+    let response = serverNotFoundResponse;
+    try {
+      response = await axios(options);
+      response = response.data;
+    } catch (e) {
+      console.error(e);
+    }
+    if (response.status === "success") {
+      setPresets(response.data);
+    }
+  }, []);
+
   useEffect(() => {
     getDevices();
+    getPresets();
   }, []);
 
   const addDevice = useCallback(
