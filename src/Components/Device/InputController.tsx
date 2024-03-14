@@ -22,11 +22,11 @@ const InputController: React.FC<InputControllerProps> = ({
     const nDevice = cloneDeep(device);
     //@ts-ignore
     nDevice[option] = value;
-    if (option === "preset") {
-      await updateDevicePreset(value);
-    } else {
-      await updateDevice(nDevice);
-    }
+    // if (option === "preset") {
+    //   await updateDevicePreset(value);
+    // } else {
+    await updateDevice(nDevice);
+    // }
   };
 
   const updatePresetOption = (option: string, value: any) => {

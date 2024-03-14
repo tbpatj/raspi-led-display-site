@@ -183,6 +183,13 @@ export const GlobalContextProvider: React.FC<GlobalContextProviderProps> = ({
         const nDevices = cloneDeep(devices);
         nDevices.push(device);
         setDevices(nDevices);
+
+        //when you add a device you need to create default preset
+        const nPresets = cloneDeep(presets);
+        const preset = cloneDeep(device.settings);
+        preset.name = "default";
+        nPresets.push(preset);
+        setPresets(nPresets);
         //TODO preset handler, make sure when the device gets added if there are no default presets for the device then create one.
 
         return response;
@@ -231,29 +238,55 @@ export const GlobalContextProvider: React.FC<GlobalContextProviderProps> = ({
 
   const addNewPreset = useCallback(
     async (i: number, name: string) => {
-      const nPresets = cloneDeep(presets);
-      const settings = cloneDeep(devices[i].settings);
-      settings.name = name;
-      const presetI = presets.findIndex(
-        (preset) =>
-          preset.name === name && preset.device_type === devices[i].type
-      );
-      let response: ServerResponse = cloneDeep(noCallResponse);
-      if (presetI !== -1) {
-        //a preset of that device already exists
-        nPresets[presetI] = settings;
-        //call to server to update existing preset
-        response = cloneDeep(successfulServerResponse);
-      } else {
-        //create a new preset
-        nPresets.push(settings);
-        //call to server to add a new preset
-        response = cloneDeep(successfulServerResponse);
+      //call to the server
+      const nDevice = cloneDeep(devices[i]);
+      nDevice.preset = name;
+      nDevice.settings.name = name;
+      nDevice.settings.device_name = nDevice.name;
+      nDevice.settings.device_type = nDevice.type;
+      const options = {
+        method: "POST",
+        data: nDevice,
+        url: `${baseURL}/presets`,
+      };
+      let response =
+        process.env.REACT_APP_DEV_MODE == "false"
+          ? serverNotFoundResponse
+          : successfulServerResponse;
+      try {
+        response = await axios(options);
+        console.log(response);
+        response = response.data;
+      } catch (e) {
+        console.error(e);
       }
-
-      //update the presets list
       if (response.status === "success") {
+        //update the presets list
+        const nPresets = cloneDeep(presets);
+        const presetI = presets.findIndex(
+          (preset) =>
+            preset.name === name &&
+            preset.device_type === nDevice.type &&
+            preset.device_name === nDevice.name
+        );
+
+        if (presetI !== -1) {
+          //a preset of that device already exists
+          nPresets[presetI] = nDevice.settings;
+          //call to server to update existing preset
+          response = cloneDeep(successfulServerResponse);
+        } else {
+          //create a new preset
+          nPresets.push(nDevice.settings);
+          //call to server to add a new preset
+          response = cloneDeep(successfulServerResponse);
+        }
         setPresets(nPresets);
+
+        //update the device specifically
+        const nDevices = cloneDeep(devices);
+        nDevices[i] = nDevice;
+        setDevices(nDevices);
       }
       return response;
     },

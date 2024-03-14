@@ -40,7 +40,11 @@ const SettingsController: React.FC<SettingsControllerProps> = ({
     const preset = cloneDeep(settings.preset as SelectSettingItem);
     if (preset as SelectSettingItem)
       preset.options = presets
-        .filter((preset) => preset.device_type === device.type)
+        .filter(
+          (preset) =>
+            preset.device_type === device.type &&
+            preset.device_name === device.name
+        )
         .map((preset) => {
           return {
             value: preset.name,

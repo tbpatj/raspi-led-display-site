@@ -1,5 +1,4 @@
 import "./App.css";
-import IndexSettings from "./IndexSettings/IndexSettings";
 import BackgroundContainer from "./Background/BackgroundContainer";
 import { GlobalContextProvider } from "./Context/GlobalContext";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";

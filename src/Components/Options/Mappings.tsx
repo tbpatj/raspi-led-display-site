@@ -3,7 +3,6 @@ import { SettingsContext } from "../../Context/SettingsContext";
 import Button from "../Input/Button";
 import Input from "../Input/Input";
 import { ReactComponent as XIcon } from "../../SVGs/svgs/x-solid.svg";
-import { Mapping } from "../../Resources/PresetResources";
 import { cloneDeep } from "lodash";
 
 const mappingInputStyle: CSSProperties = { width: "60px" };

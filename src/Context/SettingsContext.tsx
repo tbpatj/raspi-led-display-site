@@ -35,6 +35,7 @@ const defaultDevice: Devices = {
   preset: "default",
   type: "addressable",
   pin_out: 0,
+  led_count: 1,
   settings: {
     name: "default",
     power: "off",
@@ -151,6 +152,7 @@ export const SettingsContextProvider: React.FC<
           const nDevice = cloneDeep(device);
           nDevice.settings.name = name;
           nDevice.preset = name;
+
           updateDevice(nDevice);
         }
       } else {
