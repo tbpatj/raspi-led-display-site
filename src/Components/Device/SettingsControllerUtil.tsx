@@ -21,11 +21,18 @@ export type SettingsControllerList = {
     | SelectSettingItem
     | InputSettingItem
     | CustomSettingItem
-    | DividerSettingItem;
+    | DividerSettingItem
+    | NumberSettingItem;
 };
 
 interface SettingListItem {
-  type: "custom-input" | "select" | "text" | "custom-item" | "divider";
+  type:
+    | "custom-input"
+    | "select"
+    | "text"
+    | "custom-item"
+    | "divider"
+    | "number";
   icon?: React.ReactNode | React.ReactNode[] | string;
   dataType: "device" | "preset";
   modeInfo?: ModeInfo;
@@ -57,6 +64,13 @@ export interface SelectSettingItem extends SettingListItem {
 
 interface InputSettingItem extends SettingListItem {
   type: "text";
+  id?: string;
+  filter?: (value: string, prevVal?: string) => string;
+  title?: string;
+}
+
+interface NumberSettingItem extends SettingListItem {
+  type: "number";
   id?: string;
   filter?: (value: string, prevVal?: string) => string;
   title?: string;
@@ -161,8 +175,9 @@ export const defaultSettings: SettingsControllerList = {
     element: <DeviceName />,
   },
   led_count: {
-    type: "text",
+    type: "number",
     dataType: "device",
+    includeTypes: "addressable",
     title: "Led Count",
   },
   device_confirm: {

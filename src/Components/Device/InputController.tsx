@@ -92,7 +92,25 @@ const InputController: React.FC<InputControllerProps> = ({
             {optionDetails?.title && <h1>{optionDetails.title}</h1>}
             <Input
               value={displayValue}
-              onChange={(val: string) => updateValues(option, Number(val))}
+              onChange={(val: string) => updateValues(option, val)}
+              id={optionDetails?.id}
+            ></Input>
+          </div>
+        </div>
+      )}
+      {optionDetails.type === "number" && (
+        <div className="regular-container">
+          <div className="regular-item-list">
+            {optionDetails?.title && <h1>{optionDetails.title}</h1>}
+            <Input
+              value={displayValue}
+              onChange={(val: string) => {
+                const isValid = /^[0-9]+$/.test(val);
+                if (isValid || val === "") {
+                  if (val === "") val = "0";
+                  updateValues(option, Number(val));
+                }
+              }}
               id={optionDetails?.id}
             ></Input>
           </div>

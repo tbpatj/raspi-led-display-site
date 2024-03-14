@@ -11,6 +11,11 @@ const ConfirmNewDevice = () => {
 
   const isDisabled = useMemo(() => {
     if (device.name === "") return true;
+    if (
+      device.type === "addressable" &&
+      !(device as RGBAddressableDevice).led_count
+    )
+      return true;
 
     // return true;
     return false;
