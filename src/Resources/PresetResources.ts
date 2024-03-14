@@ -8,9 +8,10 @@ export type DevicePresets =
 export const modes = ["breathe", "fade", "custom", "tv"] as const;
 
 export interface DevicePreset {
+  device_name: string;
+  device_type: DeviceTypes;
   name: string;
   power: "on" | "off";
-  type: DeviceTypes;
   mode: (typeof modes)[number];
   mapping: Mapping[];
 }
@@ -45,14 +46,16 @@ export const defaultPresets: DevicePresets[] = [
   {
     name: "default",
     power: "off",
-    type: "addressable",
+    device_name: "",
+    device_type: "addressable",
     mode: "breathe",
     mapping: [{ ledSIndx: 0, ledEIndx: 0, mapSIndx: 0, mapEIndx: 0 }],
   },
   {
     name: "default",
     power: "off",
-    type: "non-addressable",
+    device_name: "",
+    device_type: "non-addressable",
     mode: "breathe",
     mapping: [{ ledSIndx: 0, ledEIndx: 0, mapSIndx: 0, mapEIndx: 0 }],
   },

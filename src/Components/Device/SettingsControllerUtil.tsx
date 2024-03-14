@@ -160,6 +160,11 @@ export const defaultSettings: SettingsControllerList = {
     dataType: "device",
     element: <DeviceName />,
   },
+  led_count: {
+    type: "text",
+    dataType: "device",
+    title: "Led Count",
+  },
   device_confirm: {
     type: "custom-item",
     dataType: "device",

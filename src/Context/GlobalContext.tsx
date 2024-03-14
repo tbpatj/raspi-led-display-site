@@ -235,7 +235,8 @@ export const GlobalContextProvider: React.FC<GlobalContextProviderProps> = ({
       const settings = cloneDeep(devices[i].settings);
       settings.name = name;
       const presetI = presets.findIndex(
-        (preset) => preset.name === name && preset.type === devices[i].type
+        (preset) =>
+          preset.name === name && preset.device_type === devices[i].type
       );
       let response: ServerResponse = cloneDeep(noCallResponse);
       if (presetI !== -1) {

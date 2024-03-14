@@ -13,7 +13,14 @@ const NewDevice: React.FC<NewDeviceProps> = ({ onFinish }) => {
     <SettingsController
       title="New Device"
       values={device}
-      options={["name", "type", "pin_out", "tv_settings", "device_confirm"]}
+      options={[
+        "name",
+        "type",
+        "pin_out",
+        "led_count",
+        "tv_settings",
+        "device_confirm",
+      ]}
     />
   );
 };

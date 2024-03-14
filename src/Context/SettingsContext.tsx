@@ -38,7 +38,8 @@ const defaultDevice: Devices = {
   settings: {
     name: "default",
     power: "off",
-    type: "addressable",
+    device_name: "",
+    device_type: "addressable",
     mode: "breathe",
     mapping: [{ ledSIndx: 0, ledEIndx: 0, mapSIndx: 0, mapEIndx: 0 }],
   },
@@ -47,7 +48,8 @@ const defaultDevice: Devices = {
 const defaultPreset: DevicePresets = {
   name: "default",
   power: "off",
-  type: "addressable",
+  device_name: "",
+  device_type: "addressable",
   mode: "breathe",
   mapping: [{ ledSIndx: 0, ledEIndx: 0, mapSIndx: 0, mapEIndx: 0 }],
 };

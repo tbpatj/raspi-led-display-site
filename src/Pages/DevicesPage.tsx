@@ -59,7 +59,7 @@ const DevicesPage = () => {
                   ? presets.find((val) => {
                       if (
                         val.name === devices[editingIndex].preset &&
-                        val.type === devices[editingIndex].type
+                        val.device_type === devices[editingIndex].type
                       )
                         return val;
                     })

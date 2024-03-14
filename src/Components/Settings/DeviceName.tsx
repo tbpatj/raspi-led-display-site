@@ -8,6 +8,7 @@ const DeviceName: React.FC = () => {
   const handleNameChange = (val: string) => {
     const nDevice = { ...device };
     nDevice.name = val;
+    nDevice.settings.device_name = val;
     updateDevice(nDevice);
   };
 

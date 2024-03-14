@@ -22,6 +22,7 @@ export interface Device {
 export interface RGBAddressableDevice extends Device {
   type: "addressable";
   pin_out: number;
+  led_count: number;
   tv_settings?: RGBAddressableTVSettings;
   settings: RGBAddressablePreset;
 }
