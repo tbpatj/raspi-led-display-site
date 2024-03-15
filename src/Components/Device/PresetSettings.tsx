@@ -56,7 +56,6 @@ const PresetSettings: React.FC<PresetSettingsProps> = () => {
           "mode",
           "device_divider",
           "mappings",
-          "tv_settings",
           "pin_out",
         ]}
         values={presets}

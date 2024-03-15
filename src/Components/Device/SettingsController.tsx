@@ -136,9 +136,6 @@ const SettingsController: React.FC<SettingsControllerProps> = ({
                 value={getDisplayValue(value)}
                 style={{ width: "calc(100% - 20px)" }}
                 onClick={() => {
-                  if (option === "tv_settings") {
-                    toggleTvShown(true);
-                  }
                   setIsEditing(true);
                   setEditing(option);
                 }}

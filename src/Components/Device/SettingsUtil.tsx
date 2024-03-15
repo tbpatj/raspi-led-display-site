@@ -34,11 +34,6 @@ export const presetSettingItems: { [deviceType: string]: string[] } = {
 //       />
 //     ),
 //   },
-//   tv_settings: { element: <div></div>, icon: <span></span> },
-//   image_processing: {
-//     element: <div></div>,
-//     icon: <ImageIcon width="30" height="24" stroke="inherit" />,
-//   },
 //   idle_animation: {
 //     element: <div></div>,
 //     icon: <AnimationIcon width="30" height="26" stroke="inherit" />,

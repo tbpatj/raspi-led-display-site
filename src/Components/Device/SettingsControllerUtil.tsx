@@ -1,5 +1,4 @@
 import { SelectMenuOption } from "../Input/SelectMenu";
-import TVSettings from "../Options/TVSettings";
 
 import PowerIcon from "../../SVGs/PowerIcon";
 import RGBStripIcon from "../../SVGs/RGBStripIcon";
@@ -140,15 +139,6 @@ export const defaultSettings: SettingsControllerList = {
     title: "Brightness",
     dataType: "preset",
     icon: <BrightnessIcon width="30" height="30" stroke="inherit" />,
-  },
-  tv_settings: {
-    type: "custom-input",
-    dataType: "device",
-    element: <TVSettings />,
-    includeTypes: "addressable",
-    modeInfo: {
-      tv: "Specify which light index corresponds with which side of the TV",
-    },
   },
   image_processing: {
     type: "custom-input",
