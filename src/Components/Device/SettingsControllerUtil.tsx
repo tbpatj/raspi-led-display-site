@@ -127,7 +127,7 @@ export const defaultSettings: SettingsControllerList = {
   },
   //soon this should be custom to adjust for not just addressable strips
   pin_out: {
-    type: "text",
+    type: "number",
     id: "rgb-strip-type-select-menu",
     title: "RGB Strip Type",
     dataType: "device",
