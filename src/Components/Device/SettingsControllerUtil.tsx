@@ -15,14 +15,16 @@ import Mappings from "../Options/Mappings";
 // ----------------- Option Controller Type Declaration ----------------- //
 
 export type SettingsControllerList = {
-  [key: string]:
-    | CustomInputSettingItem
-    | SelectSettingItem
-    | InputSettingItem
-    | CustomSettingItem
-    | DividerSettingItem
-    | NumberSettingItem;
+  [key: string]: SettingsControllerItem;
 };
+
+export type SettingsControllerItem =
+  | CustomInputSettingItem
+  | SelectSettingItem
+  | InputSettingItem
+  | CustomSettingItem
+  | DividerSettingItem
+  | NumberSettingItem;
 
 interface SettingListItem {
   type:
@@ -32,6 +34,7 @@ interface SettingListItem {
     | "custom-item"
     | "divider"
     | "number";
+  title?: string;
   icon?: React.ReactNode | React.ReactNode[] | string;
   dataType: "device" | "preset";
   modeInfo?: ModeInfo;
@@ -129,7 +132,7 @@ export const defaultSettings: SettingsControllerList = {
   pin_out: {
     type: "number",
     id: "rgb-strip-type-select-menu",
-    title: "RGB Strip Type",
+    title: "Pin Out",
     dataType: "device",
     icon: <PinoutIcon width="35" height="24" stroke="inherit" />,
   },
@@ -196,6 +199,7 @@ export const defaultSettings: SettingsControllerList = {
     type: "select",
     dataType: "preset",
     id: "mode-select",
+    title: "Mode",
     options: [
       { text: "Breathe", value: "breathe" },
       { text: "Fade", value: "fade" },

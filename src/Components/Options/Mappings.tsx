@@ -4,11 +4,13 @@ import Button from "../Input/Button";
 import Input from "../Input/Input";
 import { ReactComponent as XIcon } from "../../SVGs/svgs/x-solid.svg";
 import { cloneDeep } from "lodash";
+import useWinSize from "../../Hooks/useWinSize";
 
 const mappingInputStyle: CSSProperties = { width: "60px" };
 
 const Mappings: React.FC = () => {
   const { preset, updatePreset } = useContext(SettingsContext);
+  const { isSmall } = useWinSize();
 
   const handleAddMapping = () => {
     const nPreset = cloneDeep(preset);
@@ -40,48 +42,50 @@ const Mappings: React.FC = () => {
   };
 
   return (
-    <div className="new-device-container">
+    <div className="select-menu-container">
       <div className="new-device-list">
         <Button onClick={handleAddMapping}>Add Mapping</Button>
         <div className="mappings-container">
           {preset?.mapping.map((mapping, index) => {
-            const showText = index === 0;
+            const showText = index === 0 || isSmall;
             return (
               <div className="mappings-item" key={`mapping-item-${index}`}>
-                <div className="mappings-item-section">
-                  <div className="mapping-item">
-                    {showText && <span>Led Start</span>}
-                    <Input
-                      onChange={handleMappingChange("ledSIndx", index)}
-                      value={String(mapping.ledSIndx)}
-                      style={mappingInputStyle}
-                    ></Input>
+                <div className="mappings-inputs-container">
+                  <div className="mappings-item-section">
+                    <div className="mapping-item">
+                      {showText && <span>Led Start</span>}
+                      <Input
+                        onChange={handleMappingChange("ledSIndx", index)}
+                        value={String(mapping.ledSIndx)}
+                        style={mappingInputStyle}
+                      ></Input>
+                    </div>
+                    <div className="mapping-item">
+                      {showText && <span>Led End</span>}
+                      <Input
+                        onChange={handleMappingChange("ledEIndx", index)}
+                        value={String(mapping.ledEIndx)}
+                        style={mappingInputStyle}
+                      ></Input>
+                    </div>
                   </div>
-                  <div className="mapping-item">
-                    {showText && <span>Led End</span>}
-                    <Input
-                      onChange={handleMappingChange("ledEIndx", index)}
-                      value={String(mapping.ledEIndx)}
-                      style={mappingInputStyle}
-                    ></Input>
-                  </div>
-                </div>
-                <div className="mappings-item-section">
-                  <div className="mapping-item">
-                    {showText && <span>Map Start</span>}
-                    <Input
-                      onChange={handleMappingChange("mapSIndx", index)}
-                      value={String(mapping.mapSIndx)}
-                      style={mappingInputStyle}
-                    ></Input>
-                  </div>
-                  <div className="mapping-item">
-                    {showText && <span>Map End</span>}
-                    <Input
-                      onChange={handleMappingChange("mapEIndx", index)}
-                      value={String(mapping.mapEIndx)}
-                      style={mappingInputStyle}
-                    ></Input>
+                  <div className="mappings-item-section">
+                    <div className="mapping-item">
+                      {showText && <span>Map Start</span>}
+                      <Input
+                        onChange={handleMappingChange("mapSIndx", index)}
+                        value={String(mapping.mapSIndx)}
+                        style={mappingInputStyle}
+                      ></Input>
+                    </div>
+                    <div className="mapping-item">
+                      {showText && <span>Map End</span>}
+                      <Input
+                        onChange={handleMappingChange("mapEIndx", index)}
+                        value={String(mapping.mapEIndx)}
+                        style={mappingInputStyle}
+                      ></Input>
+                    </div>
                   </div>
                 </div>
                 {preset?.mapping.length > 1 && (

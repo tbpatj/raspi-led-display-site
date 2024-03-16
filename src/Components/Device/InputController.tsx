@@ -4,6 +4,7 @@ import SelectMenu from "../Input/SelectMenu";
 import { cloneDeep } from "lodash";
 import { SettingsControllerList } from "./SettingsControllerUtil";
 import Input from "../Input/Input";
+import MenuContainer from "./MenuContainer";
 
 interface InputControllerProps {
   options: SettingsControllerList;
@@ -87,34 +88,30 @@ const InputController: React.FC<InputControllerProps> = ({
         />
       )}
       {optionDetails.type === "text" && (
-        <div className="regular-container">
-          <div className="regular-item-list">
-            {optionDetails?.title && <h1>{optionDetails.title}</h1>}
-            <Input
-              value={displayValue}
-              onChange={(val: string) => updateValues(option, val)}
-              id={optionDetails?.id}
-            ></Input>
-          </div>
-        </div>
+        <MenuContainer option={optionDetails}>
+          <Input
+            className="input-menu"
+            value={displayValue}
+            onChange={(val: string) => updateValues(option, val)}
+            id={optionDetails?.id}
+          ></Input>
+        </MenuContainer>
       )}
       {optionDetails.type === "number" && (
-        <div className="regular-container">
-          <div className="regular-item-list">
-            {optionDetails?.title && <h1>{optionDetails.title}</h1>}
-            <Input
-              value={displayValue}
-              onChange={(val: string) => {
-                const isValid = /^[0-9]+$/.test(val);
-                if (isValid || val === "") {
-                  if (val === "") val = "0";
-                  updateValues(option, Number(val));
-                }
-              }}
-              id={optionDetails?.id}
-            ></Input>
-          </div>
-        </div>
+        <MenuContainer option={optionDetails}>
+          <Input
+            className="input-menu"
+            value={displayValue}
+            onChange={(val: string) => {
+              const isValid = /^[0-9]+$/.test(val);
+              if (isValid || val === "") {
+                if (val === "") val = "0";
+                updateValues(option, Number(val));
+              }
+            }}
+            id={optionDetails?.id}
+          ></Input>
+        </MenuContainer>
       )}
       {optionDetails.type === "custom-input" && <>{optionDetails.element}</>}
     </div>

@@ -134,7 +134,6 @@ const SettingsController: React.FC<SettingsControllerProps> = ({
               <SettingItem
                 key={`settings-controller-item-${option}`}
                 value={getDisplayValue(value)}
-                style={{ width: "calc(100% - 20px)" }}
                 onClick={() => {
                   setIsEditing(true);
                   setEditing(option);

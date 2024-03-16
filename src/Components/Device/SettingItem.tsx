@@ -26,21 +26,8 @@ const SettingItem: React.FC<SettingItemProps> = ({
         onClick();
       }}
     >
-      <div
-        style={{
-          display: "flex",
-        }}
-      >
-        <div
-          style={{
-            width: "50px",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          {icon ? icon : ""}
-        </div>
+      <div className="device-settings-icon-title ">
+        <div className="device-settings-icon-container">{icon ? icon : ""}</div>
         {title
           .split("_")
           .map((v) => v.charAt(0).toUpperCase() + v.slice(1))
