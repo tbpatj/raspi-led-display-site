@@ -36,6 +36,8 @@ const defaultDevice: Devices = {
   type: "addressable",
   pin_out: 0,
   led_count: 1,
+  transition_speed: 1000,
+  animation_speed: 1000,
   settings: {
     name: "default",
     power: "off",

@@ -54,9 +54,12 @@ const PresetSettings: React.FC<PresetSettingsProps> = () => {
           "properties_divider",
           "power",
           "mode",
+          "animation_speed",
+          "transition_speed",
           "device_divider",
           "mappings",
           "pin_out",
+          "led_count",
         ]}
         values={presets}
       />

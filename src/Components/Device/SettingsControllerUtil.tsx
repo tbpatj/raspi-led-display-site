@@ -140,6 +140,18 @@ export const defaultSettings: SettingsControllerList = {
     dataType: "preset",
     icon: <BrightnessIcon width="30" height="30" stroke="inherit" />,
   },
+  animation_speed: {
+    type: "number",
+    id: "animation-speed-input",
+    title: "Animation Speed",
+    dataType: "device",
+  },
+  transition_speed: {
+    type: "number",
+    id: "transition-speed-input",
+    title: "Transition Speed",
+    dataType: "device",
+  },
   image_processing: {
     type: "custom-input",
     element: <div></div>,
