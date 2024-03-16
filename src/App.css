@@ -286,6 +286,7 @@ div {
 
 .device-settings-value {
   font-weight: 300;
+  font-size: 24px;
 }
 
 .device-settings-title {
@@ -307,12 +308,18 @@ div {
   .device-settings-title {
     margin: 15px 0px;
   }
+  .device-settings-value {
+    font-size: 20px;
+  }
 }
 @media (max-width: 500px) {
   .device-settings-item {
     width: calc(100% - 10px);
     font-size: 25px;
     gap: 40px;
+  }
+  .device-settings-value {
+    font-size: 18px;
   }
 }
 
@@ -327,6 +334,10 @@ div {
   flex-direction: column;
   gap: 15px;
   margin-top: 50px;
+}
+
+.select-menu-container::-webkit-scrollbar {
+  display: none;
 }
 
 .select-menu-item {
@@ -391,6 +402,10 @@ div {
   justify-content: space-between;
   gap: 15px;
   padding: 80px 0px;
+}
+
+.new-device-container::-webkit-scrollbar {
+  display: none;
 }
 
 .new-device-button-container {

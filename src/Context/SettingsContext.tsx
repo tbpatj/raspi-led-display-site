@@ -37,12 +37,12 @@ const defaultDevice: Devices = {
   pin_out: 0,
   led_count: 1,
   transition_speed: 1000,
-  animation_speed: 1000,
   settings: {
     name: "default",
     power: "off",
     device_name: "",
     device_type: "addressable",
+    animation_speed: 1000,
     mode: "breathe",
     mapping: [{ ledSIndx: 0, ledEIndx: 0, mapSIndx: 0, mapEIndx: 0 }],
   },

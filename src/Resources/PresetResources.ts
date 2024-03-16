@@ -32,12 +32,14 @@ export interface Mapping {
 export interface RGBNonAddressablePreset extends DevicePreset {
   type: "non-addressable";
   mode: "tv" | "custom" | "fade";
+  animation_speed: number;
   image_processing: string;
 }
 
 export interface RGBAddressablePreset extends DevicePreset {
   type: "addressable";
   mode: "tv" | "custom" | "breathe";
+  animation_speed: number;
   image_processing: string;
   blur?: number;
 }

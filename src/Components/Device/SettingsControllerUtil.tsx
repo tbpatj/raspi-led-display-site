@@ -11,6 +11,10 @@ import DeviceName from "../Settings/DeviceName";
 import ConfirmNewDevice from "../Settings/ConfirmNewDevice";
 import SavePreset from "../Settings/SavePreset";
 import Mappings from "../Options/Mappings";
+import MappingIcon from "../../SVGs/MappingIcon";
+import PresetIcon from "../../SVGs/PresetIcon";
+import LedCountIcon from "../../SVGs/LedCountIcon";
+import TransitionIcon from "../../SVGs/TransitionIcon";
 
 // ----------------- Option Controller Type Declaration ----------------- //
 
@@ -147,13 +151,15 @@ export const defaultSettings: SettingsControllerList = {
     type: "number",
     id: "animation-speed-input",
     title: "Animation Speed",
-    dataType: "device",
+    icon: <AnimationIcon width="30" height="26" stroke="inherit" />,
+    dataType: "preset",
   },
   transition_speed: {
     type: "number",
     id: "transition-speed-input",
     title: "Transition Speed",
     dataType: "device",
+    icon: <TransitionIcon width="30" height="26" stroke="inherit" />,
   },
   image_processing: {
     type: "custom-input",
@@ -173,6 +179,7 @@ export const defaultSettings: SettingsControllerList = {
     options: [{ text: "Default", value: "default" }],
     id: "options-controller-device-preset",
     title: "Presets",
+    icon: <PresetIcon width="30" height="30" stroke="inherit" />,
   },
   name: {
     type: "custom-item",
@@ -184,6 +191,7 @@ export const defaultSettings: SettingsControllerList = {
     dataType: "device",
     includeTypes: "addressable",
     title: "Led Count",
+    icon: <LedCountIcon width="30" height="30" stroke="inherit" />,
   },
   device_confirm: {
     type: "custom-item",
@@ -194,12 +202,14 @@ export const defaultSettings: SettingsControllerList = {
     type: "custom-input",
     dataType: "preset",
     element: <Mappings />,
+    icon: <MappingIcon width="30" height="30" stroke="inherit" />,
   },
   mode: {
     type: "select",
     dataType: "preset",
     id: "mode-select",
     title: "Mode",
+    icon: <ImageIcon width="30" height="24" stroke="inherit" />,
     options: [
       { text: "Breathe", value: "breathe" },
       { text: "Fade", value: "fade" },

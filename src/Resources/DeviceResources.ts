@@ -24,14 +24,12 @@ export interface RGBAddressableDevice extends Device {
   pin_out: number;
   led_count: number;
   transition_speed: number;
-  animation_speed: number;
   settings: RGBAddressablePreset;
 }
 
 export interface RGBNonAddressableDevice extends Device {
   type: "non-addressable";
   transition_speed: number;
-  animation_speed: number;
   pin_out: { r: number; g: number; b: number };
   settings: RGBNonAddressablePreset;
 }
