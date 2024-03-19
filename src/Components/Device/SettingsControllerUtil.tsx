@@ -147,9 +147,11 @@ export const defaultSettings: SettingsControllerList = {
           b_pin: 0,
         };
         nDevice = nDevice as RGBNonAddressableDevice;
+        nDevice.settings.device_type = "non-addressable";
       } else if (nDevice.type === "addressable") {
         (nDevice as RGBAddressableDevice).led_count = 0;
         (nDevice as RGBAddressableDevice).pin_out = 0;
+        nDevice.settings.device_type = "addressable";
       }
       return nDevice;
     },
