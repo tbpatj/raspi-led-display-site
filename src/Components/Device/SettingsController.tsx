@@ -126,9 +126,10 @@ const SettingsController: React.FC<SettingsControllerProps> = ({
 
             //get the value if it's a preset setting or a device setting
             const value =
-              calcSettings?.[option]?.dataType === "device"
+              calcSettings?.[option]?.overrideValue?.(device) ??
+              (calcSettings?.[option]?.dataType === "device"
                 ? device?.[option as keyof typeof device]
-                : device.settings?.[option as keyof typeof device.settings];
+                : device.settings?.[option as keyof typeof device.settings]);
 
             return (
               <SettingItem

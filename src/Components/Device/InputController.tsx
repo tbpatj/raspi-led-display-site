@@ -20,9 +20,12 @@ const InputController: React.FC<InputControllerProps> = ({
     useContext(SettingsContext);
 
   const updateDeviceOption = async (option: string, value: any) => {
-    const nDevice = cloneDeep(device);
-    //@ts-ignore
-    nDevice[option] = value;
+    let nDevice = cloneDeep(device);
+    nDevice[option as keyof typeof nDevice] = value;
+    const nDevice2 = options[option]?.overrideChanges?.(nDevice);
+    if (nDevice2) {
+      nDevice = nDevice2;
+    }
     // if (option === "preset") {
     //   await updateDevicePreset(value);
     // } else {

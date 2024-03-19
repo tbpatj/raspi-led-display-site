@@ -6,7 +6,12 @@ import ImageIcon from "../../SVGs/ImageIcon";
 import AnimationIcon from "../../SVGs/AnimationIcon";
 import PinoutIcon from "../../SVGs/PinoutIcon";
 import BrightnessIcon from "../../SVGs/BrightnessIcon";
-import { DeviceTypes } from "../../Resources/DeviceResources";
+import {
+  Device,
+  DeviceTypes,
+  RGBAddressableDevice,
+  RGBNonAddressableDevice,
+} from "../../Resources/DeviceResources";
 import DeviceName from "../Settings/DeviceName";
 import ConfirmNewDevice from "../Settings/ConfirmNewDevice";
 import SavePreset from "../Settings/SavePreset";
@@ -15,6 +20,7 @@ import MappingIcon from "../../SVGs/MappingIcon";
 import PresetIcon from "../../SVGs/PresetIcon";
 import LedCountIcon from "../../SVGs/LedCountIcon";
 import TransitionIcon from "../../SVGs/TransitionIcon";
+import PinOut from "../Options/Pinout";
 
 // ----------------- Option Controller Type Declaration ----------------- //
 
@@ -44,6 +50,8 @@ interface SettingListItem {
   modeInfo?: ModeInfo;
   includeTypes?: DeviceTypes | DeviceTypes[];
   whenCustom?: boolean;
+  overrideValue?: (device: Device) => string;
+  overrideChanges?: (nDevice: Device) => Device;
 }
 
 interface CustomSettingItem extends SettingListItem {
@@ -130,15 +138,38 @@ export const defaultSettings: SettingsControllerList = {
         }}
       />
     ),
+    //make sure to override certain values when the type of a device changes.
+    overrideChanges: (nDevice: Device) => {
+      if (nDevice.type === "non-addressable") {
+        (nDevice as RGBNonAddressableDevice).pin_out = {
+          r_pin: 0,
+          g_pin: 0,
+          b_pin: 0,
+        };
+        nDevice = nDevice as RGBNonAddressableDevice;
+      } else if (nDevice.type === "addressable") {
+        (nDevice as RGBAddressableDevice).led_count = 0;
+        (nDevice as RGBAddressableDevice).pin_out = 0;
+      }
+      return nDevice;
+    },
     dataType: "device",
   },
   //soon this should be custom to adjust for not just addressable strips
   pin_out: {
-    type: "number",
-    id: "rgb-strip-type-select-menu",
-    title: "Pin Out",
-    dataType: "device",
+    type: "custom-input",
+    dataType: "preset",
+    element: <PinOut />,
     icon: <PinoutIcon width="35" height="24" stroke="inherit" />,
+    overrideValue: (device: Device) => {
+      if (device.type === "non-addressable") {
+        const pins = (device as RGBNonAddressableDevice).pin_out;
+        return `r:${pins.r_pin} g:${pins.g_pin} b:${pins.b_pin}`;
+      } else if (device.type === "addressable") {
+        return (device as RGBAddressableDevice).pin_out.toString();
+      }
+      return "";
+    },
   },
   brightness: {
     type: "text",

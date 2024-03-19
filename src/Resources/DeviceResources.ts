@@ -30,6 +30,6 @@ export interface RGBAddressableDevice extends Device {
 export interface RGBNonAddressableDevice extends Device {
   type: "non-addressable";
   transition_speed: number;
-  pin_out: { r: number; g: number; b: number };
+  pin_out: { r_pin: number; g_pin: number; b_pin: number };
   settings: RGBNonAddressablePreset;
 }

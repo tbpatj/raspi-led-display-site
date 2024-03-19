@@ -5,14 +5,12 @@ export type DevicePresets =
   | RGBNonAddressablePreset
   | DevicePreset;
 
-export const modes = ["breathe", "fade", "custom", "tv"] as const;
-
 export interface DevicePreset {
   device_name: string;
   device_type: DeviceTypes;
   name: string;
   power: "on" | "off";
-  mode: (typeof modes)[number];
+  mode: string;
   mapping: Mapping[];
 }
 
@@ -31,17 +29,14 @@ export interface Mapping {
 
 export interface RGBNonAddressablePreset extends DevicePreset {
   type: "non-addressable";
-  mode: "tv" | "custom" | "fade";
+  mode: string;
   animation_speed: number;
-  image_processing: string;
 }
 
 export interface RGBAddressablePreset extends DevicePreset {
   type: "addressable";
-  mode: "tv" | "custom" | "breathe";
+  mode: string;
   animation_speed: number;
-  image_processing: string;
-  blur?: number;
 }
 
 export const defaultPresets: DevicePresets[] = [
