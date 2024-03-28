@@ -1,18 +1,16 @@
 import { useContext, useMemo } from "react";
-import { SettingsContext } from "../../Context/SettingsContext";
+import { SettingsContext, StgsCnxtCmdFc } from "../../Context/SettingsContext";
 import Button from "../Input/Button";
-import { RGBAddressableDevice } from "../../Resources/DeviceResources";
-import { GlobalContext } from "../../Context/GlobalContext";
+import { Device, RGBAddressableDevice } from "../../Resources/DeviceResources";
 
 const ConfirmNewDevice = () => {
-  const { device, updateDevice, toggleEditingNav } =
+  const { data: device, command }: { data: Device; command: StgsCnxtCmdFc } =
     useContext(SettingsContext);
-  const { addDevice } = useContext(GlobalContext);
 
   const isDisabled = useMemo(() => {
-    if (device.name === "") return true;
+    if (device?.name === "") return true;
     if (
-      device.type === "addressable" &&
+      device?.type === "addressable" &&
       !(device as RGBAddressableDevice).led_count
     )
       return true;
@@ -22,8 +20,8 @@ const ConfirmNewDevice = () => {
   }, [device]);
 
   const handleClick = () => {
-    addDevice(device);
-    toggleEditingNav();
+    command({ val: "new-device" });
+    // toggleEditingNav();
   };
 
   return (

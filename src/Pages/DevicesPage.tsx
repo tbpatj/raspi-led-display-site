@@ -1,18 +1,17 @@
 import { useContext, useState } from "react";
 import Card from "../Components/Cards/Card";
 import VerticalTransition from "../Components/TransitionContainers/VerticalTransition";
-import NewDevice from "../Components/Device/NewDevice";
 import { Devices } from "../Resources/DeviceResources";
 import { GlobalContext } from "../Context/GlobalContext";
-import PresetSettings from "../Components/Device/PresetSettings";
-import { SettingsContextProvider } from "../Context/SettingsContext";
 import { DeviceSVGMap } from "../Utils/DeviceSVGMap";
+import DeviceEditor from "../Components/Device/DeviceEditor";
+import NewDeviceEditor from "../Components/Device/NewDeviceEditor";
 
 const DevicesPage = () => {
   const [editing, setEditing] = useState(0);
   const [editingOpen, setEditingOpen] = useState(false);
   const [editingIndex, setEditingIndex] = useState(0);
-  const { devices, presets } = useContext(GlobalContext);
+  const { devices } = useContext(GlobalContext);
   return (
     <VerticalTransition
       onBack={() => setEditingOpen(false)}
@@ -48,41 +47,13 @@ const DevicesPage = () => {
         </div>
       </div>
       <div>
-        {editing === 1 && (
-          <div
-            style={{ position: "relative", width: "100vw", height: "100vh" }}
-          >
-            <SettingsContextProvider
-              selectedDevice={editingIndex}
-              initialPreset={
-                devices[editingIndex].preset !== "custom"
-                  ? presets.find((val) => {
-                      if (
-                        val.name === devices[editingIndex].preset &&
-                        val.device_type === devices[editingIndex].type
-                      )
-                        return val;
-                    })
-                  : devices[editingIndex].settings
-              }
-              setEditingOpen={setEditingOpen}
-            >
-              <PresetSettings />
-            </SettingsContextProvider>
-          </div>
-        )}
+        {editing === 1 && <DeviceEditor index={editingIndex} />}
         {editing === 2 && (
-          <div
-            style={{ position: "relative", width: "100vw", height: "100vh" }}
-          >
-            <SettingsContextProvider setEditingOpen={setEditingOpen}>
-              <NewDevice
-                onFinish={() => {
-                  setEditingOpen(false);
-                }}
-              />
-            </SettingsContextProvider>
-          </div>
+          <NewDeviceEditor
+            onFinish={() => {
+              setEditingOpen(false);
+            }}
+          />
         )}
       </div>
     </VerticalTransition>

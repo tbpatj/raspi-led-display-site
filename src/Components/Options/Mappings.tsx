@@ -1,43 +1,44 @@
 import { CSSProperties, useContext } from "react";
-import { SettingsContext } from "../../Context/SettingsContext";
+import { SettingsContext, StgsCnxtUpFc } from "../../Context/SettingsContext";
 import Button from "../Input/Button";
 import Input from "../Input/Input";
 import { ReactComponent as XIcon } from "../../SVGs/svgs/x-solid.svg";
 import { cloneDeep } from "lodash";
 import useWinSize from "../../Hooks/useWinSize";
+import { Device } from "../../Resources/DeviceResources";
+import { ChangeItem } from "../../Resources/JsonChange";
 
 const mappingInputStyle: CSSProperties = { width: "60px" };
 
 const Mappings: React.FC = () => {
-  const { preset, updatePreset } = useContext(SettingsContext);
+  const { data, update }: { data: Device; update: StgsCnxtUpFc } =
+    useContext(SettingsContext);
   const { isSmall } = useWinSize();
 
   const handleAddMapping = () => {
-    const nPreset = cloneDeep(preset);
-    nPreset.mapping.push({
+    const mapping = {
       ledSIndx: 0,
       ledEIndx: 0,
       mapSIndx: 0,
       mapEIndx: 0,
-    });
-    updatePreset(nPreset);
+    };
+    update([{ path: ["settings", "mapping"], value: [mapping] }]);
   };
 
   const handleRemoveMapping = (index: number) => () => {
-    const nPreset = cloneDeep(preset);
-    nPreset.mapping.splice(index, 1);
-    updatePreset(nPreset);
+    let curMapping = data.settings.mapping;
+    curMapping.splice(index, 1);
+    update([{ path: ["settings", "mapping"], value: [curMapping] }]);
   };
 
   const handleMappingChange = (type: string, indx: number) => (val: string) => {
     const isValid = /^[0-9]+$/.test(val);
     if (isValid || val === "") {
       if (val === "") val = "0";
-      const nPreset = cloneDeep(preset);
-      const map = nPreset.mapping[indx];
-      // const type = typeof keyof mapping
-      nPreset.mapping[indx][type as keyof typeof map] = parseInt(val);
-      updatePreset(nPreset);
+      const mapping = cloneDeep(data.settings.mapping);
+      const map = mapping[indx]; // const type = typeof keyof mapping
+      mapping[indx][type as keyof typeof map] = parseInt(val);
+      update([{ path: ["settings", "mapping"], value: mapping }]);
     }
   };
 
@@ -46,7 +47,7 @@ const Mappings: React.FC = () => {
       <div className="new-device-list">
         <Button onClick={handleAddMapping}>Add Mapping</Button>
         <div className="mappings-container">
-          {preset?.mapping.map((mapping, index) => {
+          {data?.settings?.mapping.map((mapping, index) => {
             const showText = index === 0 || isSmall;
             return (
               <div className="mappings-item" key={`mapping-item-${index}`}>
@@ -88,7 +89,7 @@ const Mappings: React.FC = () => {
                     </div>
                   </div>
                 </div>
-                {preset?.mapping.length > 1 && (
+                {data?.settings?.mapping.length > 1 && (
                   <XIcon
                     onClick={handleRemoveMapping(index)}
                     style={{ cursor: "pointer" }}

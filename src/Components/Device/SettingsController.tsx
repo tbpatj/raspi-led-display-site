@@ -1,24 +1,23 @@
-import { useContext, useEffect, useMemo, useState } from "react";
-import { SelectSettingItem, defaultSettings } from "./SettingsControllerUtil";
+import { useContext, useState } from "react";
+import { SettingsControllerList } from "./SettingsControllerUtil";
 import SettingItem from "./SettingItem";
 import HorizontalTransition from "../TransitionContainers/HorizonalTransition";
 import { GlobalContext } from "../../Context/GlobalContext";
 import InputController from "./InputController";
 import { SettingsContext } from "../../Context/SettingsContext";
-import { cloneDeep } from "lodash";
-import { SelectMenuOption } from "../Input/SelectMenu";
 import SettingDivider from "./SettingDivider";
+import { getJsonValue } from "../../Resources/JsonChange";
 
 interface SettingsControllerProps {
   options: string[];
-  values: { [key: string]: any };
+  settings: SettingsControllerList;
   title?: string;
 }
 
 const SettingsController: React.FC<SettingsControllerProps> = ({
   options,
-  values,
   title,
+  settings,
 }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editing, setEditing] = useState("");
@@ -26,42 +25,13 @@ const SettingsController: React.FC<SettingsControllerProps> = ({
     {}
   );
   const { toggleTvShown, presets, modes } = useContext(GlobalContext);
-  const { device } = useContext(SettingsContext);
+  const { data } = useContext(SettingsContext);
 
   const getDisplayValue = (value: any) => {
     if (typeof value === "string") return value;
     else if (typeof value === "number") return value.toString();
     else return "";
   };
-
-  const calcSettings = useMemo(() => {
-    const settings = cloneDeep(defaultSettings);
-    //set up the preset settings
-    const preset = cloneDeep(settings.preset as SelectSettingItem);
-    if (preset as SelectSettingItem)
-      preset.options = presets
-        .filter(
-          (preset) =>
-            preset.device_type === device.type &&
-            preset.device_name === device.name
-        )
-        .map((preset) => {
-          return {
-            value: preset.name,
-            text: preset.name,
-          } as SelectMenuOption;
-        });
-    console.log(preset, presets);
-    settings.preset = preset;
-
-    //set up the mode settings
-    const modeSetting = cloneDeep(settings.mode as SelectSettingItem);
-    modeSetting.options = modes.map((mode) => {
-      return { text: mode, value: mode } as SelectMenuOption;
-    });
-    settings.mode = modeSetting;
-    return settings;
-  }, [device, presets, modes]);
 
   let hideFromDivide = false;
 
@@ -79,26 +49,23 @@ const SettingsController: React.FC<SettingsControllerProps> = ({
           <h1>{title ? title : ""}</h1>
           {options.map((option) => {
             //filter out options that are not supported by the device type
-            if (calcSettings?.[option]?.includeTypes) {
-              const includedTypes = calcSettings?.[option]?.includeTypes;
+            if (settings?.[option]?.includeTypes) {
+              const includedTypes = settings?.[option]?.includeTypes;
               if (typeof includedTypes === "string") {
-                if (device.type !== includedTypes) return;
+                if (data?.type !== includedTypes) return;
               } else if (typeof includedTypes === "object") {
-                if (!includedTypes.includes(device.type)) return;
+                if (!includedTypes.includes(data?.type)) return;
               }
             }
-            if (calcSettings?.[option]?.modeInfo) {
+            if (settings?.[option]?.modeInfo) {
               //if the mode doesn't support the current setting then remove it.
-              const modeInfo = calcSettings?.[option].modeInfo;
-              if (!modeInfo?.[device.settings.mode]) return;
+              const modeInfo = settings?.[option].modeInfo;
+              if (!modeInfo?.[data.settings.mode]) return;
             }
             //if the element is only meant to shown when the preset it a custom preset
-            if (
-              calcSettings?.[option]?.whenCustom &&
-              device.preset !== "custom"
-            )
+            if (settings?.[option]?.whenCustom && data.preset !== "custom")
               return;
-            const settingOption = calcSettings?.[option];
+            const settingOption = settings?.[option];
 
             if (settingOption?.type === "divider") {
               if (dividerHide?.[option]) hideFromDivide = true;
@@ -126,10 +93,8 @@ const SettingsController: React.FC<SettingsControllerProps> = ({
 
             //get the value if it's a preset setting or a device setting
             const value =
-              calcSettings?.[option]?.overrideValue?.(device) ??
-              (calcSettings?.[option]?.dataType === "device"
-                ? device?.[option as keyof typeof device]
-                : device.settings?.[option as keyof typeof device.settings]);
+              settings?.[option]?.overrideValue?.(data) ??
+              getJsonValue(data, [...(settings?.[option]?.path ?? []), option]);
 
             return (
               <SettingItem
@@ -140,17 +105,14 @@ const SettingsController: React.FC<SettingsControllerProps> = ({
                   setEditing(option);
                 }}
                 title={option}
-                icon={calcSettings?.[option]?.icon}
+                icon={settings?.[option]?.icon}
               />
             );
           })}
         </div>
       </div>
       <div>
-        <InputController
-          options={calcSettings}
-          option={editing}
-        ></InputController>
+        <InputController options={settings} option={editing}></InputController>
       </div>
     </HorizontalTransition>
   );

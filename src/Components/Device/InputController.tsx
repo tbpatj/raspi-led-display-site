@@ -1,10 +1,11 @@
 import { useContext, useMemo } from "react";
 import { SettingsContext } from "../../Context/SettingsContext";
 import SelectMenu from "../Input/SelectMenu";
-import { cloneDeep } from "lodash";
 import { SettingsControllerList } from "./SettingsControllerUtil";
 import Input from "../Input/Input";
 import MenuContainer from "./MenuContainer";
+import { ChangeItem, getJsonValue } from "../../Resources/JsonChange";
+import { clientFailureResponse } from "../../Resources/ServerResponseResources";
 
 interface InputControllerProps {
   options: SettingsControllerList;
@@ -16,54 +17,38 @@ const InputController: React.FC<InputControllerProps> = ({
   option,
   options,
 }) => {
-  const { device, preset, updateDevice, updatePreset, updateDevicePreset } =
-    useContext(SettingsContext);
-
-  const updateDeviceOption = async (option: string, value: any) => {
-    let nDevice = cloneDeep(device);
-    nDevice[option as keyof typeof nDevice] = value;
-    const nDevice2 = options[option]?.overrideChanges?.(nDevice);
-    if (nDevice2) {
-      nDevice = nDevice2;
-    }
-    // if (option === "preset") {
-    //   await updateDevicePreset(value);
-    // } else {
-    await updateDevice(nDevice);
-    // }
-  };
-
-  const updatePresetOption = (option: string, value: any) => {
-    const nPreset = cloneDeep(preset);
-    //@ts-ignore
-    nPreset[option] = value;
-    updatePreset(nPreset);
-  };
-
-  const updateValues = (option: string, value: any) => {
-    if (optionDetails.dataType === "device") {
-      updateDeviceOption(option, value);
-    } else if (optionDetails.dataType === "preset") {
-      updatePresetOption(option, value);
-    }
-  };
+  const { data, update } = useContext(SettingsContext);
 
   const optionDetails = useMemo(() => {
     return options?.[option] ?? "none";
   }, [option, options]);
 
-  const optionValue = useMemo(() => {
-    //make sure to return the actual value if it is from the preset or the device
-    if (optionDetails.dataType === "device") {
-      return device?.[option as keyof typeof device] ?? undefined;
-    } else if (optionDetails.dataType === "preset") {
-      //return the current settings preset value from the device
-      return (
-        device?.settings?.[option as keyof typeof device.settings] ?? undefined
-      );
+  const updateValues = async (option: string, value: any) => {
+    let nUpdate: ChangeItem = { path: [option], value: value };
+    if (optionDetails?.path) {
+      nUpdate.path = [...optionDetails.path, option];
     }
-    return "none";
-  }, [option, device]);
+    const override = optionDetails?.overrideChanges?.(nUpdate);
+    let response = clientFailureResponse;
+    if (override) {
+      response = await update([nUpdate, ...override]);
+    } else {
+      response = await update([nUpdate]);
+    }
+    if (response.status === "error") {
+      //handle errors when needed
+    }
+  };
+
+  const optionValue = useMemo(() => {
+    //make sure to return the actual value if it utilizes a path
+    if (optionDetails?.path) {
+      const test = getJsonValue(data, [...(optionDetails?.path ?? []), option]);
+      return test;
+    } else {
+      return data?.[option];
+    }
+  }, [option, data]);
 
   const displayValue = useMemo(() => {
     if (optionValue !== undefined && optionValue !== null) {
@@ -85,7 +70,7 @@ const InputController: React.FC<InputControllerProps> = ({
             updateValues(option, val);
           }}
           title={optionDetails?.title}
-          type={device.type}
+          type={data?.type}
           id={optionDetails?.id}
           options={optionDetails.options}
         />

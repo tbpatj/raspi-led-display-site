@@ -37,13 +37,13 @@ interface GlobalProps {
   addNewPreset: (i: number, name: string) => Promise<ServerResponse>;
 }
 
-const defaultServerResponse: ServerResponse = {
+export const defaultServerResponse: ServerResponse = {
   status: "error",
   message: "Context Provider was not initialized properly",
   code: 400,
 };
 
-const serverNotFoundResponse: ServerResponse = {
+export const serverNotFoundResponse: ServerResponse = {
   status: "error",
   message: "Endpoint or server not found.",
   code: 404,

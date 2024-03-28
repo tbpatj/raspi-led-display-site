@@ -1,12 +1,13 @@
 import { useContext, useEffect, useState } from "react";
-import { SettingsContext } from "../../Context/SettingsContext";
+import { SettingsContext, StgsCnxtUpFc } from "../../Context/SettingsContext";
 import Button from "../Input/Button";
 import { GlobalContext } from "../../Context/GlobalContext";
 import Modal from "../Modal/Modal";
+import { Device } from "../../Resources/DeviceResources";
 
 const DeleteDevice = () => {
   const [modalOpened, setModalOpened] = useState(false);
-  const { device, updateDevice, toggleEditingNav } =
+  const { data: device, update }: { data: Device; update: StgsCnxtUpFc } =
     useContext(SettingsContext);
   const { addDevice } = useContext(GlobalContext);
 
@@ -24,7 +25,7 @@ const DeleteDevice = () => {
 
   const handleDelete = () => {
     // addDevice(device);
-    toggleEditingNav();
+    // toggleEditingNav();
   };
 
   return (
