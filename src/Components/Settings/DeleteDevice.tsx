@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from "react";
-import { SettingsContext, StgsCnxtUpFc } from "../../Context/SettingsContext";
+import { SettingsContext, StgsCnxtCmdFc } from "../../Context/SettingsContext";
 import Button from "../Input/Button";
 import { GlobalContext } from "../../Context/GlobalContext";
 import Modal from "../Modal/Modal";
@@ -7,9 +7,9 @@ import { Device } from "../../Resources/DeviceResources";
 
 const DeleteDevice = () => {
   const [modalOpened, setModalOpened] = useState(false);
-  const { data: device, update }: { data: Device; update: StgsCnxtUpFc } =
+  const { data: device, command }: { data: Device; command: StgsCnxtCmdFc } =
     useContext(SettingsContext);
-  const { addDevice } = useContext(GlobalContext);
+  // const { deleteDevice } = useContext(GlobalContext);
 
   useEffect(() => {
     return () => {
@@ -18,18 +18,22 @@ const DeleteDevice = () => {
   }, []);
 
   const handleClick = () => {
-    // deleteDevice();
     setModalOpened(true);
-    // toggleEditingNav();
   };
 
-  const handleDelete = () => {
-    // addDevice(device);
-    // toggleEditingNav();
+  const handleDelete = async () => {
+    const response = await command({
+      val: "delete",
+      data: { name: device?.name, type: device?.type },
+    });
+    if (response.status === "error") {
+    } else {
+      command({ val: "toggle-nav" });
+    }
   };
 
   return (
-    <div className="new-device-container">
+    <>
       <Modal
         opened={modalOpened}
         onClose={() => {
@@ -50,7 +54,7 @@ const DeleteDevice = () => {
       <Button className="delete-button" onClick={() => handleClick()}>
         Delete Device
       </Button>
-    </div>
+    </>
   );
 };
 

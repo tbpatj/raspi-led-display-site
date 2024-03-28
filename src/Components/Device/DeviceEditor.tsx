@@ -7,14 +7,19 @@ import {
 import DeviceControllerContainer from "./DeviceControllerContainer";
 import { Device } from "../../Resources/DeviceResources";
 import { ChangeItem } from "../../Resources/JsonChange";
-import { clientFailureResponse } from "../../Resources/ServerResponseResources";
+import {
+  clientFailureResponse,
+  clientSuccessResponse,
+} from "../../Resources/ServerResponseResources";
 
 interface DeviceEditorProps {
   index: number;
+  onToggleNav: () => void;
 }
 
-const DeviceEditor: React.FC<DeviceEditorProps> = ({ index }) => {
-  const { devices, updateDevice, addNewPreset } = useContext(GlobalContext);
+const DeviceEditor: React.FC<DeviceEditorProps> = ({ index, onToggleNav }) => {
+  const { devices, updateDevice, addNewPreset, deleteDevice } =
+    useContext(GlobalContext);
   const handleChange = async (json: Device, items: ChangeItem[]) => {
     //if the update is part of the settings, then we know we are updating what potentially is the preset, so we need to make it a custom preset
     if (
@@ -29,6 +34,11 @@ const DeviceEditor: React.FC<DeviceEditorProps> = ({ index }) => {
   const handleCommand = async (json: Device, command: SettingsCommand) => {
     if (command.val === "save-preset" && command?.data?.name) {
       return await addNewPreset(index, command?.data?.name);
+    } else if (command.val === "delete") {
+      return await deleteDevice(index);
+    } else if (command.val === "toggle-nav") {
+      onToggleNav();
+      return clientSuccessResponse;
     }
     return clientFailureResponse;
   };

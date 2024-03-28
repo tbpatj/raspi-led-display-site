@@ -47,7 +47,12 @@ const DevicesPage = () => {
         </div>
       </div>
       <div>
-        {editing === 1 && <DeviceEditor index={editingIndex} />}
+        {editing === 1 && (
+          <DeviceEditor
+            onToggleNav={() => setEditingOpen(false)}
+            index={editingIndex}
+          />
+        )}
         {editing === 2 && (
           <NewDeviceEditor
             onFinish={() => {

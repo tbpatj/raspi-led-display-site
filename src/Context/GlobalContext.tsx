@@ -28,6 +28,7 @@ interface GlobalProps {
   presets: DevicePresets[];
   devices: Devices[];
   modes: string[];
+  deleteDevice: (i: number) => Promise<ServerResponse>;
   addDevice: (device: Devices) => Promise<ServerResponse>;
   updateDevice: (i: number, nDevice: Devices) => Promise<ServerResponse>;
   updateDevicePreset: (
@@ -75,6 +76,7 @@ const defaultGlobalData = {
   presets: defaultPresets,
   devices: [],
   modes: [],
+  deleteDevice: async (i: number) => defaultServerResponse,
   addDevice: async (device: Devices) => defaultServerResponse,
   updateDevice: async (i: number, nDevice: Devices) => defaultServerResponse,
   updateDevicePreset: async (i: number, presetName: string) =>
@@ -236,6 +238,30 @@ export const GlobalContextProvider: React.FC<GlobalContextProviderProps> = ({
     [devices]
   );
 
+  const deleteDevice = useCallback(
+    async (i: number) => {
+      const device = devices[i];
+      console.log(device, i, devices);
+      const options = {
+        method: "DELETE",
+        data: { type: device.type },
+        url: `${baseURL}/devices/delete/${device.name}`,
+      };
+      let response =
+        process.env.REACT_APP_DEV_MODE == "false"
+          ? serverNotFoundResponse
+          : successfulServerResponse;
+      try {
+        response = await axios(options);
+        response = response.data;
+      } catch (e) {
+        console.error(e);
+      }
+      return response;
+    },
+    [devices]
+  );
+
   const addNewPreset = useCallback(
     async (i: number, name: string) => {
       //call to the server
@@ -319,6 +345,7 @@ export const GlobalContextProvider: React.FC<GlobalContextProviderProps> = ({
       tvShown,
       presets,
       devices,
+      deleteDevice,
       toggleTvShown,
       addDevice,
       updateDevice,
@@ -330,6 +357,7 @@ export const GlobalContextProvider: React.FC<GlobalContextProviderProps> = ({
     tvShown,
     presets,
     devices,
+    deleteDevice,
     toggleTvShown,
     addDevice,
     updateDevice,
