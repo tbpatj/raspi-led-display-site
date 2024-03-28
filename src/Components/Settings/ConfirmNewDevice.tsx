@@ -19,9 +19,11 @@ const ConfirmNewDevice = () => {
     return false;
   }, [device]);
 
-  const handleClick = () => {
-    command({ val: "new-device" });
-    // toggleEditingNav();
+  const handleClick = async () => {
+    const response = await command({ val: "new-device" });
+    if (response.status === "success") {
+      command({ val: "toggle-nav" });
+    }
   };
 
   return (

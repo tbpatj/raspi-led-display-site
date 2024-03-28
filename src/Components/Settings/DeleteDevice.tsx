@@ -28,6 +28,7 @@ const DeleteDevice = () => {
     });
     if (response.status === "error") {
     } else {
+      setModalOpened(false);
       command({ val: "toggle-nav" });
     }
   };

@@ -1,7 +1,12 @@
-import { Outlet, useLocation } from "react-router-dom";
+import { Outlet, Route, useLocation } from "react-router-dom";
 import LedIcon from "../../SVGs/LedIcon";
+import PowerIcon from "../../SVGs/PowerIcon";
+import { Link } from "react-router-dom";
 
-const routes = [{ icon: <LedIcon width="30" height="44" />, path: "/" }];
+const routes = [
+  { icon: <LedIcon width="30" height="44" />, path: "/" },
+  { icon: <PowerIcon width="30" height="44" />, path: "/power" },
+];
 
 const Navbar: React.FC = () => {
   const location = useLocation();
@@ -19,7 +24,7 @@ const Navbar: React.FC = () => {
               }`}
               key={`nav-item-${i}`}
             >
-              {route.icon}
+              <Link to={route.path}>{route.icon}</Link>
             </div>
           );
         })}

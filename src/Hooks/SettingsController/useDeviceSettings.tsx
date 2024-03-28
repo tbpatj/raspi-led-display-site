@@ -25,15 +25,15 @@ const useDeviceSettings: () => UseDeviceSettings = () => {
       preset.options = presets
         .filter(
           (preset) =>
-            preset.device_type === data.type && preset.device_name === data.name
+            preset?.device_type === data?.type &&
+            preset?.device_name === data?.name
         )
         .map((preset) => {
           return {
-            value: preset.name,
-            text: preset.name,
+            value: preset?.name,
+            text: preset?.name,
           } as SelectMenuOption;
         });
-    console.log(preset, presets);
     settings.preset = preset;
 
     //set up the mode settings

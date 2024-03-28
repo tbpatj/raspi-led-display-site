@@ -241,7 +241,6 @@ export const GlobalContextProvider: React.FC<GlobalContextProviderProps> = ({
   const deleteDevice = useCallback(
     async (i: number) => {
       const device = devices[i];
-      console.log(device, i, devices);
       const options = {
         method: "DELETE",
         data: { type: device.type },
@@ -254,6 +253,10 @@ export const GlobalContextProvider: React.FC<GlobalContextProviderProps> = ({
       try {
         response = await axios(options);
         response = response.data;
+        if (response.status === "success") {
+          getDevices();
+          getPresets();
+        }
       } catch (e) {
         console.error(e);
       }

@@ -63,7 +63,7 @@ const SettingsController: React.FC<SettingsControllerProps> = ({
               if (!modeInfo?.[data.settings.mode]) return;
             }
             //if the element is only meant to shown when the preset it a custom preset
-            if (settings?.[option]?.whenCustom && data.preset !== "custom")
+            if (settings?.[option]?.whenCustom && data?.preset !== "custom")
               return;
             const settingOption = settings?.[option];
 

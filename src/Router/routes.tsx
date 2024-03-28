@@ -15,6 +15,7 @@ const routes: RouteObject[] = [
             index: true,
             element: <DevicesPage />,
           },
+          { path: "/power", element: <div>page</div> },
         ],
       },
     ],

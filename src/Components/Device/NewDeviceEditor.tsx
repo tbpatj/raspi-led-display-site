@@ -48,11 +48,10 @@ const NewDeviceEditor: React.FC<NewDeviceEditorProps> = ({ onFinish }) => {
   const handleCommand = async (json: Device, command: SettingsCommand) => {
     if (command.val === "new-device") {
       //create new device
-      const serverResponse = await addDevice(json);
-      if (serverResponse.status === "success") {
-        onFinish();
-      }
-      return serverResponse;
+      return await addDevice(json);
+    }
+    if (command.val === "toggle-nav") {
+      onFinish();
     }
     return clientFailureResponse;
   };
