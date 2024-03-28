@@ -1,11 +1,11 @@
 import { useContext, useMemo } from "react";
 import { SettingsContext } from "../../Context/SettingsContext";
 import SelectMenu from "../Input/SelectMenu";
-import { cloneDeep } from "lodash";
 import { SettingsControllerList } from "./SettingsControllerUtil";
 import Input from "../Input/Input";
 import MenuContainer from "./MenuContainer";
 import { ChangeItem, getJsonValue } from "../../Resources/JsonChange";
+import { clientFailureResponse } from "../../Resources/ServerResponseResources";
 
 interface InputControllerProps {
   options: SettingsControllerList;
@@ -23,16 +23,20 @@ const InputController: React.FC<InputControllerProps> = ({
     return options?.[option] ?? "none";
   }, [option, options]);
 
-  const updateValues = (option: string, value: any) => {
+  const updateValues = async (option: string, value: any) => {
     let nUpdate: ChangeItem = { path: [option], value: value };
     if (optionDetails?.path) {
       nUpdate.path = [...optionDetails.path, option];
     }
     const override = optionDetails?.overrideChanges?.(nUpdate);
+    let response = clientFailureResponse;
     if (override) {
-      update([nUpdate, ...override]);
+      response = await update([nUpdate, ...override]);
     } else {
-      update([nUpdate]);
+      response = await update([nUpdate]);
+    }
+    if (response.status === "error") {
+      //handle errors when needed
     }
   };
 
