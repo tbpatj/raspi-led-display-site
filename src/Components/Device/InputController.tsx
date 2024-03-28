@@ -5,7 +5,7 @@ import { cloneDeep } from "lodash";
 import { SettingsControllerList } from "./SettingsControllerUtil";
 import Input from "../Input/Input";
 import MenuContainer from "./MenuContainer";
-import { getJsonValue } from "../../Resources/JsonChange";
+import { ChangeItem, getJsonValue } from "../../Resources/JsonChange";
 
 interface InputControllerProps {
   options: SettingsControllerList;
@@ -24,10 +24,15 @@ const InputController: React.FC<InputControllerProps> = ({
   }, [option, options]);
 
   const updateValues = (option: string, value: any) => {
+    let nUpdate: ChangeItem = { path: [option], value: value };
     if (optionDetails?.path) {
-      update([{ path: [...optionDetails.path, option], value: value }]);
+      nUpdate.path = [...optionDetails.path, option];
+    }
+    const override = optionDetails?.overrideChanges?.(nUpdate);
+    if (override) {
+      update([nUpdate, ...override]);
     } else {
-      update([{ path: [option], value: value }]);
+      update([nUpdate]);
     }
   };
 

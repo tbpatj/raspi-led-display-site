@@ -22,6 +22,7 @@ import LedCountIcon from "../../SVGs/LedCountIcon";
 import TransitionIcon from "../../SVGs/TransitionIcon";
 import PinOut from "../Options/Pinout";
 import DeleteDevice from "../Settings/DeleteDevice";
+import { ChangeItem } from "../../Resources/JsonChange";
 
 // ----------------- Option Controller Type Declaration ----------------- //
 
@@ -52,7 +53,7 @@ interface SettingListItem {
   whenCustom?: boolean;
   path?: string[];
   overrideValue?: (data: any) => string;
-  overrideChanges?: (data: any) => any;
+  overrideChanges?: (change: ChangeItem) => ChangeItem[];
 }
 
 interface CustomSettingItem extends SettingListItem {
@@ -140,21 +141,29 @@ export const defaultSettings: SettingsControllerList = {
       />
     ),
     //make sure to override certain values when the type of a device changes.
-    overrideChanges: (nDevice: Device) => {
-      if (nDevice?.type === "non-addressable") {
-        (nDevice as RGBNonAddressableDevice).pin_out = {
-          r_pin: 0,
-          g_pin: 0,
-          b_pin: 0,
-        };
-        nDevice = nDevice as RGBNonAddressableDevice;
-        nDevice.settings.device_type = "non-addressable";
-      } else if (nDevice?.type === "addressable") {
-        (nDevice as RGBAddressableDevice).led_count = 0;
-        (nDevice as RGBAddressableDevice).pin_out = 0;
-        nDevice.settings.device_type = "addressable";
+    overrideChanges: (change: ChangeItem) => {
+      if (change.value === "non-addressable") {
+        return [
+          {
+            path: ["pin_out"],
+            value: {
+              r_pin: 0,
+              g_pin: 0,
+              b_pin: 0,
+            },
+          },
+        ] as ChangeItem[];
+      } else if (change.value === "addressable") {
+        return [
+          {
+            path: ["pin_out"],
+            value: 0,
+          },
+          { path: "led_count", value: 0 },
+          { path: ["settings", "device_type"], value: "addressable" },
+        ] as ChangeItem[];
       }
-      return nDevice;
+      return [];
     },
   },
   //soon this should be custom to adjust for not just addressable strips
