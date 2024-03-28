@@ -8,6 +8,10 @@ import { Device, RGBAddressableDevice } from "../../Resources/DeviceResources";
 import { ChangeItem } from "../../Resources/JsonChange";
 import SettingsController from "./SettingsController";
 import { defaultSettings } from "./SettingsControllerUtil";
+import {
+  clientFailureResponse,
+  clientSuccessResponse,
+} from "../../Resources/ServerResponseResources";
 
 interface NewDeviceEditorProps {
   onFinish: () => void;
@@ -31,26 +35,26 @@ const defaultDevice: RGBAddressableDevice = {
   },
   transition_speed: 1000,
 };
+
 const NewDeviceEditor: React.FC<NewDeviceEditorProps> = ({ onFinish }) => {
-  const { devices, updateDevice } = useContext(GlobalContext);
+  const { addDevice } = useContext(GlobalContext);
   const [device, setDevice] = useState<Device>(defaultDevice as Device);
 
-  const handleChange = (json: Device, items: ChangeItem[]) => {
-    // if (items.findIndex((val) => val.path.includes("type")) != -1) {
-    //   if (json.type === "addressable") {
-    //     (json as RGBAddressableDevice)["pin_out"] = 0;
-    //   } else {
-    //     json["pin_out"] = { r: 0, g: 0, b: 0 };
-    //   }
-    // }
+  const handleChange = async (json: Device, items: ChangeItem[]) => {
     setDevice(json);
+    return clientSuccessResponse;
   };
 
-  const handleCommand = (json: Device, command: SettingsCommand) => {
+  const handleCommand = async (json: Device, command: SettingsCommand) => {
     if (command.val === "new-device") {
       //create new device
-      onFinish();
+      const serverResponse = await addDevice(json);
+      if (serverResponse.status === "success") {
+        onFinish();
+      }
+      return serverResponse;
     }
+    return clientFailureResponse;
   };
 
   return (

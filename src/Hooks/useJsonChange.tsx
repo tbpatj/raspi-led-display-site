@@ -1,14 +1,15 @@
 import { useCallback } from "react";
 import { ChangeItem, jsonRecursion } from "../Resources/JsonChange";
 import { cloneDeep } from "lodash";
+import { ServerResponse } from "../Resources/ServerResponseResources";
 
 interface UseJsonChangeProps {
   json: any;
-  onChange: (json: any, items: ChangeItem[]) => void;
+  onChange: (json: any, items: ChangeItem[]) => Promise<ServerResponse>;
 }
 
 interface UseJsonChange {
-  update: (items: ChangeItem[]) => void;
+  update: (items: ChangeItem[]) => Promise<ServerResponse>;
 }
 
 const useJsonChange: (props: UseJsonChangeProps) => UseJsonChange = ({
@@ -16,12 +17,12 @@ const useJsonChange: (props: UseJsonChangeProps) => UseJsonChange = ({
   onChange,
 }) => {
   const update = useCallback(
-    (items: ChangeItem[]) => {
+    async (items: ChangeItem[]) => {
       let nJson = cloneDeep(json);
       for (const item of items) {
         nJson = jsonRecursion(nJson, item.path, item.value);
       }
-      onChange(nJson, items);
+      return await onChange(nJson, items);
     },
     [json]
   );

@@ -7,11 +7,13 @@ import {
 } from "react";
 import useJsonChange from "../Hooks/useJsonChange";
 import { ChangeItem } from "../Resources/JsonChange";
+import { ServerResponse } from "../Resources/ServerResponseResources";
+import { defaultServerResponse } from "./GlobalContext";
 
 interface SettingsContextProviderProps {
   initalJson: any;
-  onChange: (json: any, items: ChangeItem[]) => void;
-  onCommand: (json: any, command: SettingsCommand) => void;
+  onChange: (json: any, items: ChangeItem[]) => Promise<ServerResponse>;
+  onCommand: (json: any, command: SettingsCommand) => Promise<ServerResponse>;
   children: React.ReactNode | React.ReactNode[];
 }
 
@@ -20,9 +22,11 @@ export interface SettingsCommand {
   data?: any;
 }
 
-export type StgsCnxtUpFc = (items: ChangeItem[]) => void;
+export type StgsCnxtUpFc = (items: ChangeItem[]) => Promise<ServerResponse>;
 
-export type StgsCnxtCmdFc = (command: SettingsCommand) => void;
+export type StgsCnxtCmdFc = (
+  command: SettingsCommand
+) => Promise<ServerResponse>;
 
 interface SettingsContextProps {
   data: any;
@@ -32,8 +36,8 @@ interface SettingsContextProps {
 
 export const SettingsContext = createContext<SettingsContextProps>({
   data: {},
-  update: (items: ChangeItem[]) => null,
-  command: (command: SettingsCommand) => null,
+  update: async (items: ChangeItem[]) => defaultServerResponse,
+  command: async (command: SettingsCommand) => defaultServerResponse,
 });
 
 export const SettingsContextProvider: React.FC<
@@ -46,9 +50,17 @@ export const SettingsContextProvider: React.FC<
     onChange: onChange,
   });
 
+  // const command = useCallback(async
+  //   (command: SettingsCommand) => {
+  //     // await onCommand(data, command);
+  //     return Promise.resolve(defaultServerResponse);
+  //   },
+  //   [data]
+  // );
+
   const command = useCallback(
-    (command: SettingsCommand) => {
-      onCommand(data, command);
+    async (command: SettingsCommand) => {
+      return await onCommand(data, command);
     },
     [data]
   );

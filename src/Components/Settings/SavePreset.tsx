@@ -7,10 +7,10 @@ import { SettingsContext } from "../../Context/SettingsContext";
 const SavePreset: React.FC = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [presetName, setPresetName] = useState("");
-  // const { savePreset } = useContext(SettingsContext);
+  const { command } = useContext(SettingsContext);
 
   const handleSaveButton = () => {
-    // savePreset(presetName);
+    command({ val: "save-preset", data: { name: presetName } });
   };
 
   return (
