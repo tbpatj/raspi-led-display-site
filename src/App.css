@@ -723,3 +723,39 @@ div {
     gap: 30px;
   }
 }
+
+/* delete button */
+.delete-button {
+  background-color: var(--secondary-accent);
+  color: var(--primary-accent);
+}
+
+.delete-modal-container {
+  min-width: 400px;
+}
+
+.delete-flex-container {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.delete-text-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  color: var(--primary-accent);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.delete-text-container:nth-child(1) {
+  margin-bottom: 40px;
+  font-size: 20px;
+}
+
+@media (max-width: 500px) {
+  .delete-modal-container {
+    min-width: 200px;
+  }
+}

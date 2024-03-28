@@ -26,6 +26,8 @@ const PresetSettings: React.FC<PresetSettingsProps> = () => {
           "mappings",
           "pin_out",
           "led_count",
+          "brightness",
+          "delete",
         ]}
         values={presets}
       />

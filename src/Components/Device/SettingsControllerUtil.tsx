@@ -21,6 +21,7 @@ import PresetIcon from "../../SVGs/PresetIcon";
 import LedCountIcon from "../../SVGs/LedCountIcon";
 import TransitionIcon from "../../SVGs/TransitionIcon";
 import PinOut from "../Options/Pinout";
+import DeleteDevice from "../Settings/DeleteDevice";
 
 // ----------------- Option Controller Type Declaration ----------------- //
 
@@ -264,5 +265,10 @@ export const defaultSettings: SettingsControllerList = {
     type: "divider",
     title: "Properties",
     dataType: "device",
+  },
+  delete: {
+    type: "custom-item",
+    dataType: "device",
+    element: <DeleteDevice />,
   },
 };
