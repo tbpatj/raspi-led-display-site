@@ -19,36 +19,6 @@ const InputController: React.FC<InputControllerProps> = ({
 }) => {
   const { data, update } = useContext(SettingsContext);
 
-  // const updateDeviceOption = async (option: string, value: any) => {
-
-  //   // let nDevice = cloneDeep(device);
-  //   // nDevice[option as keyof typeof nDevice] = value;
-  //   // const nDevice2 = options[option]?.overrideChanges?.(nDevice);
-  //   // if (nDevice2) {
-  //   //   nDevice = nDevice2;
-  //   // }
-  //   // // if (option === "preset") {
-  //   // //   await updateDevicePreset(value);
-  //   // // } else {
-  //   // await updateDevice(nDevice);
-  //   // // }
-  // };
-
-  // const updatePresetOption = (option: string, value: any) => {
-  //   const nPreset = cloneDeep(preset);
-  //   //@ts-ignore
-  //   nPreset[option] = value;
-  //   updatePreset(nPreset);
-  // };
-
-  // const updateValues = (option: string, value: any) => {
-  //   if (optionDetails.dataType === "device") {
-  //     updateDeviceOption(option, value);
-  //   } else if (optionDetails.dataType === "preset") {
-  //     updatePresetOption(option, value);
-  //   }
-  // };
-
   const optionDetails = useMemo(() => {
     return options?.[option] ?? "none";
   }, [option, options]);
@@ -62,13 +32,9 @@ const InputController: React.FC<InputControllerProps> = ({
   };
 
   const optionValue = useMemo(() => {
-    //make sure to return the actual value if it is from the preset or the device
-    console.log(data, optionDetails.path, option);
+    //make sure to return the actual value if it utilizes a path
     if (optionDetails?.path) {
-      console.log("checking");
-
       const test = getJsonValue(data, [...(optionDetails?.path ?? []), option]);
-      console.log(test);
       return test;
     } else {
       return data[option];

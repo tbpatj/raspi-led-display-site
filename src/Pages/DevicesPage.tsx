@@ -4,9 +4,9 @@ import VerticalTransition from "../Components/TransitionContainers/VerticalTrans
 import NewDevice from "../Components/Device/NewDevice";
 import { Devices } from "../Resources/DeviceResources";
 import { GlobalContext } from "../Context/GlobalContext";
-import PresetSettings from "../Components/Device/PresetSettings";
 import { SettingsContextProvider } from "../Context/SettingsContext";
 import { DeviceSVGMap } from "../Utils/DeviceSVGMap";
+import DeviceEditor from "../Components/Device/DeviceEditor";
 
 const DevicesPage = () => {
   const [editing, setEditing] = useState(0);
@@ -48,46 +48,16 @@ const DevicesPage = () => {
         </div>
       </div>
       <div>
-        {editing === 1 && (
-          <div
-            style={{ position: "relative", width: "100vw", height: "100vh" }}
-          >
-            <SettingsContextProvider
-              initalJson={devices[editingIndex]}
-              onChange={() => null}
-              onCommand={() => null}
-            >
-              {/* <SettingsContextProvider
-              selectedDevice={editingIndex}
-              initialPreset={
-                devices[editingIndex].preset !== "custom"
-                  ? presets.find((val) => {
-                      if (
-                        val.name === devices[editingIndex].preset &&
-                        val.device_type === devices[editingIndex].type
-                      )
-                        return val;
-                    })
-                  : devices[editingIndex].settings
-              }
-              setEditingOpen={setEditingOpen}
-            > */}
-              <PresetSettings />
-            </SettingsContextProvider>
-            {/* </SettingsContextProvider> */}
-          </div>
-        )}
+        {editing === 1 && <DeviceEditor index={editingIndex} />}
         {editing === 2 && (
           <div
             style={{ position: "relative", width: "100vw", height: "100vh" }}
           >
-            {/* <SettingsContextProvider setEditingOpen={setEditingOpen}> */}
             <NewDevice
               onFinish={() => {
                 setEditingOpen(false);
               }}
             />
-            {/* </SettingsContextProvider> */}
           </div>
         )}
       </div>

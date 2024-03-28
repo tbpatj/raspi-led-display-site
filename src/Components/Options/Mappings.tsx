@@ -38,7 +38,7 @@ const Mappings: React.FC = () => {
       const mapping = cloneDeep(data.settings.mapping);
       const map = mapping[indx]; // const type = typeof keyof mapping
       mapping[indx][type as keyof typeof map] = parseInt(val);
-      update([{ path: ["settings", "mapping"], value: [mapping] }]);
+      update([{ path: ["settings", "mapping"], value: mapping }]);
     }
   };
 

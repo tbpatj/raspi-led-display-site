@@ -1,18 +1,20 @@
 import { useContext } from "react";
 import { GlobalContext } from "../../Context/GlobalContext";
 import SettingsController from "./SettingsController";
+import useDeviceSettings from "../../Hooks/SettingsController/useDeviceSettings";
 
-interface PresetSettingsProps {}
+interface DeviceControllerContainerProps {}
 
-const PresetSettings: React.FC<PresetSettingsProps> = () => {
-  // const [isEditing, setIsEditing] = useState(false);
-  // const [editing, setEditing] = useState("");
-  // const { device } = useContext(DeviceContext);
+const DeviceControllerContainer: React.FC<
+  DeviceControllerContainerProps
+> = () => {
   const { presets } = useContext(GlobalContext);
+  const { settings } = useDeviceSettings();
 
   return (
     <div style={{ width: "100vw", height: "100vh", position: "relative" }}>
       <SettingsController
+        settings={settings}
         options={[
           "preset_divider",
           "save_preset",
@@ -35,4 +37,4 @@ const PresetSettings: React.FC<PresetSettingsProps> = () => {
   );
 };
 
-export default PresetSettings;
+export default DeviceControllerContainer;
