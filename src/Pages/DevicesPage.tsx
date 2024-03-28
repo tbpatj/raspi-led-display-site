@@ -53,6 +53,11 @@ const DevicesPage = () => {
             style={{ position: "relative", width: "100vw", height: "100vh" }}
           >
             <SettingsContextProvider
+              initalJson={devices[editingIndex]}
+              onChange={() => null}
+              onCommand={() => null}
+            >
+              {/* <SettingsContextProvider
               selectedDevice={editingIndex}
               initialPreset={
                 devices[editingIndex].preset !== "custom"
@@ -66,22 +71,23 @@ const DevicesPage = () => {
                   : devices[editingIndex].settings
               }
               setEditingOpen={setEditingOpen}
-            >
+            > */}
               <PresetSettings />
             </SettingsContextProvider>
+            {/* </SettingsContextProvider> */}
           </div>
         )}
         {editing === 2 && (
           <div
             style={{ position: "relative", width: "100vw", height: "100vh" }}
           >
-            <SettingsContextProvider setEditingOpen={setEditingOpen}>
-              <NewDevice
-                onFinish={() => {
-                  setEditingOpen(false);
-                }}
-              />
-            </SettingsContextProvider>
+            {/* <SettingsContextProvider setEditingOpen={setEditingOpen}> */}
+            <NewDevice
+              onFinish={() => {
+                setEditingOpen(false);
+              }}
+            />
+            {/* </SettingsContextProvider> */}
           </div>
         )}
       </div>

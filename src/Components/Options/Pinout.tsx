@@ -1,22 +1,22 @@
 import { useContext } from "react";
-import { SettingsContext } from "../../Context/SettingsContext";
+import { SettingsContext, StgsCnxtUpFc } from "../../Context/SettingsContext";
 import Input from "../Input/Input";
 import {
+  Device,
   RGBAddressableDevice,
   RGBNonAddressableDevice,
 } from "../../Resources/DeviceResources";
 
 const PinOut: React.FC = () => {
-  const { device, updateDevice } = useContext(SettingsContext);
+  const { data: device, update }: { data: Device; update: StgsCnxtUpFc } =
+    useContext(SettingsContext);
 
   const onAddressablePinOutChange = (val: string) => {
     const isValid = /^[0-9]+$/.test(val);
     if (isValid || val === "") {
       if (val === "") val = "0";
       if (device.type === "addressable") {
-        const nDevice = { ...device } as RGBAddressableDevice;
-        nDevice.pin_out = parseInt(val);
-        updateDevice(nDevice);
+        update([{ path: ["pin_out"], value: parseInt(val) }]);
       }
     }
   };
@@ -27,13 +27,11 @@ const PinOut: React.FC = () => {
       if (isValid || val === "") {
         if (val === "") val = "0";
         if (device.type === "non-addressable") {
-          const nDevice = { ...device } as RGBNonAddressableDevice;
-          const pin_out = (nDevice as RGBNonAddressableDevice).pin_out;
+          let pin_out = (device as RGBNonAddressableDevice).pin_out;
           if (typeof pin_out === "number")
-            nDevice.pin_out = { r_pin: 0, g_pin: 0, b_pin: 0 };
-          nDevice.pin_out[(type + "_pin") as keyof typeof pin_out] =
-            parseInt(val);
-          updateDevice(nDevice);
+            pin_out = { r_pin: 0, g_pin: 0, b_pin: 0 };
+          pin_out[(type + "_pin") as keyof typeof pin_out] = parseInt(val);
+          update([{ path: ["pin_out"], value: pin_out }]);
         }
       }
     };

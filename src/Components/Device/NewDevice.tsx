@@ -7,12 +7,12 @@ interface NewDeviceProps {
 }
 
 const NewDevice: React.FC<NewDeviceProps> = ({ onFinish }) => {
-  const { device } = useContext(SettingsContext);
+  const { data } = useContext(SettingsContext);
 
   return (
     <SettingsController
       title="New Device"
-      values={device}
+      values={data}
       options={["name", "type", "pin_out", "led_count", "device_confirm"]}
     />
   );

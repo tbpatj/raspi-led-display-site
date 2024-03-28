@@ -1,11 +1,11 @@
 import { useContext, useMemo } from "react";
-import { SettingsContext } from "../../Context/SettingsContext";
+import { SettingsContext, StgsCnxtUpFc } from "../../Context/SettingsContext";
 import Button from "../Input/Button";
-import { RGBAddressableDevice } from "../../Resources/DeviceResources";
+import { Device, RGBAddressableDevice } from "../../Resources/DeviceResources";
 import { GlobalContext } from "../../Context/GlobalContext";
 
 const ConfirmNewDevice = () => {
-  const { device, updateDevice, toggleEditingNav } =
+  const { data: device, update }: { data: Device; update: StgsCnxtUpFc } =
     useContext(SettingsContext);
   const { addDevice } = useContext(GlobalContext);
 
@@ -23,7 +23,7 @@ const ConfirmNewDevice = () => {
 
   const handleClick = () => {
     addDevice(device);
-    toggleEditingNav();
+    // toggleEditingNav();
   };
 
   return (

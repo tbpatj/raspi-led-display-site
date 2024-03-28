@@ -8,6 +8,7 @@ import { SettingsContext } from "../../Context/SettingsContext";
 import { cloneDeep } from "lodash";
 import { SelectMenuOption } from "../Input/SelectMenu";
 import SettingDivider from "./SettingDivider";
+import { getJsonValue } from "../../Resources/JsonChange";
 
 interface SettingsControllerProps {
   options: string[];
@@ -26,7 +27,7 @@ const SettingsController: React.FC<SettingsControllerProps> = ({
     {}
   );
   const { toggleTvShown, presets, modes } = useContext(GlobalContext);
-  const { device } = useContext(SettingsContext);
+  const { data } = useContext(SettingsContext);
 
   const getDisplayValue = (value: any) => {
     if (typeof value === "string") return value;
@@ -42,8 +43,7 @@ const SettingsController: React.FC<SettingsControllerProps> = ({
       preset.options = presets
         .filter(
           (preset) =>
-            preset.device_type === device.type &&
-            preset.device_name === device.name
+            preset.device_type === data.type && preset.device_name === data.name
         )
         .map((preset) => {
           return {
@@ -61,7 +61,7 @@ const SettingsController: React.FC<SettingsControllerProps> = ({
     });
     settings.mode = modeSetting;
     return settings;
-  }, [device, presets, modes]);
+  }, [data, presets, modes]);
 
   let hideFromDivide = false;
 
@@ -82,21 +82,18 @@ const SettingsController: React.FC<SettingsControllerProps> = ({
             if (calcSettings?.[option]?.includeTypes) {
               const includedTypes = calcSettings?.[option]?.includeTypes;
               if (typeof includedTypes === "string") {
-                if (device.type !== includedTypes) return;
+                if (data.type !== includedTypes) return;
               } else if (typeof includedTypes === "object") {
-                if (!includedTypes.includes(device.type)) return;
+                if (!includedTypes.includes(data.type)) return;
               }
             }
             if (calcSettings?.[option]?.modeInfo) {
               //if the mode doesn't support the current setting then remove it.
               const modeInfo = calcSettings?.[option].modeInfo;
-              if (!modeInfo?.[device.settings.mode]) return;
+              if (!modeInfo?.[data.settings.mode]) return;
             }
             //if the element is only meant to shown when the preset it a custom preset
-            if (
-              calcSettings?.[option]?.whenCustom &&
-              device.preset !== "custom"
-            )
+            if (calcSettings?.[option]?.whenCustom && data.preset !== "custom")
               return;
             const settingOption = calcSettings?.[option];
 
@@ -126,10 +123,11 @@ const SettingsController: React.FC<SettingsControllerProps> = ({
 
             //get the value if it's a preset setting or a device setting
             const value =
-              calcSettings?.[option]?.overrideValue?.(device) ??
-              (calcSettings?.[option]?.dataType === "device"
-                ? device?.[option as keyof typeof device]
-                : device.settings?.[option as keyof typeof device.settings]);
+              calcSettings?.[option]?.overrideValue?.(data) ??
+              getJsonValue(data, [
+                ...(calcSettings?.[option]?.path ?? []),
+                option,
+              ]);
 
             return (
               <SettingItem

@@ -47,12 +47,12 @@ interface SettingListItem {
     | "number";
   title?: string;
   icon?: React.ReactNode | React.ReactNode[] | string;
-  dataType: "device" | "preset";
   modeInfo?: ModeInfo;
   includeTypes?: DeviceTypes | DeviceTypes[];
   whenCustom?: boolean;
-  overrideValue?: (device: Device) => string;
-  overrideChanges?: (nDevice: Device) => Device;
+  path?: string[];
+  overrideValue?: (data: any) => string;
+  overrideChanges?: (data: any) => any;
 }
 
 interface CustomSettingItem extends SettingListItem {
@@ -105,7 +105,7 @@ interface ModeInfo {
 export const defaultSettings: SettingsControllerList = {
   save_preset: {
     type: "custom-item",
-    dataType: "preset",
+    path: ["settings"],
     whenCustom: true,
     element: <SavePreset />,
   },
@@ -118,7 +118,7 @@ export const defaultSettings: SettingsControllerList = {
     id: "power-select-menu",
     title: "Power",
     icon: <PowerIcon width="25" height="28" stroke="inherit" />,
-    dataType: "preset",
+    path: ["settings"],
   },
   type: {
     type: "select",
@@ -156,12 +156,11 @@ export const defaultSettings: SettingsControllerList = {
       }
       return nDevice;
     },
-    dataType: "device",
   },
   //soon this should be custom to adjust for not just addressable strips
   pin_out: {
     type: "custom-input",
-    dataType: "preset",
+    path: ["settings"],
     element: <PinOut />,
     icon: <PinoutIcon width="35" height="24" stroke="inherit" />,
     overrideValue: (device: Device) => {
@@ -178,7 +177,7 @@ export const defaultSettings: SettingsControllerList = {
     type: "text",
     id: "brightness-input",
     title: "Brightness",
-    dataType: "preset",
+    path: ["settings"],
     icon: <BrightnessIcon width="30" height="30" stroke="inherit" />,
   },
   animation_speed: {
@@ -186,30 +185,28 @@ export const defaultSettings: SettingsControllerList = {
     id: "animation-speed-input",
     title: "Animation Speed",
     icon: <AnimationIcon width="30" height="26" stroke="inherit" />,
-    dataType: "preset",
+    path: ["settings"],
   },
   transition_speed: {
     type: "number",
     id: "transition-speed-input",
     title: "Transition Speed",
-    dataType: "device",
     icon: <TransitionIcon width="30" height="26" stroke="inherit" />,
   },
   image_processing: {
     type: "custom-input",
     element: <div></div>,
-    dataType: "preset",
+    path: ["settings"],
     icon: <ImageIcon width="30" height="24" stroke="inherit" />,
   },
   idle_animation: {
     type: "custom-input",
     element: <div></div>,
-    dataType: "preset",
+    path: ["settings"],
     icon: <AnimationIcon width="30" height="26" stroke="inherit" />,
   },
   preset: {
     type: "select",
-    dataType: "device",
     options: [{ text: "Default", value: "default" }],
     id: "options-controller-device-preset",
     title: "Presets",
@@ -217,30 +214,27 @@ export const defaultSettings: SettingsControllerList = {
   },
   name: {
     type: "custom-item",
-    dataType: "device",
     element: <DeviceName />,
   },
   led_count: {
     type: "number",
-    dataType: "device",
     includeTypes: "addressable",
     title: "Led Count",
     icon: <LedCountIcon width="30" height="30" stroke="inherit" />,
   },
   device_confirm: {
     type: "custom-item",
-    dataType: "device",
     element: <ConfirmNewDevice />,
   },
   mappings: {
     type: "custom-input",
-    dataType: "preset",
+    path: ["settings"],
     element: <Mappings />,
     icon: <MappingIcon width="30" height="30" stroke="inherit" />,
   },
   mode: {
     type: "select",
-    dataType: "preset",
+    path: ["settings"],
     id: "mode-select",
     title: "Mode",
     icon: <ImageIcon width="30" height="24" stroke="inherit" />,
@@ -254,21 +248,17 @@ export const defaultSettings: SettingsControllerList = {
   device_divider: {
     type: "divider",
     title: "Device Settings",
-    dataType: "device",
   },
   preset_divider: {
     type: "divider",
     title: "Presets",
-    dataType: "device",
   },
   properties_divider: {
     type: "divider",
     title: "Properties",
-    dataType: "device",
   },
   delete: {
     type: "custom-item",
-    dataType: "device",
     element: <DeleteDevice />,
   },
 };

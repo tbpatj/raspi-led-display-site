@@ -5,6 +5,7 @@ import { cloneDeep } from "lodash";
 import { SettingsControllerList } from "./SettingsControllerUtil";
 import Input from "../Input/Input";
 import MenuContainer from "./MenuContainer";
+import { getJsonValue } from "../../Resources/JsonChange";
 
 interface InputControllerProps {
   options: SettingsControllerList;
@@ -16,54 +17,63 @@ const InputController: React.FC<InputControllerProps> = ({
   option,
   options,
 }) => {
-  const { device, preset, updateDevice, updatePreset, updateDevicePreset } =
-    useContext(SettingsContext);
+  const { data, update } = useContext(SettingsContext);
 
-  const updateDeviceOption = async (option: string, value: any) => {
-    let nDevice = cloneDeep(device);
-    nDevice[option as keyof typeof nDevice] = value;
-    const nDevice2 = options[option]?.overrideChanges?.(nDevice);
-    if (nDevice2) {
-      nDevice = nDevice2;
-    }
-    // if (option === "preset") {
-    //   await updateDevicePreset(value);
-    // } else {
-    await updateDevice(nDevice);
-    // }
-  };
+  // const updateDeviceOption = async (option: string, value: any) => {
 
-  const updatePresetOption = (option: string, value: any) => {
-    const nPreset = cloneDeep(preset);
-    //@ts-ignore
-    nPreset[option] = value;
-    updatePreset(nPreset);
-  };
+  //   // let nDevice = cloneDeep(device);
+  //   // nDevice[option as keyof typeof nDevice] = value;
+  //   // const nDevice2 = options[option]?.overrideChanges?.(nDevice);
+  //   // if (nDevice2) {
+  //   //   nDevice = nDevice2;
+  //   // }
+  //   // // if (option === "preset") {
+  //   // //   await updateDevicePreset(value);
+  //   // // } else {
+  //   // await updateDevice(nDevice);
+  //   // // }
+  // };
 
-  const updateValues = (option: string, value: any) => {
-    if (optionDetails.dataType === "device") {
-      updateDeviceOption(option, value);
-    } else if (optionDetails.dataType === "preset") {
-      updatePresetOption(option, value);
-    }
-  };
+  // const updatePresetOption = (option: string, value: any) => {
+  //   const nPreset = cloneDeep(preset);
+  //   //@ts-ignore
+  //   nPreset[option] = value;
+  //   updatePreset(nPreset);
+  // };
+
+  // const updateValues = (option: string, value: any) => {
+  //   if (optionDetails.dataType === "device") {
+  //     updateDeviceOption(option, value);
+  //   } else if (optionDetails.dataType === "preset") {
+  //     updatePresetOption(option, value);
+  //   }
+  // };
 
   const optionDetails = useMemo(() => {
     return options?.[option] ?? "none";
   }, [option, options]);
 
+  const updateValues = (option: string, value: any) => {
+    if (optionDetails?.path) {
+      update([{ path: [...optionDetails.path, option], value: value }]);
+    } else {
+      update([{ path: [option], value: value }]);
+    }
+  };
+
   const optionValue = useMemo(() => {
     //make sure to return the actual value if it is from the preset or the device
-    if (optionDetails.dataType === "device") {
-      return device?.[option as keyof typeof device] ?? undefined;
-    } else if (optionDetails.dataType === "preset") {
-      //return the current settings preset value from the device
-      return (
-        device?.settings?.[option as keyof typeof device.settings] ?? undefined
-      );
+    console.log(data, optionDetails.path, option);
+    if (optionDetails?.path) {
+      console.log("checking");
+
+      const test = getJsonValue(data, [...(optionDetails?.path ?? []), option]);
+      console.log(test);
+      return test;
+    } else {
+      return data[option];
     }
-    return "none";
-  }, [option, device]);
+  }, [option, data]);
 
   const displayValue = useMemo(() => {
     if (optionValue !== undefined && optionValue !== null) {
@@ -85,7 +95,7 @@ const InputController: React.FC<InputControllerProps> = ({
             updateValues(option, val);
           }}
           title={optionDetails?.title}
-          type={device.type}
+          type={data?.type}
           id={optionDetails?.id}
           options={optionDetails.options}
         />
