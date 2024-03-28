@@ -4,7 +4,7 @@ import { cloneDeep } from "lodash";
 
 interface UseJsonChangeProps {
   json: any;
-  onChange: (json: any) => void;
+  onChange: (json: any, items: ChangeItem[]) => void;
 }
 
 interface UseJsonChange {
@@ -21,7 +21,7 @@ const useJsonChange: (props: UseJsonChangeProps) => UseJsonChange = ({
       for (const item of items) {
         nJson = jsonRecursion(nJson, item.path, item.value);
       }
-      onChange(nJson);
+      onChange(nJson, items);
     },
     [json]
   );

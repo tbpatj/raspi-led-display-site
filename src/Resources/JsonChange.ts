@@ -24,7 +24,7 @@ export const getJsonValue = (json: any, paths: string[]) => {
   let val = json;
   for (let i = 0; i < paths.length; i++) {
     if (val === undefined) return undefined;
-    val = val?.[paths[i]];
+    val = val?.[paths?.[i] ?? ""];
   }
   return val;
 };

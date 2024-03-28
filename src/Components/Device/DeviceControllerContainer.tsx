@@ -31,7 +31,6 @@ const DeviceControllerContainer: React.FC<
           "brightness",
           "delete",
         ]}
-        values={presets}
       />
     </div>
   );

@@ -37,7 +37,7 @@ const InputController: React.FC<InputControllerProps> = ({
       const test = getJsonValue(data, [...(optionDetails?.path ?? []), option]);
       return test;
     } else {
-      return data[option];
+      return data?.[option];
     }
   }, [option, data]);
 

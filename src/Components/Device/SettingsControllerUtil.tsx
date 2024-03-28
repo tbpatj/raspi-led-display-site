@@ -141,7 +141,7 @@ export const defaultSettings: SettingsControllerList = {
     ),
     //make sure to override certain values when the type of a device changes.
     overrideChanges: (nDevice: Device) => {
-      if (nDevice.type === "non-addressable") {
+      if (nDevice?.type === "non-addressable") {
         (nDevice as RGBNonAddressableDevice).pin_out = {
           r_pin: 0,
           g_pin: 0,
@@ -149,7 +149,7 @@ export const defaultSettings: SettingsControllerList = {
         };
         nDevice = nDevice as RGBNonAddressableDevice;
         nDevice.settings.device_type = "non-addressable";
-      } else if (nDevice.type === "addressable") {
+      } else if (nDevice?.type === "addressable") {
         (nDevice as RGBAddressableDevice).led_count = 0;
         (nDevice as RGBAddressableDevice).pin_out = 0;
         nDevice.settings.device_type = "addressable";
@@ -164,10 +164,10 @@ export const defaultSettings: SettingsControllerList = {
     element: <PinOut />,
     icon: <PinoutIcon width="35" height="24" stroke="inherit" />,
     overrideValue: (device: Device) => {
-      if (device.type === "non-addressable") {
+      if (device?.type === "non-addressable") {
         const pins = (device as RGBNonAddressableDevice).pin_out;
         return `r:${pins.r_pin} g:${pins.g_pin} b:${pins.b_pin}`;
-      } else if (device.type === "addressable") {
+      } else if (device?.type === "addressable") {
         return (device as RGBAddressableDevice).pin_out.toString();
       }
       return "";

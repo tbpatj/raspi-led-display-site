@@ -20,7 +20,7 @@ const DeviceName: React.FC = () => {
   return (
     <Input
       onChange={handleNameChange}
-      value={device.name}
+      value={device?.name}
       placeholder="Device Name"
       id="device-name"
     />

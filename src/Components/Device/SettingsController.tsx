@@ -11,13 +11,11 @@ import { getJsonValue } from "../../Resources/JsonChange";
 interface SettingsControllerProps {
   options: string[];
   settings: SettingsControllerList;
-  values: { [key: string]: any };
   title?: string;
 }
 
 const SettingsController: React.FC<SettingsControllerProps> = ({
   options,
-  values,
   title,
   settings,
 }) => {
@@ -54,9 +52,9 @@ const SettingsController: React.FC<SettingsControllerProps> = ({
             if (settings?.[option]?.includeTypes) {
               const includedTypes = settings?.[option]?.includeTypes;
               if (typeof includedTypes === "string") {
-                if (data.type !== includedTypes) return;
+                if (data?.type !== includedTypes) return;
               } else if (typeof includedTypes === "object") {
-                if (!includedTypes.includes(data.type)) return;
+                if (!includedTypes.includes(data?.type)) return;
               }
             }
             if (settings?.[option]?.modeInfo) {
