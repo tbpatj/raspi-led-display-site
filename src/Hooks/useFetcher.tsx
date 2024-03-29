@@ -22,7 +22,7 @@ interface UseFetcher {
   ) => any;
 }
 
-const baseURL = process.env.REACT_APP_BASE_URL;
+const baseURL = process.env.REACT_APP_BASE_URL ?? "";
 
 const useFetcher: (props: UseFetcherProps) => UseFetcher = ({ token }) => {
   const fetcher = useCallback(
@@ -36,7 +36,7 @@ const useFetcher: (props: UseFetcherProps) => UseFetcher = ({ token }) => {
         url:
           url.includes("https:") || url.includes("http:")
             ? `${url}`
-            : `${baseURL}${url}`,
+            : `${baseURL}${url ?? ""}`,
         method: data?.method ?? "GET",
         data: data?.body ?? {},
         params: data?.params ?? {},
