@@ -29,7 +29,7 @@ const Mappings: React.FC = () => {
   const handleRemoveMapping = (index: number) => () => {
     let curMapping = data.settings.mapping;
     curMapping.splice(index, 1);
-    update([{ path: ["settings", "mapping"], value: [curMapping] }]);
+    update([{ path: ["settings", "mapping"], value: curMapping }]);
   };
 
   const handleMappingChange = (type: string, indx: number) => (val: string) => {
