@@ -40,6 +40,7 @@ div {
 .background-item {
   position: absolute;
   border-radius: 50%;
+  transform: translate(-50%, -50%);
   transition: left 0.8s ease, top 0.8s ease;
 }
 
@@ -54,6 +55,17 @@ div {
   );
   backdrop-filter: blur(250px);
   z-index: 1;
+}
+
+@media (max-width: 900px) {
+  .background-cover {
+    backdrop-filter: blur(180px);
+  }
+}
+@media (max-width: 420px) {
+  .background-cover {
+    backdrop-filter: blur(160px);
+  }
 }
 
 /* ------------- Card ------------- */

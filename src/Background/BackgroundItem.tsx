@@ -1,14 +1,29 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useMemo, useState } from "react";
 import { GlobalContext } from "../Context/GlobalContext";
 import { cloneDeep } from "lodash";
+import useWinSize from "../Hooks/useWinSize";
 
 const BackgroundItem = () => {
   const { tvShown } = useContext(GlobalContext);
+  const { isSmall, isTablet } = useWinSize();
+
+  const range = useMemo(() => {
+    const range = { offset: 400, mul: 100, posOffset: 10, posMul: 80 };
+    if (isTablet) {
+      range.offset = 300;
+      range.mul = 150;
+    } else if (isSmall) {
+      range.offset = 150;
+      range.mul = 150;
+    }
+    return range;
+  }, [isSmall]);
+
   const [perc, setPerc] = useState({
-    x: Math.random() * 80 + 10,
-    y: Math.random() * 80 + 10,
-    w: Math.random() * 100 + 400,
-    h: Math.random() * 100 + 400,
+    x: Math.random() * range.posMul + range.posOffset,
+    y: Math.random() * range.posMul + range.posOffset,
+    w: Math.random() * range.mul + range.offset,
+    h: Math.random() * range.mul + range.offset,
     color: `rgb(${Math.random() * 255}, ${Math.random() * 255}, ${
       Math.random() * 255
     })`,
