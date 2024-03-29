@@ -16,13 +16,14 @@ const Mappings: React.FC = () => {
   const { isSmall } = useWinSize();
 
   const handleAddMapping = () => {
+    const cMapping = cloneDeep(data.settings.mapping);
     const mapping = {
       ledSIndx: 0,
       ledEIndx: 0,
       mapSIndx: 0,
       mapEIndx: 0,
     };
-    update([{ path: ["settings", "mapping"], value: [mapping] }]);
+    update([{ path: ["settings", "mapping"], value: [...cMapping, mapping] }]);
   };
 
   const handleRemoveMapping = (index: number) => () => {
