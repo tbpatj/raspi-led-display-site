@@ -4,6 +4,7 @@ import Button from "../Input/Button";
 import { GlobalContext } from "../../Context/GlobalContext";
 import Modal from "../Modal/Modal";
 import { Device } from "../../Resources/DeviceResources";
+import DeleteModal from "../Modal/DeleteModal";
 
 const DeleteDevice = () => {
   const [modalOpened, setModalOpened] = useState(false);
@@ -35,23 +36,14 @@ const DeleteDevice = () => {
 
   return (
     <>
-      <Modal
+      <DeleteModal
+        title="Delete Device"
         opened={modalOpened}
         onClose={() => {
           setModalOpened(false);
         }}
-      >
-        <div className="delete-modal-container">
-          <div className="delete-text-container">
-            <h2>Delete Device</h2>
-            <div>Are you sure?</div>
-          </div>
-          <div className="delete-flex-container">
-            <Button onClick={handleDelete}>Yes</Button>
-            <Button onClick={() => setModalOpened(false)}>No</Button>
-          </div>
-        </div>
-      </Modal>
+        onConfirm={handleDelete}
+      />
       <Button className="delete-button" onClick={() => handleClick()}>
         Delete Device
       </Button>

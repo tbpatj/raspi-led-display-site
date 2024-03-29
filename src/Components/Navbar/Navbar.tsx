@@ -2,10 +2,12 @@ import { Outlet, Route, useLocation } from "react-router-dom";
 import LedIcon from "../../SVGs/LedIcon";
 import PowerIcon from "../../SVGs/PowerIcon";
 import { Link } from "react-router-dom";
+import AnimationIcon from "../../SVGs/AnimationIcon";
 
 const routes = [
   { icon: <LedIcon width="30" height="44" />, path: "/" },
-  { icon: <PowerIcon width="30" height="44" />, path: "/power" },
+  // { icon: <PowerIcon width="30" height="44" />, path: "/power" },
+  { icon: <AnimationIcon width="30" height="44" />, path: "/animations" },
 ];
 
 const Navbar: React.FC = () => {

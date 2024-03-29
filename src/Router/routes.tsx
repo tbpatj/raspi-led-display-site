@@ -1,6 +1,8 @@
 import { RouteObject } from "react-router-dom";
 import Navbar from "../Components/Navbar/Navbar";
 import DevicesPage from "../Pages/DevicesPage";
+import TVSettingsPage from "../Pages/TVSettingsPage";
+import AnimationsPage from "../Pages/AnimationsPage";
 
 const routes: RouteObject[] = [
   {
@@ -15,7 +17,8 @@ const routes: RouteObject[] = [
             index: true,
             element: <DevicesPage />,
           },
-          { path: "/power", element: <div>page</div> },
+          { path: "/power", element: <TVSettingsPage /> },
+          { path: "/animations", element: <AnimationsPage /> },
         ],
       },
     ],

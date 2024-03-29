@@ -28,6 +28,7 @@ interface GlobalProps {
   presets: DevicePresets[];
   devices: Devices[];
   modes: string[];
+  getModes: () => void;
   deleteDevice: (i: number) => Promise<ServerResponse>;
   addDevice: (device: Devices) => Promise<ServerResponse>;
   updateDevice: (i: number, nDevice: Devices) => Promise<ServerResponse>;
@@ -76,6 +77,7 @@ const defaultGlobalData = {
   presets: defaultPresets,
   devices: [],
   modes: [],
+  getModes: async () => null,
   deleteDevice: async (i: number) => defaultServerResponse,
   addDevice: async (device: Devices) => defaultServerResponse,
   updateDevice: async (i: number, nDevice: Devices) => defaultServerResponse,
@@ -133,7 +135,7 @@ export const GlobalContextProvider: React.FC<GlobalContextProviderProps> = ({
     if (response.status === "success") {
       setModes(response.data);
     }
-  }, []);
+  }, [setModes]);
 
   const getPresets = useCallback(async () => {
     const options = {
@@ -348,6 +350,7 @@ export const GlobalContextProvider: React.FC<GlobalContextProviderProps> = ({
       tvShown,
       presets,
       devices,
+      getModes,
       deleteDevice,
       toggleTvShown,
       addDevice,
@@ -360,6 +363,7 @@ export const GlobalContextProvider: React.FC<GlobalContextProviderProps> = ({
     tvShown,
     presets,
     devices,
+    getModes,
     deleteDevice,
     toggleTvShown,
     addDevice,
