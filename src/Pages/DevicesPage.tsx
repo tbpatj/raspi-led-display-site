@@ -25,6 +25,7 @@ const DevicesPage = () => {
             {devices.map((device: Devices, index: number) => {
               return (
                 <Card
+                  key={"device-card-" + device.name + "-" + index}
                   text={device.name}
                   onClick={() => {
                     setEditingIndex(index);

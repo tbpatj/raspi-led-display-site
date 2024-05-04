@@ -14,7 +14,8 @@ const TVSettingsPage: React.FC = () => {
       >
         <div style={{ width: "100vw", height: "100vh", position: "relative" }}>
           <SettingsController
-            options={["aspect_ratio", "power"]}
+            title="TV Settings"
+            options={["aspect_ratio", "dead_zone", "frame_processing"]}
             settings={defaultTVSettings}
           ></SettingsController>
         </div>

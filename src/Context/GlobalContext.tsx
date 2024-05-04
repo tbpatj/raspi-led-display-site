@@ -10,6 +10,11 @@ import { DevicePresets, defaultPresets } from "../Resources/PresetResources";
 import { ServerResponse } from "../Resources/ServerResponseResources";
 import { cloneDeep } from "lodash";
 import axios from "axios";
+import useTVSettings, {
+  TVSettingsHook,
+  defaultTVSettingsHook,
+} from "../Hooks/useTVSettings";
+import { defaultTVSettings } from "../Resources/TVSettingsResources";
 
 interface GlobalContextProviderProps {
   children: React.ReactNode | React.ReactNode[];
@@ -22,7 +27,9 @@ export interface TVPosition {
   rightPx: number;
 }
 
-interface GlobalProps {
+type GlobalProps = OtherProps & TVSettingsHook;
+
+interface OtherProps {
   tvShown: boolean;
   toggleTvShown: (nVal?: boolean) => void;
   presets: DevicePresets[];
@@ -84,6 +91,7 @@ const defaultGlobalData = {
   updateDevicePreset: async (i: number, presetName: string) =>
     defaultServerResponse,
   addNewPreset: async (i: number, name: string) => defaultServerResponse,
+  ...defaultTVSettingsHook,
 };
 
 export const GlobalContext = createContext<GlobalProps>(defaultGlobalData);
@@ -91,6 +99,7 @@ export const GlobalContext = createContext<GlobalProps>(defaultGlobalData);
 export const GlobalContextProvider: React.FC<GlobalContextProviderProps> = ({
   children,
 }) => {
+  const tv = useTVSettings();
   const [tvShown, setTVShown] = useState(false);
   const toggleTvShown = useCallback(
     (nVal?: boolean) => {
@@ -110,7 +119,6 @@ export const GlobalContextProvider: React.FC<GlobalContextProviderProps> = ({
     let response = serverNotFoundResponse;
     try {
       response = await axios(options);
-      console.log(response);
       response = response.data;
     } catch (e) {
       console.error(e);
@@ -158,6 +166,7 @@ export const GlobalContextProvider: React.FC<GlobalContextProviderProps> = ({
     getDevices();
     getPresets();
     getModes();
+    tv.getTVSettings();
   }, []);
 
   const addDevice = useCallback(
@@ -176,7 +185,6 @@ export const GlobalContextProvider: React.FC<GlobalContextProviderProps> = ({
           : successfulServerResponse;
       try {
         response = await axios(options);
-        console.log(response);
         response = response.data;
       } catch (e) {
         console.error(e);
@@ -217,7 +225,6 @@ export const GlobalContextProvider: React.FC<GlobalContextProviderProps> = ({
           : successfulServerResponse;
       try {
         response = await axios(options);
-        console.log(response);
         response = response.data;
       } catch (e) {
         console.error(e);
@@ -229,7 +236,6 @@ export const GlobalContextProvider: React.FC<GlobalContextProviderProps> = ({
         const nDevices = cloneDeep(devices);
         nDevices[i] = nDevice;
         setDevices(nDevices);
-        console.log("updated");
         //TODO preset handler, make sure when the device gets added if there are no default presets for the device then create one.
 
         return response;
@@ -286,7 +292,6 @@ export const GlobalContextProvider: React.FC<GlobalContextProviderProps> = ({
           : successfulServerResponse;
       try {
         response = await axios(options);
-        console.log(response);
         response = response.data;
       } catch (e) {
         console.error(e);
@@ -357,6 +362,7 @@ export const GlobalContextProvider: React.FC<GlobalContextProviderProps> = ({
       updateDevice,
       updateDevicePreset,
       addNewPreset,
+      ...tv,
     };
   }, [
     modes,
@@ -370,6 +376,7 @@ export const GlobalContextProvider: React.FC<GlobalContextProviderProps> = ({
     updateDevice,
     updateDevicePreset,
     addNewPreset,
+    tv,
   ]);
 
   return (
