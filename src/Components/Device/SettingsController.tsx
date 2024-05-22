@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { Fragment, useContext, useState } from "react";
 import { SettingsControllerList } from "./SettingsControllerUtil";
 import SettingItem from "./SettingItem";
 import HorizontalTransition from "../TransitionContainers/HorizonalTransition";
@@ -47,7 +47,7 @@ const SettingsController: React.FC<SettingsControllerProps> = ({
       <div className="new-device-container">
         <div className="new-device-list">
           <h1>{title ? title : ""}</h1>
-          {options.map((option) => {
+          {options.map((option, i) => {
             //filter out options that are not supported by the device type
             if (settings?.[option]?.includeTypes) {
               const includedTypes = settings?.[option]?.includeTypes;
@@ -72,6 +72,7 @@ const SettingsController: React.FC<SettingsControllerProps> = ({
               else hideFromDivide = false;
               return (
                 <SettingDivider
+                  key={`settings-controller-divider-${option}-${i}`}
                   onClick={() => {
                     setDividerHide((prev) => {
                       return { ...prev, [option]: !prev[option] };
@@ -88,7 +89,11 @@ const SettingsController: React.FC<SettingsControllerProps> = ({
 
             //if the element is a custom element then don't use a default setting.
             if (settingOption?.type === "custom-item") {
-              return <>{settingOption.element}</>;
+              return (
+                <Fragment key={`custom-item-${option}-${i}`}>
+                  {settingOption.element}
+                </Fragment>
+              );
             }
 
             //get the value if it's a preset setting or a device setting
@@ -98,7 +103,7 @@ const SettingsController: React.FC<SettingsControllerProps> = ({
 
             return (
               <SettingItem
-                key={`settings-controller-item-${option}`}
+                key={`settings-controller-item-${option}-${i}`}
                 value={getDisplayValue(value)}
                 onClick={() => {
                   setIsEditing(true);

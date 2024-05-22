@@ -229,6 +229,14 @@ export const defaultSettings: SettingsControllerList = {
     type: "number",
     includeTypes: "addressable",
     title: "Led Count",
+    overrideValue: (device: Device) => {
+      device = device as RGBAddressableDevice;
+      if ((device as RGBAddressableDevice).led_count !== 0) {
+        //post the axios call to the server to show the leds that are being used.
+        return (device as RGBAddressableDevice).led_count.toString();
+      }
+      return "0";
+    },
     icon: <LedCountIcon width="30" height="30" stroke="inherit" />,
   },
   device_confirm: {

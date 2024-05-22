@@ -6,9 +6,11 @@ import { ReactComponent as XIcon } from "../../SVGs/svgs/x-solid.svg";
 import { cloneDeep } from "lodash";
 import useWinSize from "../../Hooks/useWinSize";
 import { Device } from "../../Resources/DeviceResources";
-import { ChangeItem } from "../../Resources/JsonChange";
+import axios from "axios";
 
 const mappingInputStyle: CSSProperties = { width: "60px" };
+
+const baseURL = process.env.REACT_APP_BASE_URL || window.location.origin;
 
 const Mappings: React.FC = () => {
   const { data, update }: { data: Device; update: StgsCnxtUpFc } =
@@ -33,6 +35,7 @@ const Mappings: React.FC = () => {
   };
 
   const handleMappingChange = (type: string, indx: number) => (val: string) => {
+    showMappings(indx);
     const isValid = /^[0-9]+$/.test(val);
     if (isValid || val === "") {
       if (val === "") val = "0";
@@ -40,6 +43,19 @@ const Mappings: React.FC = () => {
       const map = mapping[indx]; // const type = typeof keyof mapping
       mapping[indx][type as keyof typeof map] = parseInt(val);
       update([{ path: ["settings", "mapping"], value: mapping }]);
+    }
+  };
+
+  const showMappings = async (indx: number) => {
+    const options = {
+      method: "POST",
+      url: baseURL + "/show-mapping/" + data.name,
+      data: { index: indx },
+    };
+    try {
+      await axios(options);
+    } catch (e) {
+      console.error(e);
     }
   };
 
@@ -106,5 +122,7 @@ const Mappings: React.FC = () => {
     </div>
   );
 };
+
+const MappingRange = () => {};
 
 export default Mappings;
