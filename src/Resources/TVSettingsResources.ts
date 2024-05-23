@@ -29,3 +29,29 @@ export type GetTVSettingsFunc = () => Promise<GetTVSettingsResponse>;
 export type SetTVSettingsFunc = (
   settings: TVSettings
 ) => Promise<ServerResponse>;
+
+// ------------- TV Mapping Hook -------------
+export interface GetTVMappingsResponse extends ServerResponse {
+  data: TVMappings;
+}
+export interface TVMappings {
+  topS: number;
+  topE: number;
+  bottomS: number;
+  bottomE: number;
+  leftS: number;
+  leftE: number;
+  rightS: number;
+  rightE: number;
+}
+
+export const defaultTVMappings = {
+  topS: 0,
+  topE: 0,
+  bottomS: 0,
+  bottomE: 0,
+  leftS: 0,
+  leftE: 0,
+  rightS: 0,
+  rightE: 0,
+};

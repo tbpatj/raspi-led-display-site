@@ -2,6 +2,7 @@
   --primary-background: #07030e;
   --primary-accent: #ece5ec;
   --secondary-accent: #f71735;
+  --bordering-color: #b0acb0;
 }
 
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap");
@@ -41,7 +42,8 @@ div {
   position: absolute;
   border-radius: 50%;
   transform: translate(-50%, -50%);
-  transition: left 0.8s ease, top 0.8s ease;
+  transition: left 2.5s ease, top 2.5s ease, width 2.5s ease, height 2.5s ease,
+    background-color 2.5s ease, border-radius 3s ease;
 }
 
 .background-cover {
@@ -749,6 +751,72 @@ div {
     flex-direction: column;
     gap: 10px;
   }
+}
+
+/* --------- tv mappings --------- */
+.tv-mapping-collection {
+  display: flex;
+  flex-direction: row;
+  padding: 0px 0px;
+  height: 55px;
+  width: 100%;
+  justify-content: center;
+  position: relative;
+}
+.tv-mapping-sub-collection {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.tv-mapping-reverse-button {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  outline: none;
+  border: none;
+  width: 15px;
+  height: 15px;
+}
+
+.tv-mapping-button {
+  border-radius: 5px;
+  outline: none;
+  border: none;
+  border: 0px solid var(--primary-background);
+  background-color: var(--primary-accent);
+  box-shadow: none;
+  font-family: Montserrat, sans-serif;
+  font-weight: 500;
+  color: var(--primary-background);
+}
+
+.tv-mapping-button.right {
+  border-radius: 0px 5px 5px 0px;
+  border-left: 1px solid var(--bordering-color);
+}
+.tv-mapping-button.middle {
+  border-radius: 0px;
+}
+.tv-mapping-button.bottom {
+  border-top: 1px solid var(--bordering-color);
+}
+.tv-mapping-button.left {
+  border-radius: 5px 0px 0px 5px;
+  border-right: 1px solid var(--bordering-color);
+}
+
+.tv-mapping-button:hover {
+  background-color: rgb(213, 213, 213);
+  /* color: var(--primary-accent); */
+}
+
+.tv-mapping-button.selected {
+  background-color: var(--secondary-accent);
+  color: white;
+  border-color: var(--secondary-accent);
 }
 
 /* text input box menus */

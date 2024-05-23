@@ -13,9 +13,15 @@ import axios from "axios";
 import useTVSettings, {
   TVSettingsHook,
   defaultTVSettingsHook,
-} from "../Hooks/useTVSettings";
-import { defaultTVSettings } from "../Resources/TVSettingsResources";
+} from "../Hooks/GlobalContext/useTVSettings";
+import {
+  TVMappings,
+  defaultTVMappings,
+  defaultTVSettings,
+} from "../Resources/TVSettingsResources";
 import useGlobalDevice from "../Hooks/GlobalContext/useGlobalDevice";
+import useTVLightToggle from "../Hooks/GlobalContext/useTVLightToggle";
+import useTVMappings from "../Hooks/GlobalContext/useTVMappings";
 
 interface GlobalContextProviderProps {
   children: React.ReactNode | React.ReactNode[];
@@ -45,6 +51,7 @@ interface OtherProps {
     presetName: string
   ) => Promise<ServerResponse>;
   addNewPreset: (i: number, name: string) => Promise<ServerResponse>;
+  tv_mappings: TVMappings;
 }
 
 export const defaultServerResponse: ServerResponse = {
@@ -87,6 +94,7 @@ const defaultGlobalData = {
     defaultServerResponse,
   addNewPreset: async (i: number, name: string) => defaultServerResponse,
   ...defaultTVSettingsHook,
+  tv_mappings: defaultTVMappings,
 };
 
 export const GlobalContext = createContext<GlobalProps>(defaultGlobalData);
@@ -95,14 +103,9 @@ export const GlobalContextProvider: React.FC<GlobalContextProviderProps> = ({
   children,
 }) => {
   const tv = useTVSettings();
-  const [tvShown, setTVShown] = useState(false);
-  const toggleTvShown = useCallback(
-    (nVal?: boolean) => {
-      setTVShown(nVal ?? !tvShown);
-    },
-    [setTVShown, tvShown]
-  );
+  const tvToggler = useTVLightToggle({});
   const deviceManager = useGlobalDevice({});
+  const { tv_mappings } = useTVMappings({});
   const [modes, setModes] = useState<string[]>([]);
 
   const getModes = useCallback(async () => {
@@ -132,13 +135,13 @@ export const GlobalContextProvider: React.FC<GlobalContextProviderProps> = ({
   const value: GlobalProps = useMemo(() => {
     return {
       modes,
-      tvShown,
       getModes,
-      toggleTvShown,
       ...tv,
       ...deviceManager,
+      ...tvToggler,
+      tv_mappings,
     };
-  }, [modes, tvShown, getModes, toggleTvShown, deviceManager, tv]);
+  }, [modes, getModes, deviceManager, tv, tv_mappings]);
 
   return (
     <GlobalContext.Provider value={value}>{children}</GlobalContext.Provider>

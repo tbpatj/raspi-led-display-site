@@ -1,4 +1,4 @@
-import { Fragment, useContext, useState } from "react";
+import { Fragment, useContext, useRef, useState } from "react";
 import { SettingsControllerList } from "./SettingsControllerUtil";
 import SettingItem from "./SettingItem";
 import HorizontalTransition from "../TransitionContainers/HorizonalTransition";
@@ -19,6 +19,8 @@ const SettingsController: React.FC<SettingsControllerProps> = ({
   title,
   settings,
 }) => {
+  const [display, setDisplay] = useState(false);
+  const timeoutRef = useRef<NodeJS.Timeout>();
   const [isEditing, setIsEditing] = useState(false);
   const [editing, setEditing] = useState("");
   const [dividerHide, setDividerHide] = useState<{ [name: string]: boolean }>(
@@ -33,6 +35,13 @@ const SettingsController: React.FC<SettingsControllerProps> = ({
     else return "";
   };
 
+  const clearDisplay = () => {
+    if (timeoutRef.current !== undefined) {
+      clearTimeout(timeoutRef.current);
+      timeoutRef.current = undefined;
+    }
+  };
+
   let hideFromDivide = false;
 
   return (
@@ -40,6 +49,9 @@ const SettingsController: React.FC<SettingsControllerProps> = ({
       onBack={() => {
         toggleTvShown(false);
         setIsEditing(false);
+        timeoutRef.current = setTimeout(() => {
+          setDisplay(false);
+        }, 800);
       }}
       id="device-settings-transition"
       selected={isEditing ? 1 : 0}
@@ -106,6 +118,8 @@ const SettingsController: React.FC<SettingsControllerProps> = ({
                 key={`settings-controller-item-${option}-${i}`}
                 value={getDisplayValue(value)}
                 onClick={() => {
+                  setDisplay(true);
+                  clearDisplay();
                   setIsEditing(true);
                   setEditing(option);
                 }}
@@ -117,7 +131,12 @@ const SettingsController: React.FC<SettingsControllerProps> = ({
         </div>
       </div>
       <div>
-        <InputController options={settings} option={editing}></InputController>
+        {display && (
+          <InputController
+            options={settings}
+            option={editing}
+          ></InputController>
+        )}
       </div>
     </HorizontalTransition>
   );

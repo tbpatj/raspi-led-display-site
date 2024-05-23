@@ -5,10 +5,10 @@ import {
   SetTVSettingsFunc,
   TVSettings,
   defaultTVSettings,
-} from "../Resources/TVSettingsResources";
+} from "../../Resources/TVSettingsResources";
 import axios from "axios";
-import { serverNotFoundResponse } from "../Context/GlobalContext";
-import { ServerResponse } from "../Resources/ServerResponseResources";
+import { serverNotFoundResponse } from "../../Context/GlobalContext";
+import { ServerResponse } from "../../Resources/ServerResponseResources";
 
 export interface TVSettingsHook {
   tv_settings: TVSettings;

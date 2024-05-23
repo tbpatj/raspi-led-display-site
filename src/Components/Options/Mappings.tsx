@@ -1,4 +1,4 @@
-import { CSSProperties, useContext } from "react";
+import { CSSProperties, useContext, useEffect, useMemo } from "react";
 import { SettingsContext, StgsCnxtUpFc } from "../../Context/SettingsContext";
 import Button from "../Input/Button";
 import Input from "../Input/Input";
@@ -7,6 +7,8 @@ import { cloneDeep } from "lodash";
 import useWinSize from "../../Hooks/useWinSize";
 import { Device } from "../../Resources/DeviceResources";
 import axios from "axios";
+import { GlobalContext } from "../../Context/GlobalContext";
+import TVMappingCollection from "./TVMappingCollection";
 
 const mappingInputStyle: CSSProperties = { width: "60px" };
 
@@ -15,7 +17,11 @@ const baseURL = process.env.REACT_APP_BASE_URL || window.location.origin;
 const Mappings: React.FC = () => {
   const { data, update }: { data: Device; update: StgsCnxtUpFc } =
     useContext(SettingsContext);
+  const { toggleTvShown } = useContext(GlobalContext);
   const { isSmall } = useWinSize();
+  const isTVMapping = useMemo(() => {
+    return data.settings.mode === "tv";
+  }, [data.settings.mode]);
 
   const handleAddMapping = () => {
     const cMapping = cloneDeep(data.settings.mapping);
@@ -59,6 +65,12 @@ const Mappings: React.FC = () => {
     }
   };
 
+  useEffect(() => {
+    if (isTVMapping) {
+      toggleTvShown(true);
+    }
+  }, []);
+
   return (
     <div className="select-menu-container">
       <div className="new-device-list">
@@ -88,28 +100,43 @@ const Mappings: React.FC = () => {
                     </div>
                   </div>
                   <div className="mappings-item-section">
-                    <div className="mapping-item">
-                      {showText && <span>Map Start</span>}
-                      <Input
-                        onChange={handleMappingChange("mapSIndx", index)}
-                        value={String(mapping.mapSIndx)}
-                        style={mappingInputStyle}
-                      ></Input>
-                    </div>
-                    <div className="mapping-item">
-                      {showText && <span>Map End</span>}
-                      <Input
-                        onChange={handleMappingChange("mapEIndx", index)}
-                        value={String(mapping.mapEIndx)}
-                        style={mappingInputStyle}
-                      ></Input>
-                    </div>
+                    {!isTVMapping && (
+                      <>
+                        <div className="mapping-item">
+                          {showText && <span>Map Start</span>}
+                          <Input
+                            onChange={handleMappingChange("mapSIndx", index)}
+                            value={String(mapping.mapSIndx)}
+                            style={mappingInputStyle}
+                          ></Input>
+                        </div>
+                        <div className="mapping-item">
+                          {showText && <span>Map End</span>}
+                          <Input
+                            onChange={handleMappingChange("mapEIndx", index)}
+                            value={String(mapping.mapEIndx)}
+                            style={mappingInputStyle}
+                          ></Input>
+                        </div>
+                      </>
+                    )}
+                    {isTVMapping && (
+                      <TVMappingCollection
+                        showMappings={showMappings}
+                        index={index}
+                      />
+                    )}
                   </div>
                 </div>
                 {data?.settings?.mapping.length > 1 && (
                   <XIcon
                     onClick={handleRemoveMapping(index)}
-                    style={{ cursor: "pointer" }}
+                    style={{
+                      cursor: "pointer",
+                      ...(index === 0 && !isSmall
+                        ? { paddingTop: "24px" }
+                        : {}),
+                    }}
                     width={20}
                     fill="#ece5ec"
                   />
