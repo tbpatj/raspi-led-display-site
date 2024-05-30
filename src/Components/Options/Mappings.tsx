@@ -1,4 +1,4 @@
-import { CSSProperties, useContext, useEffect, useMemo } from "react";
+import { CSSProperties, useContext, useEffect, useMemo, useState } from "react";
 import { SettingsContext, StgsCnxtUpFc } from "../../Context/SettingsContext";
 import Button from "../Input/Button";
 import Input from "../Input/Input";
@@ -19,9 +19,14 @@ const Mappings: React.FC = () => {
     useContext(SettingsContext);
   const { toggleTvShown } = useContext(GlobalContext);
   const { isSmall } = useWinSize();
+  const [custom, setCustom] = useState(false);
   const isTVMapping = useMemo(() => {
     return data.settings.mode === "tv";
   }, [data.settings.mode]);
+
+  const showTVMapping = useMemo(() => {
+    return isTVMapping && !custom;
+  }, [isTVMapping, custom]);
 
   const handleAddMapping = () => {
     const cMapping = cloneDeep(data.settings.mapping);
@@ -74,7 +79,22 @@ const Mappings: React.FC = () => {
   return (
     <div className="select-menu-container">
       <div className="new-device-list">
-        <Button onClick={handleAddMapping}>Add Mapping</Button>
+        <div className="mapping-button-container">
+          <Button
+            style={isTVMapping ? { width: "70%" } : {}}
+            onClick={handleAddMapping}
+          >
+            Add Mapping
+          </Button>
+          {isTVMapping && (
+            <Button
+              className="mapping-button"
+              onClick={() => setCustom(!custom)}
+            >
+              {!custom ? "Custom Mapping" : "TV Mapping"}
+            </Button>
+          )}
+        </div>
         <div className="mappings-container">
           {data?.settings?.mapping.map((mapping, index) => {
             const showText = index === 0 || isSmall;
@@ -100,7 +120,7 @@ const Mappings: React.FC = () => {
                     </div>
                   </div>
                   <div className="mappings-item-section">
-                    {!isTVMapping && (
+                    {!showTVMapping && (
                       <>
                         <div className="mapping-item">
                           {showText && <span>Map Start</span>}
@@ -120,7 +140,7 @@ const Mappings: React.FC = () => {
                         </div>
                       </>
                     )}
-                    {isTVMapping && (
+                    {showTVMapping && (
                       <TVMappingCollection
                         showMappings={showMappings}
                         index={index}
