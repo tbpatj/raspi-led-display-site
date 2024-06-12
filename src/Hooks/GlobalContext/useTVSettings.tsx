@@ -42,7 +42,10 @@ const useTVSettings: () => TVSettingsHook = () => {
       response = await axios(options);
       response = response?.data;
       if (response.status === "success") {
-        setTv_settings(response.data);
+        setTv_settings({
+          ...defaultTVSettings,
+          ...(response.data as TVSettings),
+        });
       }
     } catch (error) {
       console.log(error);

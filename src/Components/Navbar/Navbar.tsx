@@ -1,12 +1,12 @@
-import { Outlet, Route, useLocation } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
 import LedIcon from "../../SVGs/LedIcon";
-import PowerIcon from "../../SVGs/PowerIcon";
 import { Link } from "react-router-dom";
 import AnimationIcon from "../../SVGs/AnimationIcon";
 import TVIcon from "../../SVGs/TVIcon";
+import { useEffect } from "react";
 
 const routes = [
-  { icon: <TVIcon width="30" height="44" />, path: "/tv" },
+  { icon: <TVIcon width="30" height="44" />, path: "/tv-manager" },
   { icon: <LedIcon width="30" height="44" />, path: "/" },
   // { icon: <PowerIcon width="30" height="44" />, path: "/power" },
   { icon: <AnimationIcon width="30" height="44" />, path: "/animations" },

@@ -833,6 +833,12 @@ div {
   border-color: var(--secondary-accent);
 }
 
+/* tv bezel */
+.tv-bezel-modal {
+  padding: 30px;
+  gap: 10px;
+}
+
 /* text input box menus */
 .input-menu {
   width: calc(50%);

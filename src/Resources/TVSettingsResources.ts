@@ -4,8 +4,9 @@ export interface TVSettings {
   padding: { x: number; y: number };
   iterations: { x: number; y: number };
   step: { x: number; y: number };
+  bezel: { x: number; y: number };
+  deadzone: { decrease: number; threshold: number; power: number };
   aspect_ratio: string;
-  dead_zone: number;
   process1Pxl: boolean;
 }
 
@@ -13,8 +14,9 @@ export const defaultTVSettings: TVSettings = {
   padding: { x: 0, y: 0 },
   iterations: { x: 0, y: 0 },
   step: { x: 0, y: 0 },
+  bezel: { x: 0, y: 0 },
+  deadzone: { decrease: 0, threshold: 0, power: 0 },
   aspect_ratio: "16:9",
-  dead_zone: 0,
   process1Pxl: false,
 };
 

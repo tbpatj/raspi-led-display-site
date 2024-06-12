@@ -1,5 +1,7 @@
 import { SettingsControllerList } from "../Device/SettingsControllerUtil";
 import FrameProcessing from "./FrameProcessing";
+import TVBezel from "./TVBezel";
+import TVDeadzone from "./TVDeadzone";
 
 export const defaultTVSettings: SettingsControllerList = {
   aspect_ratio: {
@@ -13,15 +15,20 @@ export const defaultTVSettings: SettingsControllerList = {
     ],
     id: "aspect-ratio-select-menu",
     title: "Aspect Ratio",
-    path: ["settings"],
   },
   frame_processing: {
     type: "custom-input",
     title: "Frame Processing",
     element: <FrameProcessing />,
   },
+  bezel: {
+    type: "custom-input",
+    title: "Frame Processing",
+    element: <TVBezel />,
+  },
   dead_zone: {
-    type: "number",
-    title: "Dead Zone",
+    type: "custom-input",
+    title: "Frame Processing",
+    element: <TVDeadzone />,
   },
 };
