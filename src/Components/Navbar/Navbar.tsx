@@ -10,6 +10,7 @@ const routes = [
   { icon: <LedIcon width="30" height="44" />, path: "/" },
   // { icon: <PowerIcon width="30" height="44" />, path: "/power" },
   { icon: <AnimationIcon width="30" height="44" />, path: "/animations" },
+  { icon: <AnimationIcon width="30" height="44" />, path: "/debug" },
 ];
 
 const Navbar: React.FC = () => {

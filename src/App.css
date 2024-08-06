@@ -1010,3 +1010,36 @@ div {
 .pointer-cursor {
   cursor: pointer;
 }
+
+/* debug */
+.my-button {
+  background-color: var(--primary-accent);
+  color: var(--primary-background);
+  border-radius: 5px;
+  padding: 10px;
+  border: none;
+  cursor: pointer;
+}
+.my-button:hover {
+  background-color: var(--bordering-color);
+}
+.debug-image {
+  height: auto;
+  height: 500px;
+  aspect-ratio: 1/1;
+}
+.debug-device-container {
+  justify-content: start;
+}
+.debug-image-container {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.debug-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center;
+}

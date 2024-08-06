@@ -4,6 +4,7 @@ import DevicesPage from "../Pages/DevicesPage";
 import TVSettingsPage from "../Pages/TVSettingsPage";
 import AnimationsPage from "../Pages/AnimationsPage";
 import Error404 from "../Pages/Error404";
+import DebugPage from "../Pages/DebugPage";
 
 const routes: RouteObject[] = [
   {
@@ -20,6 +21,7 @@ const routes: RouteObject[] = [
           },
           { path: "/animations", element: <AnimationsPage /> },
           { path: "/tv-manager", element: <TVSettingsPage /> },
+          { path: "/debug", element: <DebugPage /> },
         ],
       },
     ],

@@ -27,7 +27,11 @@ const SettingItem: React.FC<SettingItemProps> = ({
       }}
     >
       <div className="device-settings-icon-title ">
-        <div className="device-settings-icon-container">{icon ? icon : ""}</div>
+        {icon && (
+          <div className="device-settings-icon-container">
+            {icon ? icon : ""}
+          </div>
+        )}
         {title
           .split("_")
           .map((v) => v.charAt(0).toUpperCase() + v.slice(1))
